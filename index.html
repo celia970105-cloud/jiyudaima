@@ -1,0 +1,525 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>⭐️极禹刷啵⭐️</title>
+    <style>
+        /* 🎨 精準配色：#FFCCDD 與 #FF799C */
+        :root {
+            --primary-pink: #FF799C;
+            --light-pink: #FFCCDD;
+            --soft-white: rgba(255, 255, 255, 0.95);
+            --star-color: #FFB3D1;
+            --text-dark: #555555;
+            --border-radius: 24px;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            font-family: -apple-system, "Microsoft JhengHei", sans-serif;
+            background-color: var(--light-pink);
+            background-image: linear-gradient(135deg, #FFCCDD 0%, #FFB3D1 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: var(--text-dark);
+            padding: 20px;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        /* ✨  */
+        body::before {
+            content: '★';
+            position: fixed;
+            top: 8%;
+            left: 12%;
+            color: white;
+            font-size: 24px;
+            opacity: 0.5;
+            animation: twinkle 3s infinite ease-in-out;
+        }
+
+        body::after {
+            content: '✧';
+            position: fixed;
+            bottom: 12%;
+            right: 10%;
+            color: white;
+            font-size: 32px;
+            opacity: 0.4;
+            animation: twinkle 4s infinite ease-in-out reverse;
+        }
+
+        @keyframes twinkle {
+
+            0%,
+            100% {
+                transform: scale(1) rotate(0deg);
+                opacity: 0.3;
+            }
+
+            50% {
+                transform: scale(1.2) rotate(15deg);
+                opacity: 0.7;
+            }
+        }
+
+        .container {
+            background: var(--soft-white);
+            backdrop-filter: blur(10px);
+            width: 100%;
+            max-width: 420px;
+            padding: 25px;
+            border-radius: var(--border-radius);
+            box-shadow: 0 15px 35px rgba(255, 121, 156, 0.25);
+            display: flex;
+            flex-direction: column;
+            gap: 18px;
+            position: relative;
+            border: 4px solid white;
+        }
+
+        h1 {
+            font-size: 26px;
+            text-align: center;
+            color: var(--primary-pink);
+            margin-bottom: 5px;
+            font-weight: 900;
+            text-shadow: 1px 1px 0px white;
+        }
+
+        #mode-tag {
+            text-align: center;
+            color: #888;
+            font-size: 11px;
+            font-style: italic;
+            background: rgba(255, 255, 255, 0.8);
+            padding: 3px 12px;
+            border-radius: 20px;
+            display: block;
+            margin: 0 auto 10px auto;
+            width: fit-content;
+            border: 1px solid #FFE6EE;
+        }
+
+        .card {
+            background: white;
+            border: 2px solid var(--light-pink);
+            border-radius: 18px;
+            padding: 18px;
+            box-shadow: 0 4px 10px rgba(255, 204, 221, 0.2);
+        }
+
+        .multi-tip {
+            background: #FFF0F4;
+            border: 1px dashed var(--primary-pink);
+            border-radius: 12px;
+            padding: 10px;
+            font-size: 12px;
+            color: #D6456D;
+            line-height: 1.4;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+            color: var(--primary-pink);
+            font-size: 14px;
+        }
+
+        textarea {
+            width: 100%;
+            height: 90px;
+            padding: 12px;
+            border: 2px solid #FFE6EE;
+            border-radius: 14px;
+            font-size: 13px;
+            background: #FFF9FA;
+            outline: none;
+            resize: none;
+            font-family: 'Courier New', monospace;
+            transition: border-color 0.3s;
+        }
+
+        textarea:focus {
+            border-color: var(--primary-pink);
+            background: white;
+        }
+
+        .btn {
+            width: 100%;
+            padding: 16px;
+            border: none;
+            border-radius: 50px;
+            font-size: 18px;
+            font-weight: bold;
+            color: white;
+            cursor: pointer;
+            transition: all 0.3s;
+            background: linear-gradient(to right, #FF799C, #FF9EBA);
+            box-shadow: 0 6px 20px rgba(255, 121, 156, 0.4);
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(255, 121, 156, 0.5);
+        }
+
+        .btn:active {
+            transform: scale(0.98);
+        }
+
+        .btn.stop {
+            background: linear-gradient(to right, #FFB3D1, #FF9999);
+            box-shadow: 0 6px 15px rgba(255, 153, 153, 0.3);
+        }
+
+        .status-bar {
+            display: flex;
+            justify-content: space-between;
+            font-size: 13px;
+            color: #666;
+            padding: 10px 0;
+            border-bottom: 1px dashed var(--light-pink);
+        }
+
+        .status-bar:last-child {
+            border-bottom: none;
+        }
+
+        .status-label {
+            font-weight: 500;
+        }
+
+        .status-value {
+            font-weight: bold;
+            color: var(--primary-pink);
+        }
+
+        #log-window {
+            height: 150px;
+            background: #FFFDFE;
+            border-radius: 14px;
+            padding: 12px;
+            font-family: 'Courier New', monospace;
+            font-size: 12px;
+            overflow-y: auto;
+            border: 2px solid #FFE6EE;
+            line-height: 1.5;
+        }
+
+        .log-entry {
+            margin-bottom: 6px;
+            border-bottom: 1px solid #FFF0F4;
+            padding-bottom: 3px;
+        }
+
+        .log-time {
+            color: #BBB;
+            margin-right: 8px;
+            font-size: 11px;
+        }
+
+        .log-warn {
+            color: #FF799C;
+            font-weight: bold;
+        }
+
+        .log-error {
+            color: #FF4444;
+        }
+
+        .log-success {
+            color: #FF799C;
+            font-weight: bold;
+        }
+
+        /* 後台靜音心跳驅動通道（防被 B 站清洗） */
+        #bili-silent-frame {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            opacity: 0.01;
+            pointer-events: none;
+            border: none;
+        }
+    </style>
+</head>
+
+<body>
+    <iframe id="bili-silent-frame" src="about:blank" allow="autoplay"></iframe>
+
+    <div class="container">
+        <div style="text-align: center;">
+            <h1>💗极禹刷啵 💗</h1>
+            <p id="mode-tag">EDGE Mode</p>
+        </div>
+
+        <div class="multi-tip"> 建立edge账号后，点击头像 新增无痕页面 每个页面登录不同的edge账号和b站号，最多3-5个避免ip风险！
+        </div>
+
+        <div id="manual-ui" class="card">
+            <label for="bv-input">BV 号输入 (每行一个)</label>
+            <textarea id="bv-input" placeholder="BV1xx...&#10;BV2xx...&#10;..."></textarea>
+        </div>
+
+        <button id="action-btn" class="btn">开始运行</button>
+
+        <div class="card">
+            <div class="status-bar">
+                <span class="status-label">待刷视频: <span id="video-count" class="status-value">0</span></span>
+                <span class="status-label">下次循环: <span id="next-run" class="status-value">--:--</span></span>
+            </div>
+            <div class="status-bar">
+                <span class="status-label">累计发送请求次数: <span id="success-count" class="status-value">0</span></span>
+                <span id="status-text" class="status-value" style="font-size: 12px;"></span>
+            </div>
+            <div style="font-size: 11px; text-align: right; color: #999; margin-top: 5px;">
+                当前标签: <span id="session-tag" class="status-value" style="font-size: 11px;">⭐</span> |
+                当前状态: <span id="current-state-text">准备就绪</span>
+            </div>
+        </div>
+
+        <div>
+            <div id="log-window"></div>
+        </div>
+    </div>
+
+    <script>
+        if (!window.location.hash.includes('session=')) {
+            const uniqueSession = Date.now().toString().slice(-6);
+            window.location.hash = 'session=' + uniqueSession;
+        }
+        const currentSessionId = window.location.hash.split('session=')[1] || "⭐";
+
+        const CONFIG = { intervalMinutes: 6 };
+
+        let state = {
+            isRunning: false,
+            videos: [],
+            countdownId: null,
+            totalSent: 0,
+            wakeLock: null
+        };
+
+        const el = {
+            btn: document.getElementById('action-btn'),
+            manualUi: document.getElementById('manual-ui'),
+            bvInput: document.getElementById('bv-input'),
+            log: document.getElementById('log-window'),
+            count: document.getElementById('video-count'),
+            nextRun: document.getElementById('next-run'),
+            success: document.getElementById('success-count'),
+            status: document.getElementById('status-text'),
+            modeTag: document.getElementById('mode-tag'),
+            stateText: document.getElementById('current-state-text'),
+            sessionTag: document.getElementById('session-tag'),
+            frame: document.getElementById('bili-silent-frame')
+        };
+
+        el.sessionTag.innerText = "⭐#" + currentSessionId;
+
+        // 本地保存上次輸入的 BV 號，刷新不丟失
+        const savedBvs = localStorage.getItem('JIYU_BV_SAVED');
+        if (savedBvs) {
+            el.bvInput.value = savedBvs;
+        }
+
+        function log(msg, type = 'info') {
+            const time = new Date().toLocaleTimeString('zh-CN', { hour12: false });
+            const entry = document.createElement('div');
+            entry.className = 'log-entry';
+            let colorClass = '';
+            if (type === 'warn') colorClass = 'log-warn';
+            if (type === 'error') colorClass = 'log-error';
+            if (type === 'success') colorClass = 'log-success';
+            entry.innerHTML = `<span class="log-time">${time}</span><span class="${colorClass}">${msg}</span>`;
+            el.log.appendChild(entry);
+            el.log.scrollTop = el.log.scrollHeight;
+        }
+
+        // 手機與後台防休眠心跳（防止鎖屏或切換標籤被凍結）
+        let audioCtx = null;
+        function enableBackgroundKeepAlive() {
+            try {
+                if ('wakeLock' in navigator) {
+                    navigator.wakeLock.request('screen').then(lock => {
+                        state.wakeLock = lock;
+                    }).catch(() => {});
+                }
+                if (!audioCtx) {
+                    const AudioContext = window.AudioContext || window.webkitAudioContext;
+                    if (AudioContext) {
+                        audioCtx = new AudioContext();
+                        const osc = audioCtx.createOscillator();
+                        const gain = audioCtx.createGain();
+                        gain.gain.value = 0.0001; // 靜音，不發出聲音但維持瀏覽器進程活性
+                        osc.connect(gain);
+                        gain.connect(audioCtx.destination);
+                        osc.start();
+                    }
+                }
+            } catch (e) {}
+        }
+
+        function parseManualVideos() {
+            const text = el.bvInput.value;
+            if (!text) return;
+
+            // 支援 BV 號及完整網址中提取 BV 號
+            const bvRegex = /BV[a-zA-Z0-9]{10}/gi;
+            const matchedBvs = text.match(bvRegex);
+
+            if (!matchedBvs) {
+                state.videos = [];
+                return;
+            }
+
+            const uniqueBvs = [...new Set(matchedBvs.map(bv => {
+                return 'BV' + bv.slice(2);
+            }))];
+
+            state.videos = uniqueBvs.map(bv => ({
+                bvid: bv,
+                title: bv
+            }));
+
+            localStorage.setItem('JIYU_BV_SAVED', text);
+        }
+
+        function sleep(ms) {
+            return new Promise(resolve => {
+                const start = Date.now();
+                const timer = setInterval(() => {
+                    if (!state.isRunning || Date.now() - start >= ms) {
+                        clearInterval(timer);
+                        resolve();
+                    }
+                }, 100);
+            });
+        }
+
+        async function runBoostCycle() {
+            if (!state.isRunning) return;
+            log('🚀 开始新一轮...', 'success');
+            el.status.innerText = '執行中...';
+            el.stateText.innerText = '正在运行';
+
+            for (let v of state.videos) {
+                if (!state.isRunning) break;
+
+                try {
+                    // 1. 後台原生通道驅動（防被吞）
+                    if (el.frame) {
+                        el.frame.src = `https://player.bilibili.com/player.html?bvid=${v.bvid}&autoplay=1&muted=1`;
+                    }
+
+                    // 2. 原版 H5 介面請求（雙保險）
+                    const params = new URLSearchParams({
+                        bvid: v.bvid,
+                        part: '1',
+                        jsonp: 'jsonp',
+                        type: '1',
+                        subtype: '0'
+                    });
+
+                    fetch('https://api.bilibili.com/x/click-interface/click/web/h5', {
+                        method: 'POST',
+                        mode: 'no-cors',
+                        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                        body: params
+                    }).catch(() => {});
+
+                    state.totalSent++;
+                    el.success.innerText = state.totalSent;
+                    log(` ${v.bvid} 播放成功 ✅`);
+                } catch (e) {
+                    log(`${v.bvid} ❌`, 'error');
+                }
+
+                await sleep(2000 + Math.random() * 1500);
+            }
+
+            if (state.isRunning) {
+                log(`${CONFIG.intervalMinutes} 分钟后自动下一轮`);
+                startCountdown(CONFIG.intervalMinutes * 60);
+            }
+        }
+
+        function startCountdown(seconds) {
+            el.status.innerText = '等待再次唤醒...';
+            el.stateText.innerText = '休眠中💤';
+            let remaining = seconds;
+            clearInterval(state.countdownId);
+            state.countdownId = setInterval(() => {
+                if (!state.isRunning) {
+                    clearInterval(state.countdownId);
+                    return;
+                }
+                if (remaining <= 0) {
+                    clearInterval(state.countdownId);
+                    runBoostCycle();
+                    return;
+                }
+                const m = Math.floor(remaining / 60).toString().padStart(2, '0');
+                const s = (remaining % 60).toString().padStart(2, '0');
+                el.nextRun.innerText = `${m}:${s}`;
+                remaining--;
+            }, 1000);
+        }
+
+        async function start() {
+            state.isRunning = true;
+            enableBackgroundKeepAlive();
+            el.btn.innerText = '停止';
+            el.btn.classList.add('stop');
+            el.bvInput.disabled = true;
+
+            parseManualVideos();
+            if (state.videos.length === 0) {
+                log('请输入正确的 BV 号', 'error');
+                stop();
+                return;
+            }
+
+            el.count.innerText = state.videos.length;
+            log(`${state.videos.length} 个视频准备就绪💗`, 'success');
+            runBoostCycle();
+        }
+
+        function stop() {
+            state.isRunning = false;
+            clearInterval(state.countdownId);
+            if (el.frame) el.frame.src = 'about:blank';
+            el.btn.innerText = '开始运行';
+            el.btn.classList.remove('stop');
+            el.bvInput.disabled = false;
+            el.status.innerText = '已停止';
+            el.stateText.innerText = '已停止';
+            log('已停止', 'warn');
+        }
+
+        el.btn.addEventListener('click', () => {
+            if (state.isRunning) {
+                stop();
+            } else {
+                start();
+            }
+        });
+
+        log(`💞极禹刷啵⭐️#${currentSessionId} 已就绪`);
+    </script>
+</body>
+
+</html>
