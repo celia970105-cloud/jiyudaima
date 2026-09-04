@@ -37,7 +37,7 @@
             overflow-x: hidden;
         }
 
-        /* ✨  */
+        /* ✨ 星光閃爍 */
         body::before {
             content: '★';
             position: fixed;
@@ -61,13 +61,10 @@
         }
 
         @keyframes twinkle {
-
-            0%,
-            100% {
+            0%, 100% {
                 transform: scale(1) rotate(0deg);
                 opacity: 0.3;
             }
-
             50% {
                 transform: scale(1.2) rotate(15deg);
                 opacity: 0.7;
@@ -84,7 +81,7 @@
             box-shadow: 0 15px 35px rgba(255, 121, 156, 0.25);
             display: flex;
             flex-direction: column;
-            gap: 18px;
+            gap: 16px;
             position: relative;
             border: 4px solid white;
         }
@@ -116,7 +113,7 @@
             background: white;
             border: 2px solid var(--light-pink);
             border-radius: 18px;
-            padding: 18px;
+            padding: 16px;
             box-shadow: 0 4px 10px rgba(255, 204, 221, 0.2);
         }
 
@@ -140,7 +137,7 @@
 
         textarea {
             width: 100%;
-            height: 90px;
+            height: 80px;
             padding: 12px;
             border: 2px solid #FFE6EE;
             border-radius: 14px;
@@ -159,10 +156,10 @@
 
         .btn {
             width: 100%;
-            padding: 16px;
+            padding: 15px;
             border: none;
             border-radius: 50px;
-            font-size: 18px;
+            font-size: 17px;
             font-weight: bold;
             color: white;
             cursor: pointer;
@@ -185,12 +182,20 @@
             box-shadow: 0 6px 15px rgba(255, 153, 153, 0.3);
         }
 
+        .btn-download {
+            background: linear-gradient(to right, #FFA2BD, #FF799C);
+            font-size: 13px;
+            padding: 11px;
+            box-shadow: 0 4px 12px rgba(255, 121, 156, 0.25);
+            margin-top: 4px;
+        }
+
         .status-bar {
             display: flex;
             justify-content: space-between;
             font-size: 13px;
             color: #666;
-            padding: 10px 0;
+            padding: 8px 0;
             border-bottom: 1px dashed var(--light-pink);
         }
 
@@ -208,7 +213,7 @@
         }
 
         #log-window {
-            height: 150px;
+            height: 130px;
             background: #FFFDFE;
             border-radius: 14px;
             padding: 12px;
@@ -245,7 +250,20 @@
             font-weight: bold;
         }
 
-        /* 後台靜音心跳驅動通道（防被 B 站清洗） */
+        .ext-guide-box {
+            background: #FFF8FA;
+            border: 1px solid #FFE6EE;
+            border-radius: 14px;
+            padding: 12px;
+            font-size: 11px;
+            color: #777;
+            line-height: 1.6;
+        }
+
+        .ext-guide-box b {
+            color: #FF799C;
+        }
+
         #bili-silent-frame {
             position: absolute;
             width: 1px;
@@ -291,6 +309,18 @@
             </div>
         </div>
 
+        <!-- 粉絲一鍵下載外掛專區 -->
+        <div class="ext-guide-box">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
+                <b>🖥️ 電腦 Edge 外掛插件包（修復版）</b>
+            </div>
+            <div>1️⃣ 點擊下方按鈕，自動下載 <code>manifest.json</code> 與 <code>content.js</code></div>
+            <div>2️⃣ 桌面新建資料夾，把這兩個檔案放進去</div>
+            <div>3️⃣ Edge 打開 <code>edge://extensions/</code> 開啟【開發者模式】</div>
+            <div>4️⃣ 點擊【載入解壓縮的擴充功能】選擇該資料夾即可！</div>
+            <button id="download-ext-btn" class="btn btn-download" type="button">📥 一鍵下載 Edge 打榜外掛包 (雙檔案)</button>
+        </div>
+
         <div>
             <div id="log-window"></div>
         </div>
@@ -325,12 +355,13 @@
             modeTag: document.getElementById('mode-tag'),
             stateText: document.getElementById('current-state-text'),
             sessionTag: document.getElementById('session-tag'),
-            frame: document.getElementById('bili-silent-frame')
+            frame: document.getElementById('bili-silent-frame'),
+            downloadBtn: document.getElementById('download-ext-btn')
         };
 
         el.sessionTag.innerText = "⭐#" + currentSessionId;
 
-        // 本地保存上次輸入的 BV 號，刷新不丟失
+        // 本地保存上次輸入的 BV 號
         const savedBvs = localStorage.getItem('JIYU_BV_SAVED');
         if (savedBvs) {
             el.bvInput.value = savedBvs;
@@ -349,7 +380,7 @@
             el.log.scrollTop = el.log.scrollHeight;
         }
 
-        // 手機與後台防休眠心跳（防止鎖屏或切換標籤被凍結）
+        // 後台防休眠
         let audioCtx = null;
         function enableBackgroundKeepAlive() {
             try {
@@ -364,7 +395,7 @@
                         audioCtx = new AudioContext();
                         const osc = audioCtx.createOscillator();
                         const gain = audioCtx.createGain();
-                        gain.gain.value = 0.0001; // 靜音，不發出聲音但維持瀏覽器進程活性
+                        gain.gain.value = 0.0001;
                         osc.connect(gain);
                         gain.connect(audioCtx.destination);
                         osc.start();
@@ -377,7 +408,6 @@
             const text = el.bvInput.value;
             if (!text) return;
 
-            // 支援 BV 號及完整網址中提取 BV 號
             const bvRegex = /BV[a-zA-Z0-9]{10}/gi;
             const matchedBvs = text.match(bvRegex);
 
@@ -420,12 +450,10 @@
                 if (!state.isRunning) break;
 
                 try {
-                    // 1. 後台原生通道驅動（防被吞）
                     if (el.frame) {
                         el.frame.src = `https://player.bilibili.com/player.html?bvid=${v.bvid}&autoplay=1&muted=1`;
                     }
 
-                    // 2. 原版 H5 介面請求（雙保險）
                     const params = new URLSearchParams({
                         bvid: v.bvid,
                         part: '1',
@@ -518,8 +546,203 @@
             }
         });
 
+        // 📥 點擊一鍵下載 manifest.json 和 content.js 兩個檔案
+        el.downloadBtn.addEventListener('click', () => {
+            const manifestContent = JSON.stringify({
+                "manifest_version": 3,
+                "name": "⭐️极禹刷啵 - B站打榜助手⭐️",
+                "version": "2.0.0",
+                "description": "极禹专属B站自动打榜助手（已修复防吞心跳版）",
+                "host_permissions": ["https://*.bilibili.com/*"],
+                "content_scripts": [{
+                    "matches": ["https://www.bilibili.com/video/*"],
+                    "js": ["content.js"],
+                    "run_at": "document_end"
+                }]
+            }, null, 2);
+
+            const scriptContent = `(function () {
+    'use strict';
+    const DEFAULT_CONFIG = {
+        enabled: false,
+        videos: ['BV1xx411c7mD'],
+        currentIndex: 0,
+        playDurationSec: 38,
+        minDelaySec: 4,
+        maxDelaySec: 8,
+        muteAudio: true,
+        cycleCount: 0
+    };
+    function loadConfig() {
+        const stored = localStorage.getItem('JIYU_BOOST_CONFIG');
+        if (stored) { try { return { ...DEFAULT_CONFIG, ...JSON.parse(stored) }; } catch (e) {} }
+        return DEFAULT_CONFIG;
+    }
+    function saveConfig(cfg) { localStorage.setItem('JIYU_BOOST_CONFIG', JSON.stringify(cfg)); }
+    let config = loadConfig();
+
+    const style = document.createElement('style');
+    style.innerHTML = \`
+        #jiyu-float-panel {
+            position: fixed; bottom: 30px; right: 30px; width: 320px;
+            background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(12px);
+            border: 3px solid #FFCCDD; border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(255, 121, 156, 0.3); z-index: 99999999;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            color: #444; padding: 16px; box-sizing: border-box;
+        }
+        #jiyu-float-panel h3 { margin: 0 0 8px 0; color: #FF799C; font-size: 16px; font-weight: 900; }
+        .jiyu-btn {
+            width: 100%; padding: 10px; border: none; border-radius: 30px;
+            background: linear-gradient(135deg, #FF799C, #FFA2BD); color: white;
+            font-weight: bold; font-size: 14px; cursor: pointer; margin-top: 8px;
+        }
+        .jiyu-btn.stop { background: linear-gradient(135deg, #FFB3D1, #FF7777); }
+        .jiyu-textarea {
+            width: 100%; height: 70px; border: 2px solid #FFE6EE; border-radius: 12px;
+            padding: 8px; font-size: 12px; box-sizing: border-box; resize: none; outline: none;
+            background: #FFF9FA; font-family: monospace;
+        }
+        .jiyu-status-line { display: flex; justify-content: space-between; font-size: 12px; color: #666; margin-top: 6px; }
+        .jiyu-highlight { color: #FF799C; font-weight: bold; }
+        .jiyu-log { font-size: 11px; color: #888; margin-top: 8px; background: #FFFDFE; padding: 6px 8px; border-radius: 8px; border: 1px solid #FFE6EE; }
+    \`;
+    document.head.appendChild(style);
+
+    const panel = document.createElement('div');
+    panel.id = 'jiyu-float-panel';
+    panel.innerHTML = \`
+        <h3>💗 极禹刷啵助手 (修復版) 💗</h3>
+        <textarea id=\"jiyu-bv-list\" class=\"jiyu-textarea\" placeholder=\"每行輸入一個BV號...\"></textarea>
+        <div class=\"jiyu-status-line\">
+            <span>當前: <span id=\"jiyu-cur-bv\" class=\"jiyu-highlight\">--</span></span>
+            <span>心跳倒計時: <span id=\"jiyu-timer\" class=\"jiyu-highlight\">--:--</span></span>
+        </div>
+        <div class=\"jiyu-status-line\">
+            <span>總輪次: <span id=\"jiyu-cycle\" class=\"jiyu-highlight\">0</span></span>
+            <span>進度: <span id=\"jiyu-progress\" class=\"jiyu-highlight\">0/0</span></span>
+        </div>
+        <div id=\"jiyu-log-box\" class=\"jiyu-log\">準備就緒</div>
+        <button id=\"jiyu-action-btn\" class=\"jiyu-btn\">開始全自動打榜</button>
+    \`;
+    document.body.appendChild(panel);
+
+    const ui = {
+        bvText: document.getElementById('jiyu-bv-list'),
+        curBv: document.getElementById('jiyu-cur-bv'),
+        timer: document.getElementById('jiyu-timer'),
+        cycle: document.getElementById('jiyu-cycle'),
+        progress: document.getElementById('jiyu-progress'),
+        log: document.getElementById('jiyu-log-box'),
+        btn: document.getElementById('jiyu-action-btn')
+    };
+
+    ui.bvText.value = config.videos.join('\\n');
+    ui.cycle.innerText = config.cycleCount || 0;
+
+    function setLog(msg) { if (ui.log) ui.log.innerText = msg; }
+    function getPageBv() {
+        const match = window.location.pathname.match(/\\/video\\/(BV1[0-9a-zA-Z]{9})/);
+        return match ? match[1] : null;
+    }
+
+    function navigateNext() {
+        if (!config.enabled || config.videos.length === 0) return;
+        config.currentIndex++;
+        if (config.currentIndex >= config.videos.length) {
+            config.currentIndex = 0;
+            config.cycleCount = (config.cycleCount || 0) + 1;
+        }
+        saveConfig(config);
+        const nextBv = config.videos[config.currentIndex];
+        const delay = Math.floor(Math.random() * 4) + 4;
+        let wait = delay;
+        const t = setInterval(() => {
+            wait--;
+            setLog(\`擬人化隨機延遲中: \${wait}s\`);
+            if (wait <= 0) {
+                clearInterval(t);
+                window.location.href = \`https://www.bilibili.com/video/\${nextBv}\`;
+            }
+        }, 1000);
+    }
+
+    async function startDriver() {
+        const curPageBv = getPageBv();
+        if (!curPageBv) return;
+        const targetBv = config.videos[config.currentIndex];
+        if (targetBv && curPageBv !== targetBv) {
+            window.location.href = \`https://www.bilibili.com/video/\${targetBv}\`;
+            return;
+        }
+        setLog('等待官方播放器就緒...');
+        let video = null;
+        for (let i = 0; i < 30; i++) {
+            video = document.querySelector('video');
+            if (video && video.readyState >= 1) break;
+            await new Promise(r => setTimeout(r, 500));
+        }
+        if (!video) { setTimeout(navigateNext, 4000); return; }
+        if (config.muteAudio) { video.muted = true; video.volume = 0; }
+        try { await video.play(); } catch (e) {}
+        let remain = config.playDurationSec;
+        const interval = setInterval(() => {
+            if (!config.enabled) { clearInterval(interval); return; }
+            remain--;
+            ui.timer.innerText = \`\${remain}s\`;
+            if (remain <= 0) {
+                clearInterval(interval);
+                setLog(\`✅ \${curPageBv} 心跳時長達標！\`);
+                navigateNext();
+            }
+        }, 1000);
+    }
+
+    ui.btn.onclick = () => {
+        if (config.enabled) {
+            config.enabled = false; saveConfig(config);
+            ui.btn.innerText = '開始全自動打榜'; ui.btn.classList.remove('stop');
+            setLog('已停止');
+        } else {
+            const matches = ui.bvText.value.match(/BV1[0-9a-zA-Z]{9}/g);
+            if (!matches || matches.length === 0) { alert('請輸入有效BV號'); return; }
+            config.videos = Array.from(new Set(matches));
+            config.enabled = true; config.currentIndex = 0; saveConfig(config);
+            ui.btn.innerText = '停止打榜'; ui.btn.classList.add('stop');
+            if (getPageBv() === config.videos[0]) { startDriver(); }
+            else { window.location.href = \`https://www.bilibili.com/video/\${config.videos[0]}\`; }
+        }
+    };
+    if (config.enabled) { ui.btn.innerText = '停止打榜'; ui.btn.classList.add('stop'); setTimeout(startDriver, 1500); }
+})();`;
+
+            function triggerDownload(filename, content, mime) {
+                const blob = new Blob([content], { type: mime });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = filename;
+                document.body.appendChild(a);
+                a.click();
+                setTimeout(() => {
+                    document.body.removeChild(a);
+                    URL.revokeObjectURL(url);
+                }, 100);
+            }
+
+            // 觸發下載 manifest.json
+            triggerDownload('manifest.json', manifestContent, 'application/json');
+            
+            // 延遲 500ms 觸發下載 content.js
+            setTimeout(() => {
+                triggerDownload('content.js', scriptContent, 'text/javascript');
+                log('📥 插件已下載！放進資料夾載入 Edge 即可', 'success');
+                alert('🎉 manifest.json 與 content.js 已下載完成！\n\n請在電腦桌面新建資料夾，把這兩個檔案放進去，並在 Edge 的 edge://extensions/ 載入即可掛機！');
+            }, 500);
+        });
+
         log(`💞极禹刷啵⭐️#${currentSessionId} 已就绪`);
     </script>
 </body>
 
-</html>
+</html></html>
