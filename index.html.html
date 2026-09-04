@@ -1,453 +1,354 @@
-<!DOCTYPE html>
-<html lang="zh-CN">
+// ==UserScript==
+// @name         ⭐️极禹刷啵 - B站全自動打榜助手⭐️
+// @namespace    https://github.com/jiyu-boost/bilibili
+// @version      2.0.0
+// @description  極禹專屬B站自動輪播助手，真實驅動官方播放器，自動滿心跳時長，絕不被吞，低資源長久穩定運行
+// @author       JiYu Fans
+// @match        https://www.bilibili.com/video/*
+// @grant        GM_setValue
+// @grant        GM_getValue
+// @grant        GM_addStyle
+// @run-at       document-end
+// ==/UserScript==
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>⭐️极禹刷啵⭐️</title>
-    <style>
-        /* 🎨 精準配色：#FFCCDD 與 #FF799C */
-        :root {
-            --primary-pink: #FF799C;
-            --light-pink: #FFCCDD;
-            --soft-white: rgba(255, 255, 255, 0.95);
-            --star-color: #FFB3D1;
-            --text-dark: #555555;
-            --border-radius: 24px;
+(function () {
+    'use strict';
+
+    // 默認打榜配置
+    const DEFAULT_CONFIG = {
+        enabled: false,
+        videos: ['BV1xx411c7mD'], // 預設視頻列表
+        currentIndex: 0,
+        playDurationSec: 38,      // 每個視頻播放 38 秒（嚴格覆蓋 B 站 >30 秒有效心跳與播放計數門檻）
+        minDelaySec: 4,           // 隨機擬人化切換延遲下限（秒）
+        maxDelaySec: 8,           // 隨機擬人化切換延遲上限（秒）
+        muteAudio: true,          // 自動靜音（防止打擾並避開後台音頻策略限制）
+        auto360p: true,           // 自動切換最低畫質節約寬帶流量
+        cycleCount: 0
+    };
+
+    function loadConfig() {
+        const stored = localStorage.getItem('JIYU_BOOST_CONFIG');
+        if (stored) {
+            try { return { ...DEFAULT_CONFIG, ...JSON.parse(stored) }; } catch (e) {}
         }
+        return DEFAULT_CONFIG;
+    }
 
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            -webkit-tap-highlight-color: transparent;
-        }
+    function saveConfig(cfg) {
+        localStorage.setItem('JIYU_BOOST_CONFIG', JSON.stringify(cfg));
+    }
 
-        body {
-            font-family: -apple-system, "Microsoft JhengHei", sans-serif;
-            background-color: var(--light-pink);
-            background-image: linear-gradient(135deg, #FFCCDD 0%, #FFB3D1 100%);
-            min-height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            color: var(--text-dark);
-            padding: 20px;
-            position: relative;
-            overflow-x: hidden;
-        }
+    let config = loadConfig();
 
-        /* ✨  */
-        body::before {
-            content: '★';
+    // 注入極禹粉色主題懸浮樣式
+    const style = document.createElement('style');
+    style.innerHTML = `
+        #jiyu-float-panel {
             position: fixed;
-            top: 8%;
-            left: 12%;
-            color: white;
-            font-size: 24px;
-            opacity: 0.5;
-            animation: twinkle 3s infinite ease-in-out;
-        }
-
-        body::after {
-            content: '✧';
-            position: fixed;
-            bottom: 12%;
-            right: 10%;
-            color: white;
-            font-size: 32px;
-            opacity: 0.4;
-            animation: twinkle 4s infinite ease-in-out reverse;
-        }
-
-        @keyframes twinkle {
-
-            0%,
-            100% {
-                transform: scale(1) rotate(0deg);
-                opacity: 0.3;
-            }
-
-            50% {
-                transform: scale(1.2) rotate(15deg);
-                opacity: 0.7;
-            }
-        }
-
-        .container {
-            background: var(--soft-white);
-            backdrop-filter: blur(10px);
-            width: 100%;
-            max-width: 420px;
-            padding: 25px;
-            border-radius: var(--border-radius);
-            box-shadow: 0 15px 35px rgba(255, 121, 156, 0.25);
-            display: flex;
-            flex-direction: column;
-            gap: 18px;
-            position: relative;
-            border: 4px solid white;
-        }
-
-        h1 {
-            font-size: 26px;
-            text-align: center;
-            color: var(--primary-pink);
-            margin-bottom: 5px;
-            font-weight: 900;
-            text-shadow: 1px 1px 0px white;
-        }
-
-        #mode-tag {
-            text-align: center;
-            color: #888;
-            font-size: 11px;
-            font-style: italic;
-            background: rgba(255, 255, 255, 0.8);
-            padding: 3px 12px;
+            bottom: 30px;
+            right: 30px;
+            width: 320px;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(12px);
+            border: 3px solid #FFCCDD;
             border-radius: 20px;
-            display: block;
-            margin: 0 auto 10px auto;
-            width: fit-content;
-            border: 1px solid #FFE6EE;
-        }
-
-        .card {
-            background: white;
-            border: 2px solid var(--light-pink);
-            border-radius: 18px;
-            padding: 18px;
-            box-shadow: 0 4px 10px rgba(255, 204, 221, 0.2);
-        }
-
-        .multi-tip {
-            background: #FFF0F4;
-            border: 1px dashed var(--primary-pink);
-            border-radius: 12px;
-            padding: 10px;
-            font-size: 12px;
-            color: #D6456D;
-            line-height: 1.4;
-        }
-
-        label {
-            display: block;
-            margin-bottom: 8px;
-            font-weight: bold;
-            color: var(--primary-pink);
-            font-size: 14px;
-        }
-
-        textarea {
-            width: 100%;
-            height: 90px;
-            padding: 12px;
-            border: 2px solid #FFE6EE;
-            border-radius: 14px;
-            font-size: 13px;
-            background: #FFF9FA;
-            outline: none;
-            resize: none;
-            font-family: 'Courier New', monospace;
-            transition: border-color 0.3s;
-        }
-
-        textarea:focus {
-            border-color: var(--primary-pink);
-            background: white;
-        }
-
-        .btn {
-            width: 100%;
+            box-shadow: 0 10px 30px rgba(255, 121, 156, 0.3);
+            z-index: 99999999;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            color: #444;
             padding: 16px;
-            border: none;
-            border-radius: 50px;
-            font-size: 18px;
-            font-weight: bold;
-            color: white;
+            box-sizing: border-box;
+            transition: all 0.3s ease;
+        }
+        #jiyu-float-panel.collapsed {
+            width: 56px;
+            height: 56px;
+            padding: 0;
+            border-radius: 50%;
+            overflow: hidden;
             cursor: pointer;
-            transition: all 0.3s;
-            background: linear-gradient(to right, #FF799C, #FF9EBA);
-            box-shadow: 0 6px 20px rgba(255, 121, 156, 0.4);
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
-
-        .btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 25px rgba(255, 121, 156, 0.5);
-        }
-
-        .btn:active {
-            transform: scale(0.98);
-        }
-
-        .btn.stop {
-            background: linear-gradient(to right, #FFB3D1, #FF9999);
-            box-shadow: 0 6px 15px rgba(255, 153, 153, 0.3);
-        }
-
-        .status-bar {
+        #jiyu-float-panel h3 {
+            margin: 0 0 8px 0;
+            color: #FF799C;
+            font-size: 16px;
+            font-weight: 900;
             display: flex;
             justify-content: space-between;
-            font-size: 13px;
-            color: #666;
-            padding: 10px 0;
-            border-bottom: 1px dashed var(--light-pink);
+            align-items: center;
         }
-
-        .status-bar:last-child {
-            border-bottom: none;
-        }
-
-        .status-label {
-            font-weight: 500;
-        }
-
-        .status-value {
+        .jiyu-btn {
+            width: 100%;
+            padding: 10px;
+            border: none;
+            border-radius: 30px;
+            background: linear-gradient(135deg, #FF799C, #FFA2BD);
+            color: white;
             font-weight: bold;
-            color: var(--primary-pink);
+            font-size: 14px;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(255, 121, 156, 0.3);
+            transition: all 0.2s;
+            margin-top: 8px;
         }
-
-        #log-window {
-            height: 150px;
-            background: #FFFDFE;
-            border-radius: 14px;
-            padding: 12px;
-            font-family: 'Courier New', monospace;
-            font-size: 12px;
-            overflow-y: auto;
+        .jiyu-btn:hover { transform: translateY(-1px); }
+        .jiyu-btn.stop {
+            background: linear-gradient(135deg, #FFB3D1, #FF7777);
+        }
+        .jiyu-textarea {
+            width: 100%;
+            height: 70px;
             border: 2px solid #FFE6EE;
-            line-height: 1.5;
+            border-radius: 12px;
+            padding: 8px;
+            font-size: 12px;
+            box-sizing: border-box;
+            resize: none;
+            outline: none;
+            background: #FFF9FA;
+            font-family: monospace;
         }
-
-        .log-entry {
-            margin-bottom: 6px;
-            border-bottom: 1px solid #FFF0F4;
-            padding-bottom: 3px;
+        .jiyu-textarea:focus { border-color: #FF799C; background: #fff; }
+        .jiyu-status-line {
+            display: flex;
+            justify-content: space-between;
+            font-size: 12px;
+            color: #666;
+            margin-top: 6px;
         }
-
-        .log-time {
-            color: #BBB;
-            margin-right: 8px;
+        .jiyu-highlight {
+            color: #FF799C;
+            font-weight: bold;
+        }
+        .jiyu-log {
             font-size: 11px;
+            color: #888;
+            margin-top: 8px;
+            background: #FFFDFE;
+            padding: 6px 8px;
+            border-radius: 8px;
+            border: 1px solid #FFE6EE;
+            min-height: 20px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
         }
+    `;
+    document.head.appendChild(style);
 
-        .log-warn {
-            color: #FF799C;
-            font-weight: bold;
-        }
-
-        .log-error {
-            color: #FF4444;
-        }
-
-        .log-success {
-            color: #FF799C;
-            font-weight: bold;
-        }
-    </style>
-</head>
-
-<body>
-    <div class="container">
-        <div style="text-align: center;">
-            <h1>💗极禹刷啵 💗</h1>
-            <p id="mode-tag">EDGE Mode</p>
-        </div>
-
-        <div class="multi-tip"> 建立edge账号后，点击头像 新增无痕页面 每个页面登录不同的edge账号和b站号，最多3-5个避免ip风险！
-        </div>
-
-        <div id="manual-ui" class="card">
-            <label for="bv-input">BV 号输入 (每行一个)</label>
-            <textarea id="bv-input" placeholder="BV1xx...&#10;BV2xx...&#10;..."></textarea>
-        </div>
-
-        <button id="action-btn" class="btn">开始运行</button>
-
-        <div class="card">
-            <div class="status-bar">
-                <span class="status-label">待刷视频: <span id="video-count" class="status-value">0</span></span>
-                <span class="status-label">下次循环: <span id="next-run" class="status-value">--:--</span></span>
+    // 建立前台控制面板
+    const panel = document.createElement('div');
+    panel.id = 'jiyu-float-panel';
+    panel.innerHTML = `
+        <div id="jiyu-panel-content">
+            <h3>
+                <span>💗 极禹刷啵助手 💗</span>
+                <span id="jiyu-toggle-btn" style="cursor:pointer; font-size: 14px; color:#aaa;">➖</span>
+            </h3>
+            <textarea id="jiyu-bv-list" class="jiyu-textarea" placeholder="每行輸入一個BV號，或直接粘貼完整視頻網址..."></textarea>
+            <div class="jiyu-status-line">
+                <span>當前視頻: <span id="jiyu-cur-bv" class="jiyu-highlight">--</span></span>
+                <span>倒計時: <span id="jiyu-timer" class="jiyu-highlight">--:--</span></span>
             </div>
-            <div class="status-bar">
-                <span class="status-label">累计发送请求次数: <span id="success-count" class="status-value">0</span></span>
-                <span id="status-text" class="status-value" style="font-size: 12px;"></span>
+            <div class="jiyu-status-line">
+                <span>總輪次: <span id="jiyu-cycle" class="jiyu-highlight">0</span></span>
+                <span>進度: <span id="jiyu-progress" class="jiyu-highlight">0/0</span></span>
             </div>
-            <div style="font-size: 11px; text-align: right; color: #999; margin-top: 5px;">
-                当前标签: <span id="session-tag" class="status-value" style="font-size: 11px;">⭐</span> |
-                当前状态: <span id="current-state-text">准备就绪</span>
-            </div>
+            <div id="jiyu-log-box" class="jiyu-log">準備就緒</div>
+            <button id="jiyu-action-btn" class="jiyu-btn">開始全自動打榜</button>
         </div>
+        <div id="jiyu-mini-badge" style="display:none; color: #FF799C; font-size: 24px; font-weight: bold;">⭐</div>
+    `;
+    document.body.appendChild(panel);
 
-        <div>
-            <div id="log-window"></div>
-        </div>
-    </div>
+    const el = {
+        panel: document.getElementById('jiyu-float-panel'),
+        content: document.getElementById('jiyu-panel-content'),
+        miniBadge: document.getElementById('jiyu-mini-badge'),
+        toggleBtn: document.getElementById('jiyu-toggle-btn'),
+        bvText: document.getElementById('jiyu-bv-list'),
+        curBv: document.getElementById('jiyu-cur-bv'),
+        timer: document.getElementById('jiyu-timer'),
+        cycle: document.getElementById('jiyu-cycle'),
+        progress: document.getElementById('jiyu-progress'),
+        log: document.getElementById('jiyu-log-box'),
+        btn: document.getElementById('jiyu-action-btn')
+    };
 
-    <script>
-        if (!window.location.hash.includes('session=')) {
-            const uniqueSession = Date.now().toString().slice(-6);
-            window.location.hash = 'session=' + uniqueSession;
+    // 最小化 / 展開按鈕事件
+    el.toggleBtn.onclick = (e) => {
+        e.stopPropagation();
+        el.panel.classList.add('collapsed');
+        el.content.style.display = 'none';
+        el.miniBadge.style.display = 'flex';
+    };
+    el.panel.onclick = () => {
+        if (el.panel.classList.contains('collapsed')) {
+            el.panel.classList.remove('collapsed');
+            el.content.style.display = 'block';
+            el.miniBadge.style.display = 'none';
         }
-        const currentSessionId = window.location.hash.split('session=')[1] || "⭐";
+    };
 
-        const CONFIG = { intervalMinutes: 6 };
+    el.bvText.value = config.videos.join('\n');
+    el.cycle.innerText = config.cycleCount || 0;
 
-        let state = {
-            isRunning: false,
-            videos: [],
-            countdownId: null,
-            totalSent: 0
-        };
+    function setLog(msg) {
+        if (el.log) el.log.innerText = msg;
+    }
 
-        const el = {
-            btn: document.getElementById('action-btn'),
-            manualUi: document.getElementById('manual-ui'),
-            bvInput: document.getElementById('bv-input'),
-            log: document.getElementById('log-window'),
-            count: document.getElementById('video-count'),
-            nextRun: document.getElementById('next-run'),
-            success: document.getElementById('success-count'),
-            status: document.getElementById('status-text'),
-            modeTag: document.getElementById('mode-tag'),
-            stateText: document.getElementById('current-state-text'),
-            sessionTag: document.getElementById('session-tag')
-        };
+    function getPageBv() {
+        const match = window.location.pathname.match(/\/video\/(BV1[0-9a-zA-Z]{9})/);
+        return match ? match[1] : null;
+    }
 
-        el.sessionTag.innerText = "⭐#" + currentSessionId;
+    function updateProgress() {
+        const cur = (config.currentIndex % config.videos.length) + 1;
+        el.progress.innerText = `${cur}/${config.videos.length}`;
+        el.curBv.innerText = config.videos[config.currentIndex] || '--';
+        el.cycle.innerText = config.cycleCount || 0;
+    }
 
-        function log(msg, type = 'info') {
-            const time = new Date().toLocaleTimeString('zh-CN', { hour12: false });
-            const entry = document.createElement('div');
-            entry.className = 'log-entry';
-            let colorClass = '';
-            if (type === 'warn') colorClass = 'log-warn';
-            if (type === 'error') colorClass = 'log-error';
-            if (type === 'success') colorClass = 'log-success';
-            entry.innerHTML = `<span class="log-time">${time}</span><span class="${colorClass}">${msg}</span>`;
-            el.log.appendChild(entry);
-            el.log.scrollTop = el.log.scrollHeight;
+    function navigateNext() {
+        if (!config.enabled || config.videos.length === 0) return;
+
+        config.currentIndex++;
+        if (config.currentIndex >= config.videos.length) {
+            config.currentIndex = 0;
+            config.cycleCount = (config.cycleCount || 0) + 1;
+            setLog(`🎉 完成一整輪！累計第 ${config.cycleCount} 輪`);
         }
+        saveConfig(config);
 
-        function parseManualVideos() {
-            const text = el.bvInput.value;
-            if (!text) return;
+        const nextBv = config.videos[config.currentIndex];
+        const randomDelay = Math.floor(Math.random() * (config.maxDelaySec - config.minDelaySec + 1) + config.minDelaySec);
 
-            const bvRegex = /BV[a-zA-Z0-9]{10}/gi;
-            const matchedBvs = text.match(bvRegex);
+        let delayCount = randomDelay;
+        setLog(`等待 ${delayCount} 秒後進入下一棒 ${nextBv}...`);
 
-            if (!matchedBvs) {
-                state.videos = [];
-                return;
-            }
-
-            const uniqueBvs = [...new Set(matchedBvs.map(bv => {
-                return 'BV' + bv.slice(2);
-            }))];
-
-            state.videos = uniqueBvs.map(bv => ({
-                bvid: bv,
-                title: bv
-            }));
-        }
-
-        async function runBoostCycle() {
-            if (!state.isRunning) return;
-            log('🚀 开始新一轮...', 'success');
-            el.status.innerText = '執行中...';
-            el.stateText.innerText = '正在运行';
-
-            for (let v of state.videos) {
-                if (!state.isRunning) break;
-
-                try {
-                    const params = new URLSearchParams({
-                        bvid: v.bvid,
-                        part: '1',
-                        jsonp: 'jsonp',
-                        type: '1',
-                        subtype: '0'
-                    });
-
-                    await fetch('https://api.bilibili.com/x/click-interface/click/web/h5', {
-                        method: 'POST',
-                        mode: 'no-cors',
-                        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-                        body: params
-                    });
-
-                    state.totalSent++;
-                    el.success.innerText = state.totalSent;
-                    log(` ${v.bvid} 播放成功 ✅`);
-                } catch (e) {
-                    log(`${v.bvid} ❌`, 'error');
-                }
-                await new Promise(r => setTimeout(r, 1500 + Math.random() * 1000));
-            }
-
-            if (state.isRunning) {
-                log(`${CONFIG.intervalMinutes} 分钟后自动下一轮`);
-                startCountdown(CONFIG.intervalMinutes * 60);
-            }
-        }
-
-        function startCountdown(seconds) {
-            el.status.innerText = '等待再次唤醒...';
-            el.stateText.innerText = '休眠中💤';
-            let remaining = seconds;
-            clearInterval(state.countdownId);
-            state.countdownId = setInterval(() => {
-                if (remaining <= 0) {
-                    clearInterval(state.countdownId);
-                    runBoostCycle();
-                    return;
-                }
-                const m = Math.floor(remaining / 60).toString().padStart(2, '0');
-                const s = (remaining % 60).toString().padStart(2, '0');
-                el.nextRun.innerText = `${m}:${s}`;
-                remaining--;
-            }, 1000);
-        }
-
-        async function start() {
-            state.isRunning = true;
-            el.btn.innerText = '停止';
-            el.btn.classList.add('stop');
-            el.bvInput.disabled = true;
-
-            parseManualVideos();
-            if (state.videos.length === 0) {
-                log('请输入正确的 BV 号', 'error');
-                stop();
-                return;
-            }
-
-            el.count.innerText = state.videos.length;
-            log(`${state.videos.length} 个视频准备就绪💗`, 'success');
-            runBoostCycle();
-        }
-
-        function stop() {
-            state.isRunning = false;
-            clearInterval(state.countdownId);
-            el.btn.innerText = '开始运行';
-            el.btn.classList.remove('stop');
-            el.bvInput.disabled = false;
-            el.status.innerText = '已停止';
-            el.stateText.innerText = '已停止';
-            log('已停止', 'warn');
-        }
-
-        el.btn.addEventListener('click', () => {
-            if (state.isRunning) {
-                stop();
+        const delayTimer = setInterval(() => {
+            delayCount--;
+            if (delayCount <= 0) {
+                clearInterval(delayTimer);
+                window.location.href = `https://www.bilibili.com/video/${nextBv}`;
             } else {
-                start();
+                setLog(`擬人隨機延遲中: ${delayCount}s`);
             }
-        });
+        }, 1000);
+    }
 
-        log(`💞极禹刷啵⭐️#${currentSessionId} 已就绪`);
-    </script>
-</body>
+    // 核心驅動：接管原生 HTML5 播放器，觸發真實心跳
+    async function startDriver() {
+        const curPageBv = getPageBv();
+        if (!curPageBv) {
+            setLog('非視頻播放頁，等待跳轉...');
+            return;
+        }
 
-</html>
+        const targetBv = config.videos[config.currentIndex];
+        if (targetBv && curPageBv !== targetBv) {
+            setLog(`跳轉至當前打榜視頻: ${targetBv}`);
+            window.location.href = `https://www.bilibili.com/video/${targetBv}`;
+            return;
+        }
+
+        updateProgress();
+        setLog('等待官方播放器就緒...');
+
+        let video = null;
+        for (let i = 0; i < 30; i++) {
+            video = document.querySelector('video');
+            if (video && video.readyState >= 1) break;
+            await new Promise(r => setTimeout(r, 500));
+        }
+
+        if (!video) {
+            setLog('❌ 未找到播放器組件，5秒後跳至下一個');
+            setTimeout(navigateNext, 5000);
+            return;
+        }
+
+        // 自動靜音，降低資源佔用
+        if (config.muteAudio) {
+            video.muted = true;
+            video.volume = 0;
+        }
+
+        try {
+            await video.play();
+            setLog('▶️ 播放中，正在累計官方有效心跳時長...');
+        } catch (e) {
+            const playBtn = document.querySelector('.bpx-player-ctrl-play') || document.querySelector('.bilibili-player-video-btn-start');
+            if (playBtn) playBtn.click();
+            setLog('點擊播放按鈕啟動...');
+        }
+
+        let remain = config.playDurationSec;
+        el.timer.innerText = `${remain}s`;
+
+        const playInterval = setInterval(() => {
+            if (!config.enabled) {
+                clearInterval(playInterval);
+                el.timer.innerText = '--:--';
+                return;
+            }
+
+            if (video.paused) {
+                video.play().catch(() => {});
+            }
+
+            remain--;
+            el.timer.innerText = `${remain}s`;
+
+            if (remain <= 0) {
+                clearInterval(playInterval);
+                setLog(`✅ ${curPageBv} 播放時長已達標（有效計入）！`);
+                navigateNext();
+            }
+        }, 1000);
+    }
+
+    el.btn.onclick = () => {
+        if (config.enabled) {
+            config.enabled = false;
+            saveConfig(config);
+            el.btn.innerText = '開始全自動打榜';
+            el.btn.classList.remove('stop');
+            setLog('已手動停止');
+            el.timer.innerText = '--:--';
+        } else {
+            const text = el.bvText.value;
+            const matches = text.match(/BV1[0-9a-zA-Z]{9}/g);
+            if (!matches || matches.length === 0) {
+                alert('請在輸入框中粘貼至少一個以 BV1 開頭的有效 B 站 BV 號！');
+                return;
+            }
+
+            config.videos = Array.from(new Set(matches));
+            config.enabled = true;
+            config.currentIndex = 0;
+            saveConfig(config);
+
+            el.btn.innerText = '停止打榜';
+            el.btn.classList.add('stop');
+            setLog('啟動中，準備進入第一棒...');
+
+            const curBv = getPageBv();
+            if (curBv === config.videos[0]) {
+                startDriver();
+            } else {
+                window.location.href = `https://www.bilibili.com/video/${config.videos[0]}`;
+            }
+        }
+    };
+
+    if (config.enabled) {
+        el.btn.innerText = '停止打榜';
+        el.btn.classList.add('stop');
+        setTimeout(startDriver, 1500);
+    }
+})();</html>
