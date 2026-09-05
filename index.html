@@ -35,7 +35,7 @@
             overflow-x: hidden;
         }
 
-        /* 星光背景 */
+        /* ✨ 星光背景閃爍 */
         body::before {
             content: '★';
             position: fixed;
@@ -91,7 +91,7 @@
             text-align: center;
             color: #888;
             font-size: 11px;
-            background: rgba(255, 255, 255, 0.8);
+            background: rgba(255, 255, 255, 0.85);
             padding: 3px 12px;
             border-radius: 20px;
             display: block;
@@ -115,7 +115,7 @@
             padding: 10px;
             font-size: 12px;
             color: #D6456D;
-            line-height: 1.4;
+            line-height: 1.45;
         }
 
         label {
@@ -187,7 +187,7 @@
             color: var(--primary-pink);
         }
 
-        /* 運行摘要面板樣式 */
+        /* 📊 運行摘要面板專屬樣式 */
         .summary-panel {
             background: #FFFFFF;
             border: 2px solid #FFCCDD;
@@ -238,10 +238,11 @@
             box-shadow: 0 0 6px rgba(16, 185, 129, 0.8);
         }
 
-        .stat-grid {
+        /* 4大核心數據方格（無目標達成率） */
+        .stat-grid-4 {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 10px;
+            gap: 8px;
             margin-bottom: 10px;
         }
 
@@ -265,10 +266,27 @@
             color: var(--primary-pink);
         }
 
+        .stat-card-time {
+            font-size: 12px;
+            font-weight: 800;
+            color: #555;
+            font-family: monospace;
+            margin-top: 2px;
+        }
+
+        .video-list-header {
+            font-size: 11px;
+            font-weight: bold;
+            color: #888;
+            margin-bottom: 6px;
+            display: flex;
+            justify-content: space-between;
+        }
+
         .video-progress-list {
             display: flex;
             flex-direction: column;
-            gap: 7px;
+            gap: 6px;
             max-height: 130px;
             overflow-y: auto;
             padding-right: 4px;
@@ -278,14 +296,28 @@
             background: #FFFDFE;
             border: 1px solid #FFEBF1;
             border-radius: 10px;
-            padding: 7px 9px;
+            padding: 8px 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
             font-size: 12px;
         }
 
-        .bv-tag { font-family: monospace; font-weight: bold; color: #444; }
-        .progress-num { font-size: 11px; font-weight: bold; color: var(--primary-pink); }
-        .progress-bar-bg { width: 100%; height: 6px; background: #FFE6EE; border-radius: 10px; overflow: hidden; margin-top: 4px; }
-        .progress-bar-fill { height: 100%; background: linear-gradient(90deg, #FFB3D1, #FF799C); border-radius: 10px; transition: width 0.4s ease; }
+        .bv-tag {
+            font-family: monospace;
+            font-weight: bold;
+            color: #444;
+        }
+
+        .play-count-badge {
+            font-size: 11px;
+            font-weight: bold;
+            color: var(--primary-pink);
+            background: #FFF0F4;
+            padding: 2px 8px;
+            border-radius: 12px;
+            border: 1px solid #FFE0EA;
+        }
 
         #log-window {
             height: 105px;
@@ -317,24 +349,24 @@
 </head>
 
 <body>
-    <!-- 5 個官方心跳播放器隱形並發通道 -->
-    <iframe id="chan-1" class="hidden-channel" src="about:blank" allow="autoplay"></iframe>
-    <iframe id="chan-2" class="hidden-channel" src="about:blank" allow="autoplay"></iframe>
-    <iframe id="chan-3" class="hidden-channel" src="about:blank" allow="autoplay"></iframe>
-    <iframe id="chan-4" class="hidden-channel" src="about:blank" allow="autoplay"></iframe>
-    <iframe id="chan-5" class="hidden-channel" src="about:blank" allow="autoplay"></iframe>
+    <!-- 5 個官方播放器硬體解碼通道（真實加載 B 站正版播放器並發送官方心跳） -->
+    <iframe id="chan-1" class="hidden-channel" src="about:blank" allow="autoplay; encrypted-media; fullscreen"></iframe>
+    <iframe id="chan-2" class="hidden-channel" src="about:blank" allow="autoplay; encrypted-media; fullscreen"></iframe>
+    <iframe id="chan-3" class="hidden-channel" src="about:blank" allow="autoplay; encrypted-media; fullscreen"></iframe>
+    <iframe id="chan-4" class="hidden-channel" src="about:blank" allow="autoplay; encrypted-media; fullscreen"></iframe>
+    <iframe id="chan-5" class="hidden-channel" src="about:blank" allow="autoplay; encrypted-media; fullscreen"></iframe>
 
-    <!-- 🎧 核心黑科技：系統特權級無聲音訊標籤（維持手機背景運作） -->
+    <!-- 🎧 核心黑科技：系統特權級無聲音訊標籤（維持手機/平板切換 App 背景持續打榜） -->
     <audio id="bg-keepalive-audio" loop playsinline style="display:none;"></audio>
 
     <div class="container">
         <div style="text-align: center;">
             <h1>💗极禹刷啵 💗</h1>
-            <p id="mode-tag">📱支援手機後台掛機 · 5通道並發防吞版</p>
+            <p id="mode-tag">📱 真人播放模擬 · 支援手機後台掛機</p>
         </div>
 
         <div class="multi-tip">
-            ✨ <b>手機/平板用戶福音</b>：點擊「开始运行」後，可自由切換去刷 IG、LINE 或小紅書，後台自動持續打榜，不會中斷！
+            ✨ <b>真人播放模式</b>：真實調用 B 站官方播放器，隨機化停留 36~43 秒，拒絕機器人協議假請求。切出瀏覽器回訊息或刷 IG 依舊持續打榜！
         </div>
 
         <div id="manual-ui" class="card">
@@ -342,7 +374,7 @@
             <textarea id="bv-input" placeholder="BV1xx...&#10;BV2xx..."></textarea>
         </div>
 
-        <button id="action-btn" class="btn">开始运行 (啟用後台保活)</button>
+        <button id="action-btn" class="btn">开始运行 (真實播放打榜)</button>
 
         <div class="card">
             <div class="status-bar">
@@ -350,7 +382,7 @@
                 <span>冷卻/批次倒計: <span id="next-run" class="status-value">--:--</span></span>
             </div>
             <div class="status-bar">
-                <span>累計有效發送: <span id="success-count" class="status-value">0</span></span>
+                <span>累計有效播放: <span id="success-count" class="status-value">0</span></span>
                 <span id="status-text" class="status-value" style="font-size: 12px;">準備就緒</span>
             </div>
             <div style="font-size: 11px; text-align: right; color: #999; margin-top: 4px;">
@@ -359,34 +391,43 @@
             </div>
         </div>
 
-        <!-- 📊 運行摘要面板 -->
+        <!-- 📊 運行摘要面板（已移除目標達成率，展示播放次數、輪次、開始與結束時間） -->
         <div class="summary-panel">
             <div class="summary-header">
                 <span class="summary-title">📊 運行摘要面板</span>
                 <div id="risk-badge" class="risk-badge normal">
                     <span class="light-dot green"></span>
-                    <span>狀態正常 · 無風控</span>
+                    <span>真人播放模擬 · 無風控</span>
                 </div>
             </div>
 
-            <div class="stat-grid">
+            <!-- 4 大核心數據：播放次數、經歷輪次、開始時間、最近結束時間 -->
+            <div class="stat-grid-4">
                 <div class="stat-card">
-                    <div class="stat-card-title">今日累計有效播放</div>
-                    <div id="today-total-count" class="stat-card-val">0 次</div>
+                    <div class="stat-card-title">循環播放次數</div>
+                    <div id="summary-total-plays" class="stat-card-val">0 次</div>
                 </div>
                 <div class="stat-card">
-                    <div class="stat-card-title">今日目標達成率</div>
-                    <div id="today-target-rate" class="stat-card-val">0%</div>
+                    <div class="stat-card-title">經歷輪次</div>
+                    <div id="summary-rounds" class="stat-card-val">第 0 輪</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-card-title">開始時間</div>
+                    <div id="summary-start-time" class="stat-card-time">未開始</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-card-title">最近結束時間</div>
+                    <div id="summary-end-time" class="stat-card-time">--:--:--</div>
                 </div>
             </div>
 
-            <div style="font-size: 11px; font-weight: bold; color: #888; margin-bottom: 5px; display: flex; justify-content: space-between;">
-                <span>各影片今日進度 (目標: 10次/支)</span>
+            <div class="video-list-header">
+                <span>各影片累計播放次數</span>
                 <span id="active-video-count">共 0 支影片</span>
             </div>
             <div id="video-progress-container" class="video-progress-list">
                 <div style="text-align: center; color: #bbb; font-size: 11px; padding: 10px;">
-                    請貼入 BV 號，將實時統計各影片真實播放進度條
+                    請貼入 BV 號，將實時記錄各影片累積播放次數
                 </div>
             </div>
         </div>
@@ -404,10 +445,10 @@
         const currentSessionId = window.location.hash.split('session=')[1] || "⭐";
 
         const CONFIG = {
-            playDuration: 38,     // 跑滿 38 秒確保官方有效心跳累計
-            cycleCoolingSec: 90,  // 一整輪結束後的防吞冷卻秒數
-            maxChannels: 5,       // 5 通道同時並發
-            targetPerVideo: 10
+            minPlaySec: 36,       // 真人觀看最小停留秒數（超過 B 站官方 30 秒有效閾值）
+            maxPlaySec: 43,       // 真人觀看最大停留秒數（擬人隨機浮動，防機器人特徵檢測）
+            cycleCoolingSec: 90,  // 一整輪所有視頻刷完後的防吞去重冷卻秒數
+            maxChannels: 5        // 5 通道同時並發
         };
 
         const todayKey = 'JIYU_DAILY_' + new Date().toISOString().slice(0, 10);
@@ -417,8 +458,11 @@
             videos: [],
             countdownId: null,
             totalSent: 0,
+            roundCount: 0,        // 經歷了幾輪
+            startTimeStr: '未開始', // 本次開始時間
+            lastEndTimeStr: '--:--:--', // 最近結束時間
             wakeLock: null,
-            targetWakeTime: 0,    // 絕對時間戳：防切換 App 凍結
+            targetWakeTime: 0,    // 絕對時間戳：切換 App 也能自動校準
             dailyCounts: loadDailyCounts()
         };
 
@@ -445,8 +489,10 @@
             status: document.getElementById('status-text'),
             stateText: document.getElementById('current-state-text'),
             sessionTag: document.getElementById('session-tag'),
-            todayTotal: document.getElementById('today-total-count'),
-            todayRate: document.getElementById('today-target-rate'),
+            summaryTotalPlays: document.getElementById('summary-total-plays'),
+            summaryRounds: document.getElementById('summary-rounds'),
+            summaryStartTime: document.getElementById('summary-start-time'),
+            summaryEndTime: document.getElementById('summary-end-time'),
             activeCount: document.getElementById('active-video-count'),
             progressContainer: document.getElementById('video-progress-container'),
             bgAudio: document.getElementById('bg-keepalive-audio'),
@@ -481,26 +527,23 @@
             el.log.scrollTop = el.log.scrollHeight;
         }
 
-        // 🎧 核心：啟動 iOS / Android 系統特權無聲音頻保活
+        // 🎧 啟動手機無聲音頻保活（切換 App 仍享有背景播放特權）
         function startSilentAudioKeepAlive() {
             try {
-                // 生成極小長度的無聲 WAV base64
                 const silentWav = "data:audio/wav;base64,UklGRiQAAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YQAAAAA=";
                 el.bgAudio.src = silentWav;
                 el.bgAudio.play().then(() => {
-                    log('🎧 後台保活通道已啟用（切出網頁仍可持續打榜）', 'success');
+                    log('🎧 背景保活已就位（切換應用不會中斷打榜）', 'success');
                 }).catch(() => {});
 
-                // 配置 MediaSession（手機鎖屏與控制中心會識別為正在播放，不予殺進程）
                 if ('mediaSession' in navigator) {
                     navigator.mediaSession.metadata = new MediaMetadata({
-                        title: "⭐️极禹打榜保活中⭐️",
-                        artist: "5通道極速打榜隊列",
-                        album: "後台不中斷運行"
+                        title: "⭐️极禹打榜進行中⭐️",
+                        artist: "真人播放模擬隊列",
+                        album: "後台不中斷打榜"
                     });
                 }
 
-                // 螢幕喚醒鎖（若支援）
                 if ('wakeLock' in navigator) {
                     navigator.wakeLock.request('screen').then(lock => {
                         state.wakeLock = lock;
@@ -519,41 +562,41 @@
             } catch (e) {}
         }
 
-        // ⏱️ 頁面可見性監聽：當用戶切回網頁時，瞬間利用時間差進行即時校準
+        // ⏱️ 切回網頁即時校驗時間戳
         document.addEventListener('visibilitychange', () => {
             if (!document.hidden && state.isRunning) {
-                // 如果目前在冷卻階段，校驗是否已超時
                 if (state.targetWakeTime > 0) {
                     const now = Date.now();
                     if (now >= state.targetWakeTime) {
-                        log('⚡ 檢測到切換期間冷卻已完成，立即啟動下一輪！', 'success');
+                        log('⚡ 檢測到切出期間冷卻已完成，無縫開啟下一輪！', 'success');
                         clearInterval(state.countdownId);
                         state.targetWakeTime = 0;
                         runBoostCycle();
                     } else {
                         const remainSec = Math.round((state.targetWakeTime - now) / 1000);
-                        log(`切回頁面，剩餘冷卻: ${remainSec} 秒`);
+                        log(`切回頁面，當前冷卻剩餘: ${remainSec} 秒`);
                     }
                 }
             }
         });
 
+        // 渲染摘要面板（無目標達成率，純統計次數、輪次、開始/結束時間）
         function renderSummaryPanel() {
             let totalToday = 0;
-            const targetTotal = (state.videos.length || 1) * CONFIG.targetPerVideo;
             state.videos.forEach(v => {
                 totalToday += (state.dailyCounts[v.bvid] || 0);
             });
 
-            el.todayTotal.innerText = totalToday + ' 次';
-            const rate = Math.min(100, Math.round((totalToday / targetTotal) * 100));
-            el.todayRate.innerText = rate + '%';
+            el.summaryTotalPlays.innerText = totalToday + ' 次';
+            el.summaryRounds.innerText = '第 ' + state.roundCount + ' 輪';
+            el.summaryStartTime.innerText = state.startTimeStr;
+            el.summaryEndTime.innerText = state.lastEndTimeStr;
             el.activeCount.innerText = `共 ${state.videos.length} 支影片`;
 
             if (state.videos.length === 0) {
                 el.progressContainer.innerHTML = `
                     <div style="text-align: center; color: #bbb; font-size: 11px; padding: 10px;">
-                        請貼入 BV 號，將實時統計各影片真實播放進度條
+                        請貼入 BV 號，將實時記錄各影片累積播放次數
                     </div>`;
                 return;
             }
@@ -561,17 +604,10 @@
             let html = '';
             state.videos.forEach(v => {
                 const count = state.dailyCounts[v.bvid] || 0;
-                const target = CONFIG.targetPerVideo;
-                const pct = Math.min(100, Math.round((count / target) * 100));
                 html += `
                     <div class="video-progress-item">
-                        <div style="display:flex; justify-content:space-between;">
-                            <span class="bv-tag">${v.bvid}</span>
-                            <span class="progress-num">${count}/${target} 次 (${pct}%)</span>
-                        </div>
-                        <div class="progress-bar-bg">
-                            <div class="progress-bar-fill" style="width: ${pct}%"></div>
-                        </div>
+                        <span class="bv-tag">${v.bvid}</span>
+                        <span class="play-count-badge">已播放 ${count} 次</span>
                     </div>
                 `;
             });
@@ -607,12 +643,14 @@
             });
         }
 
-        // 🚀 核心：5 通道極速並發
+        // 🚀 真人播放模擬主程序：真正加載官方播放器，絕不使用假 API 請求
         async function runBoostCycle() {
             if (!state.isRunning) return;
-            log('🚀 开始新一轮（5通道高速并发）...', 'success');
-            el.status.innerText = '執行中...';
-            el.stateText.innerText = '正在运行';
+            state.roundCount++;
+            log(`🎬 開始第 ${state.roundCount} 輪播放（5 通道真人模擬）...`, 'success');
+            el.status.innerText = `第 ${state.roundCount} 輪執行中...`;
+            el.stateText.innerText = `正在進行第 ${state.roundCount} 輪`;
+            renderSummaryPanel();
 
             for (let i = 0; i < state.videos.length; i += CONFIG.maxChannels) {
                 if (!state.isRunning) break;
@@ -620,34 +658,24 @@
                 const currentBatch = state.videos.slice(i, i + CONFIG.maxChannels);
                 const batchBvs = currentBatch.map(v => v.bvid);
 
-                log(`▶️ 並發運行中: ${batchBvs.join(' | ')}`);
+                log(`▶️ 加載官方播放器: ${batchBvs.join(' | ')}`);
 
+                // 核心關鍵：載入真正的官方播放器 iframe，讓 B 站內核自行完成視頻切片解碼與官方合法心跳上報
                 currentBatch.forEach((v, idx) => {
                     const chan = el.channels[idx];
                     if (chan) {
                         chan.src = `https://player.bilibili.com/player.html?bvid=${v.bvid}&autoplay=1&muted=1&page=1`;
                     }
-                    const params = new URLSearchParams({
-                        bvid: v.bvid,
-                        part: '1',
-                        jsonp: 'jsonp',
-                        type: '1',
-                        subtype: '0'
-                    });
-                    fetch('https://api.bilibili.com/x/click-interface/click/web/h5', {
-                        method: 'POST',
-                        mode: 'no-cors',
-                        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-                        body: params
-                    }).catch(() => {});
                 });
 
-                // 絕對時間倒計時（即使切出後台，時間也是根據真實 Date.now 計算）
-                const batchEndTs = Date.now() + CONFIG.playDuration * 1000;
+                // 擬人化隨機停留時長（36 ~ 43 秒，避開固定時長作弊檢測）
+                const randomizedPlaySec = Math.floor(CONFIG.minPlaySec + Math.random() * (CONFIG.maxPlaySec - CONFIG.minPlaySec + 1));
+                const batchEndTs = Date.now() + randomizedPlaySec * 1000;
+
                 while (state.isRunning) {
                     const now = Date.now();
                     const remain = Math.max(0, Math.ceil((batchEndTs - now) / 1000));
-                    el.status.innerText = `心跳倒計: ${remain}s (同時刷${currentBatch.length}個)`;
+                    el.status.innerText = `真人觀看累計: ${remain}s (同時${currentBatch.length}個)`;
                     el.nextRun.innerText = `00:${remain.toString().padStart(2, '0')}`;
                     if (remain <= 0) break;
                     await sleep(1000);
@@ -655,10 +683,11 @@
 
                 if (!state.isRunning) break;
 
+                // 本組播放完畢，次數真切入庫
                 currentBatch.forEach(v => {
                     state.totalSent++;
                     state.dailyCounts[v.bvid] = (state.dailyCounts[v.bvid] || 0) + 1;
-                    log(` ${v.bvid} 有效心跳完成 ✅ [今日已達 ${state.dailyCounts[v.bvid]} 次]`);
+                    log(`✅ ${v.bvid} 官方播放心跳完成 (累計播放 ${state.dailyCounts[v.bvid]} 次)`, 'success');
                 });
 
                 saveDailyCounts();
@@ -666,23 +695,29 @@
                 renderSummaryPanel();
 
                 if (i + CONFIG.maxChannels < state.videos.length) {
-                    log('⚡ 自動無縫切換下一批影片...');
-                    await sleep(2000);
+                    // 擬人換片間歇 2.5 ~ 4.5 秒
+                    const switchDelay = 2500 + Math.floor(Math.random() * 2000);
+                    log(`⚡ 擬人換片間歇 ${(switchDelay/1000).toFixed(1)} 秒後播放下一批...`);
+                    await sleep(switchDelay);
                 }
             }
 
+            // 清除當前播放器防止資源佔用
             el.channels.forEach(ch => { if (ch) ch.src = 'about:blank'; });
 
             if (state.isRunning) {
-                log(`整輪已完成！防吞冷卻 ${CONFIG.cycleCoolingSec} 秒後自動重啟下一輪`);
+                // 記錄本輪結束時間
+                state.lastEndTimeStr = new Date().toLocaleTimeString('zh-CN', { hour12: false });
+                renderSummaryPanel();
+                log(`🏁 第 ${state.roundCount} 輪播放完畢！冷卻 ${CONFIG.cycleCoolingSec} 秒去重防吞後進入下一輪`);
                 startCountdown(CONFIG.cycleCoolingSec);
             }
         }
 
-        // ⏱️ 基於「真實世界時間戳」的倒計時（切走再久也不會卡住）
+        // ⏱️ 防切 App 凍結倒計時
         function startCountdown(seconds) {
             el.status.innerText = '防吞去重冷卻中...';
-            el.stateText.innerText = '冷卻中💤';
+            el.stateText.innerText = '冷卻休眠中💤';
             state.targetWakeTime = Date.now() + seconds * 1000;
 
             clearInterval(state.countdownId);
@@ -708,7 +743,8 @@
 
         async function start() {
             state.isRunning = true;
-            startSilentAudioKeepAlive(); // 啟動背景特權保活
+            state.startTimeStr = new Date().toLocaleTimeString('zh-CN', { hour12: false });
+            startSilentAudioKeepAlive();
             el.btn.innerText = '停止打榜';
             el.btn.classList.add('stop');
             el.bvInput.disabled = true;
@@ -721,22 +757,25 @@
             }
 
             el.count.innerText = state.videos.length;
-            log(`${state.videos.length} 個視頻準備就緒💗（手機後台保活模式已開啟）`, 'success');
+            log(`${state.videos.length} 個視頻準備就緒💗（真人播放模式已啟動，開始於 ${state.startTimeStr}）`, 'success');
+            renderSummaryPanel();
             runBoostCycle();
         }
 
         function stop() {
             state.isRunning = false;
             state.targetWakeTime = 0;
+            state.lastEndTimeStr = new Date().toLocaleTimeString('zh-CN', { hour12: false });
             clearInterval(state.countdownId);
-            stopSilentAudioKeepAlive(); // 關閉保活
+            stopSilentAudioKeepAlive();
             el.channels.forEach(ch => { if (ch) ch.src = 'about:blank'; });
-            el.btn.innerText = '开始运行 (啟用後台保活)';
+            el.btn.innerText = '开始运行 (真實播放打榜)';
             el.btn.classList.remove('stop');
             el.bvInput.disabled = false;
             el.status.innerText = '已停止';
             el.stateText.innerText = '已停止';
-            log('已停止', 'warn');
+            renderSummaryPanel();
+            log(`已手動停止，結束於 ${state.lastEndTimeStr}`, 'warn');
         }
 
         el.btn.addEventListener('click', () => {
@@ -747,7 +786,7 @@
             parseManualVideos();
         });
 
-        log(`💞极禹刷啵⭐️#${currentSessionId} 已就绪 (支援手機後台)`);
+        log(`💞极禹刷啵⭐️#${currentSessionId} 已就緒 (真人模擬·後台保活版)`);
     </script>
 </body>
 
