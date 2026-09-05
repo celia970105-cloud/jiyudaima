@@ -75,13 +75,13 @@
             background: var(--soft-white);
             backdrop-filter: blur(10px);
             width: 100%;
-            max-width: 420px;
-            padding: 25px;
+            max-width: 440px;
+            padding: 22px;
             border-radius: var(--border-radius);
             box-shadow: 0 15px 35px rgba(255, 121, 156, 0.25);
             display: flex;
             flex-direction: column;
-            gap: 16px;
+            gap: 15px;
             position: relative;
             border: 4px solid white;
         }
@@ -156,7 +156,7 @@
 
         .btn {
             width: 100%;
-            padding: 15px;
+            padding: 14px;
             border: none;
             border-radius: 50px;
             font-size: 17px;
@@ -187,7 +187,7 @@
             font-size: 13px;
             padding: 11px;
             box-shadow: 0 4px 12px rgba(255, 121, 156, 0.25);
-            margin-top: 4px;
+            margin-top: 6px;
         }
 
         .status-bar {
@@ -195,7 +195,7 @@
             justify-content: space-between;
             font-size: 13px;
             color: #666;
-            padding: 8px 0;
+            padding: 7px 0;
             border-bottom: 1px dashed var(--light-pink);
         }
 
@@ -212,8 +212,162 @@
             color: var(--primary-pink);
         }
 
+        /* 📊 運行摘要面板專屬樣式 */
+        .summary-panel {
+            background: #FFFFFF;
+            border: 2px solid #FFCCDD;
+            border-radius: 18px;
+            padding: 16px;
+            box-shadow: 0 4px 12px rgba(255, 121, 156, 0.15);
+        }
+
+        .summary-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid #FFE6EE;
+        }
+
+        .summary-title {
+            font-size: 14px;
+            font-weight: 900;
+            color: var(--primary-pink);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        /* 🟢 / 🔴 風控狀態指示燈 */
+        .risk-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+
+        .risk-badge.normal {
+            background: #ECFDF5;
+            color: #059669;
+            border: 1px solid #A7F3D0;
+        }
+
+        .risk-badge.blocked {
+            background: #FEF2F2;
+            color: #DC2626;
+            border: 1px solid #FECACA;
+            animation: pulse-warn 1.5s infinite;
+        }
+
+        .light-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            display: inline-block;
+        }
+
+        .light-dot.green {
+            background: #10B981;
+            box-shadow: 0 0 6px rgba(16, 185, 129, 0.8);
+        }
+
+        .light-dot.red {
+            background: #EF4444;
+            box-shadow: 0 0 8px rgba(239, 68, 68, 0.9);
+        }
+
+        @keyframes pulse-warn {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.03); }
+        }
+
+        /* 累計指標小方塊 */
+        .stat-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-bottom: 12px;
+        }
+
+        .stat-card {
+            background: #FFF9FA;
+            border: 1px solid #FFE6EE;
+            border-radius: 12px;
+            padding: 10px;
+            text-align: center;
+        }
+
+        .stat-card-title {
+            font-size: 11px;
+            color: #888;
+            margin-bottom: 4px;
+        }
+
+        .stat-card-val {
+            font-size: 18px;
+            font-weight: 900;
+            color: var(--primary-pink);
+        }
+
+        /* 影片進度清單 */
+        .video-progress-list {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            max-height: 150px;
+            overflow-y: auto;
+            padding-right: 4px;
+        }
+
+        .video-progress-item {
+            background: #FFFDFE;
+            border: 1px solid #FFEBF1;
+            border-radius: 10px;
+            padding: 8px 10px;
+            font-size: 12px;
+        }
+
+        .video-progress-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 4px;
+        }
+
+        .bv-tag {
+            font-family: monospace;
+            font-weight: bold;
+            color: #444;
+        }
+
+        .progress-num {
+            font-size: 11px;
+            font-weight: bold;
+            color: var(--primary-pink);
+        }
+
+        .progress-bar-bg {
+            width: 100%;
+            height: 6px;
+            background: #FFE6EE;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .progress-bar-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #FFB3D1, #FF799C);
+            border-radius: 10px;
+            transition: width 0.4s ease;
+        }
+
         #log-window {
-            height: 130px;
+            height: 120px;
             background: #FFFDFE;
             border-radius: 14px;
             padding: 12px;
@@ -287,7 +441,7 @@
     <div class="container">
         <div style="text-align: center;">
             <h1>💗极禹刷啵 💗</h1>
-            <p id="mode-tag">EDGE Mode</p>
+            <p id="mode-tag">EDGE Mode · 5通道並行</p>
         </div>
 
         <div class="multi-tip"> 建立edge账号后，点击头像 新增无痕页面 每个页面登录不同的edge账号和b站号，最多3-5个避免ip风险！
@@ -312,6 +466,41 @@
             <div style="font-size: 11px; text-align: right; color: #999; margin-top: 5px;">
                 当前标签: <span id="session-tag" class="status-value" style="font-size: 11px;">⭐</span> |
                 当前状态: <span id="current-state-text">准备就绪</span>
+            </div>
+        </div>
+
+        <!-- 📊 核心新功能：運行摘要面板 -->
+        <div class="summary-panel">
+            <div class="summary-header">
+                <span class="summary-title">📊 運行摘要面板</span>
+                <!-- 風控指示燈（綠燈正常 / 紅燈攔截） -->
+                <div id="risk-badge" class="risk-badge normal">
+                    <span id="risk-dot" class="light-dot green"></span>
+                    <span id="risk-text">狀態正常 · 無風控</span>
+                </div>
+            </div>
+
+            <!-- 實時累計成功總次數 -->
+            <div class="stat-grid">
+                <div class="stat-card">
+                    <div class="stat-card-title">今日累計成功播放</div>
+                    <div id="today-total-count" class="stat-card-val">0 次</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-card-title">今日目標達成率</div>
+                    <div id="today-target-rate" class="stat-card-val">0%</div>
+                </div>
+            </div>
+
+            <!-- 各影片今日進度列表 (如 5/10 次) -->
+            <div style="font-size: 11px; font-weight: bold; color: #888; margin-bottom: 6px; display: flex; justify-content: space-between;">
+                <span>各影片今日進度 (目標: 10次/支)</span>
+                <span id="active-video-count">共 0 支影片</span>
+            </div>
+            <div id="video-progress-container" class="video-progress-list">
+                <div style="text-align: center; color: #bbb; font-size: 11px; padding: 10px;">
+                    請輸入 BV 號開始打榜，此處將實時顯示進度條
+                </div>
             </div>
         </div>
 
@@ -342,16 +531,37 @@
         const CONFIG = {
             playDuration: 38,     // 每個視頻跑滿 38 秒（覆蓋 B 站有效心跳）
             intervalMinutes: 5,   // 一大輪全部刷完後的冷卻分鐘數
-            maxChannels: 5        // 🔥 升級為 5 通道同時並發（速度翻 5 倍）
+            maxChannels: 5,       // 5 通道同時並發
+            targetPerVideo: 10    // 每個影片的默認今日目標次數（如 5/10 次）
         };
+
+        // 今日日期鍵值（確保每天 0 點自動獨立計數）
+        const todayKey = 'JIYU_DAILY_' + new Date().toISOString().slice(0, 10);
 
         let state = {
             isRunning: false,
             videos: [],
             countdownId: null,
             totalSent: 0,
-            wakeLock: null
+            wakeLock: null,
+            isRiskBlocked: false, // 是否觸發 B 站風控攔截
+            dailyCounts: loadDailyCounts() // 各影片今日播放計數字典 { 'BVxxx': 5 }
         };
+
+        function loadDailyCounts() {
+            try {
+                const stored = localStorage.getItem(todayKey);
+                return stored ? JSON.parse(stored) : {};
+            } catch (e) {
+                return {};
+            }
+        }
+
+        function saveDailyCounts() {
+            try {
+                localStorage.setItem(todayKey, JSON.stringify(state.dailyCounts));
+            } catch (e) {}
+        }
 
         const el = {
             btn: document.getElementById('action-btn'),
@@ -365,6 +575,13 @@
             modeTag: document.getElementById('mode-tag'),
             stateText: document.getElementById('current-state-text'),
             sessionTag: document.getElementById('session-tag'),
+            riskBadge: document.getElementById('risk-badge'),
+            riskDot: document.getElementById('risk-dot'),
+            riskText: document.getElementById('risk-text'),
+            todayTotal: document.getElementById('today-total-count'),
+            todayRate: document.getElementById('today-target-rate'),
+            activeCount: document.getElementById('active-video-count'),
+            progressContainer: document.getElementById('video-progress-container'),
             channels: [
                 document.getElementById('chan-1'),
                 document.getElementById('chan-2'),
@@ -381,6 +598,8 @@
         const savedBvs = localStorage.getItem('JIYU_BV_SAVED');
         if (savedBvs) {
             el.bvInput.value = savedBvs;
+            parseManualVideos();
+            renderSummaryPanel();
         }
 
         function log(msg, type = 'info') {
@@ -394,6 +613,63 @@
             entry.innerHTML = `<span class="log-time">${time}</span><span class="${colorClass}">${msg}</span>`;
             el.log.appendChild(entry);
             el.log.scrollTop = el.log.scrollHeight;
+        }
+
+        // 設置風控指示燈（綠色正常 / 紅色攔截）
+        function setRiskStatus(isBlocked, reason = '') {
+            state.isRiskBlocked = isBlocked;
+            if (isBlocked) {
+                el.riskBadge.className = 'risk-badge blocked';
+                el.riskDot.className = 'light-dot red';
+                el.riskText.innerText = '⚠️ 已觸發風控攔截！';
+                log(`🚨 [風控警報] 偵測到 B 站頻率攔截${reason ? ': ' + reason : ''}！建議休眠或更換網絡！`, 'error');
+            } else {
+                el.riskBadge.className = 'risk-badge normal';
+                el.riskDot.className = 'light-dot green';
+                el.riskText.innerText = '狀態正常 · 無風控';
+            }
+        }
+
+        // 實時渲染運行摘要面板
+        function renderSummaryPanel() {
+            let totalToday = 0;
+            const targetTotal = (state.videos.length || 1) * CONFIG.targetPerVideo;
+
+            state.videos.forEach(v => {
+                totalToday += (state.dailyCounts[v.bvid] || 0);
+            });
+
+            el.todayTotal.innerText = totalToday + ' 次';
+            const rate = Math.min(100, Math.round((totalToday / targetTotal) * 100));
+            el.todayRate.innerText = rate + '%';
+            el.activeCount.innerText = `共 ${state.videos.length} 支影片`;
+
+            if (state.videos.length === 0) {
+                el.progressContainer.innerHTML = `
+                    <div style="text-align: center; color: #bbb; font-size: 11px; padding: 10px;">
+                        請輸入 BV 號開始打榜，此處將實時顯示進度條
+                    </div>`;
+                return;
+            }
+
+            let html = '';
+            state.videos.forEach(v => {
+                const count = state.dailyCounts[v.bvid] || 0;
+                const target = CONFIG.targetPerVideo;
+                const pct = Math.min(100, Math.round((count / target) * 100));
+                html += `
+                    <div class="video-progress-item">
+                        <div class="video-progress-header">
+                            <span class="bv-tag">${v.bvid}</span>
+                            <span class="progress-num">${count}/${target} 次 (${pct}%)</span>
+                        </div>
+                        <div class="progress-bar-bg">
+                            <div class="progress-bar-fill" style="width: ${pct}%"></div>
+                        </div>
+                    </div>
+                `;
+            });
+            el.progressContainer.innerHTML = html;
         }
 
         // 後台防休眠保活機制
@@ -429,6 +705,7 @@
 
             if (!matchedBvs) {
                 state.videos = [];
+                renderSummaryPanel();
                 return;
             }
 
@@ -442,6 +719,7 @@
             }));
 
             localStorage.setItem('JIYU_BV_SAVED', text);
+            renderSummaryPanel();
         }
 
         function sleep(ms) {
@@ -463,7 +741,6 @@
             el.status.innerText = '執行中...';
             el.stateText.innerText = '正在运行';
 
-            // 將所有視頻按 5 個一組打包，並發運行
             for (let i = 0; i < state.videos.length; i += CONFIG.maxChannels) {
                 if (!state.isRunning) break;
 
@@ -472,7 +749,7 @@
 
                 log(`▶️ 5通道並發: ${batchBvs.join(' | ')}`);
 
-                // 同時啟動 5 個通道載入官方播放器上報心跳
+                // 啟動通道
                 currentBatch.forEach((v, idx) => {
                     const chan = el.channels[idx];
                     if (chan) {
@@ -486,12 +763,18 @@
                         type: '1',
                         subtype: '0'
                     });
+
+                    // 請求測試與風控捕獲
                     fetch('https://api.bilibili.com/x/click-interface/click/web/h5', {
                         method: 'POST',
                         mode: 'no-cors',
                         headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
                         body: params
-                    }).catch(() => {});
+                    }).then(() => {
+                        if (state.isRiskBlocked) setRiskStatus(false);
+                    }).catch(err => {
+                        setRiskStatus(true, '網絡連線異常');
+                    });
                 });
 
                 // 5 個視頻同時倒計時 38 秒
@@ -504,12 +787,16 @@
 
                 if (!state.isRunning) break;
 
-                // 本組 5 個視頻全部達標
+                // 本組 5 個視頻全部達標：更新各影片進度與今日總計
                 currentBatch.forEach(v => {
                     state.totalSent++;
-                    log(` ${v.bvid} 播放成功 ✅`);
+                    state.dailyCounts[v.bvid] = (state.dailyCounts[v.bvid] || 0) + 1;
+                    log(` ${v.bvid} 播放成功 ✅ [今日已達 ${state.dailyCounts[v.bvid]}/${CONFIG.targetPerVideo}次]`);
                 });
+
+                saveDailyCounts();
                 el.success.innerText = state.totalSent;
+                renderSummaryPanel();
 
                 // 擬人化間歇 3~5 秒換下一批
                 await sleep(3000 + Math.random() * 2000);
@@ -583,6 +870,10 @@
             } else {
                 start();
             }
+        });
+
+        el.bvInput.addEventListener('input', () => {
+            parseManualVideos();
         });
 
         // 外掛下載功能
