@@ -264,7 +264,8 @@
             color: #FF799C;
         }
 
-        #bili-silent-frame {
+        /* 3 個後台官方心跳播放器通道（靜音並發） */
+        .hidden-channel {
             position: absolute;
             width: 1px;
             height: 1px;
@@ -276,7 +277,10 @@
 </head>
 
 <body>
-    <iframe id="bili-silent-frame" src="about:blank" allow="autoplay"></iframe>
+    <!-- 3 通道並行播放容器 -->
+    <iframe id="chan-1" class="hidden-channel" src="about:blank" allow="autoplay"></iframe>
+    <iframe id="chan-2" class="hidden-channel" src="about:blank" allow="autoplay"></iframe>
+    <iframe id="chan-3" class="hidden-channel" src="about:blank" allow="autoplay"></iframe>
 
     <div class="container">
         <div style="text-align: center;">
@@ -309,7 +313,7 @@
             </div>
         </div>
 
-        <!-- 粉絲一鍵下載外掛專區 -->
+        <!-- 電腦 Edge 外掛插件包下載 -->
         <div class="ext-guide-box">
             <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
                 <b>🖥️ 電腦 Edge 外掛插件包（修復版）</b>
@@ -333,7 +337,11 @@
         }
         const currentSessionId = window.location.hash.split('session=')[1] || "⭐";
 
-        const CONFIG = { intervalMinutes: 6 };
+        const CONFIG = {
+            playDuration: 38,     // 每個視頻跑滿 38 秒（覆蓋 B 站 30 秒有效心跳）
+            intervalMinutes: 5,   // 一大輪全部刷完後的冷卻分鍾數
+            maxChannels: 3        // 安全並行通道數（同時刷 3 個視頻，防吞防驗證碼）
+        };
 
         let state = {
             isRunning: false,
@@ -355,13 +363,17 @@
             modeTag: document.getElementById('mode-tag'),
             stateText: document.getElementById('current-state-text'),
             sessionTag: document.getElementById('session-tag'),
-            frame: document.getElementById('bili-silent-frame'),
+            channels: [
+                document.getElementById('chan-1'),
+                document.getElementById('chan-2'),
+                document.getElementById('chan-3')
+            ],
             downloadBtn: document.getElementById('download-ext-btn')
         };
 
         el.sessionTag.innerText = "⭐#" + currentSessionId;
 
-        // 本地保存上次輸入的 BV 號
+        // 本地記錄 BV 號
         const savedBvs = localStorage.getItem('JIYU_BV_SAVED');
         if (savedBvs) {
             el.bvInput.value = savedBvs;
@@ -380,7 +392,7 @@
             el.log.scrollTop = el.log.scrollHeight;
         }
 
-        // 後台防休眠
+        // 後台防休眠保活機制
         let audioCtx = null;
         function enableBackgroundKeepAlive() {
             try {
@@ -440,20 +452,30 @@
             });
         }
 
+        // 核心：多通道並發打榜主邏輯
         async function runBoostCycle() {
             if (!state.isRunning) return;
-            log('🚀 开始新一轮...', 'success');
+            log('🚀 开始新一轮（3通道并发打榜）...', 'success');
             el.status.innerText = '執行中...';
             el.stateText.innerText = '正在运行';
 
-            for (let v of state.videos) {
+            // 將所有視頻按 3 個一組打包，並發運行
+            for (let i = 0; i < state.videos.length; i += CONFIG.maxChannels) {
                 if (!state.isRunning) break;
 
-                try {
-                    if (el.frame) {
-                        el.frame.src = `https://player.bilibili.com/player.html?bvid=${v.bvid}&autoplay=1&muted=1`;
+                const currentBatch = state.videos.slice(i, i + CONFIG.maxChannels);
+                const batchBvs = currentBatch.map(v => v.bvid);
+
+                log(`▶️ 通道並發中: ${batchBvs.join(' | ')}`);
+
+                // 同時啟動多個通道載入官方播放器上報心跳
+                currentBatch.forEach((v, idx) => {
+                    const chan = el.channels[idx];
+                    if (chan) {
+                        chan.src = `https://player.bilibili.com/player.html?bvid=${v.bvid}&autoplay=1&muted=1&page=1`;
                     }
 
+                    // 輔助 API 發送
                     const params = new URLSearchParams({
                         bvid: v.bvid,
                         part: '1',
@@ -461,23 +483,37 @@
                         type: '1',
                         subtype: '0'
                     });
-
                     fetch('https://api.bilibili.com/x/click-interface/click/web/h5', {
                         method: 'POST',
                         mode: 'no-cors',
                         headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
                         body: params
                     }).catch(() => {});
+                });
 
-                    state.totalSent++;
-                    el.success.innerText = state.totalSent;
-                    log(` ${v.bvid} 播放成功 ✅`);
-                } catch (e) {
-                    log(`${v.bvid} ❌`, 'error');
+                // 多個視頻同時倒計時 38 秒
+                let remain = CONFIG.playDuration;
+                while (remain > 0 && state.isRunning) {
+                    el.status.innerText = `心跳累計: ${remain}s (同時刷${currentBatch.length}個)`;
+                    await sleep(1000);
+                    remain--;
                 }
 
-                await sleep(2000 + Math.random() * 1500);
+                if (!state.isRunning) break;
+
+                // 本組視頻全部達標
+                currentBatch.forEach(v => {
+                    state.totalSent++;
+                    log(` ${v.bvid} 播放成功 ✅`);
+                });
+                el.success.innerText = state.totalSent;
+
+                // 擬人化間歇 3~5 秒換下一批
+                await sleep(3000 + Math.random() * 2000);
             }
+
+            // 清空當前播放通道
+            el.channels.forEach(ch => { if (ch) ch.src = 'about:blank'; });
 
             if (state.isRunning) {
                 log(`${CONFIG.intervalMinutes} 分钟后自动下一轮`);
@@ -522,14 +558,14 @@
             }
 
             el.count.innerText = state.videos.length;
-            log(`${state.videos.length} 个视频准备就绪💗`, 'success');
+            log(`${state.videos.length} 个视频准备就绪💗（3 通道并发啟動）`, 'success');
             runBoostCycle();
         }
 
         function stop() {
             state.isRunning = false;
             clearInterval(state.countdownId);
-            if (el.frame) el.frame.src = 'about:blank';
+            el.channels.forEach(ch => { if (ch) ch.src = 'about:blank'; });
             el.btn.innerText = '开始运行';
             el.btn.classList.remove('stop');
             el.bvInput.disabled = false;
@@ -546,7 +582,7 @@
             }
         });
 
-        // 📥 點擊一鍵下載 manifest.json 和 content.js 兩個檔案
+        // 外掛下載功能
         el.downloadBtn.addEventListener('click', () => {
             const manifestContent = JSON.stringify({
                 "manifest_version": 3,
@@ -563,157 +599,44 @@
 
             const scriptContent = `(function () {
     'use strict';
-    const DEFAULT_CONFIG = {
-        enabled: false,
-        videos: ['BV1xx411c7mD'],
-        currentIndex: 0,
-        playDurationSec: 38,
-        minDelaySec: 4,
-        maxDelaySec: 8,
-        muteAudio: true,
-        cycleCount: 0
-    };
-    function loadConfig() {
-        const stored = localStorage.getItem('JIYU_BOOST_CONFIG');
-        if (stored) { try { return { ...DEFAULT_CONFIG, ...JSON.parse(stored) }; } catch (e) {} }
-        return DEFAULT_CONFIG;
-    }
+    const DEFAULT_CONFIG = { enabled: false, videos: ['BV1xx411c7mD'], currentIndex: 0, playDurationSec: 38, minDelaySec: 4, maxDelaySec: 8, muteAudio: true, cycleCount: 0 };
+    function loadConfig() { const stored = localStorage.getItem('JIYU_BOOST_CONFIG'); return stored ? JSON.parse(stored) : DEFAULT_CONFIG; }
     function saveConfig(cfg) { localStorage.setItem('JIYU_BOOST_CONFIG', JSON.stringify(cfg)); }
     let config = loadConfig();
-
     const style = document.createElement('style');
-    style.innerHTML = \`
-        #jiyu-float-panel {
-            position: fixed; bottom: 30px; right: 30px; width: 320px;
-            background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(12px);
-            border: 3px solid #FFCCDD; border-radius: 20px;
-            box-shadow: 0 10px 30px rgba(255, 121, 156, 0.3); z-index: 99999999;
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-            color: #444; padding: 16px; box-sizing: border-box;
-        }
-        #jiyu-float-panel h3 { margin: 0 0 8px 0; color: #FF799C; font-size: 16px; font-weight: 900; }
-        .jiyu-btn {
-            width: 100%; padding: 10px; border: none; border-radius: 30px;
-            background: linear-gradient(135deg, #FF799C, #FFA2BD); color: white;
-            font-weight: bold; font-size: 14px; cursor: pointer; margin-top: 8px;
-        }
-        .jiyu-btn.stop { background: linear-gradient(135deg, #FFB3D1, #FF7777); }
-        .jiyu-textarea {
-            width: 100%; height: 70px; border: 2px solid #FFE6EE; border-radius: 12px;
-            padding: 8px; font-size: 12px; box-sizing: border-box; resize: none; outline: none;
-            background: #FFF9FA; font-family: monospace;
-        }
-        .jiyu-status-line { display: flex; justify-content: space-between; font-size: 12px; color: #666; margin-top: 6px; }
-        .jiyu-highlight { color: #FF799C; font-weight: bold; }
-        .jiyu-log { font-size: 11px; color: #888; margin-top: 8px; background: #FFFDFE; padding: 6px 8px; border-radius: 8px; border: 1px solid #FFE6EE; }
-    \`;
+    style.innerHTML = '#jiyu-float-panel{position:fixed;bottom:30px;right:30px;width:320px;background:rgba(255,255,255,0.95);border:3px solid #FFCCDD;border-radius:20px;padding:16px;z-index:99999999;font-family:sans-serif;}.jiyu-btn{width:100%;padding:10px;border:none;border-radius:30px;background:linear-gradient(135deg,#FF799C,#FFA2BD);color:#fff;font-weight:bold;cursor:pointer;margin-top:8px;}';
     document.head.appendChild(style);
-
     const panel = document.createElement('div');
     panel.id = 'jiyu-float-panel';
-    panel.innerHTML = \`
-        <h3>💗 极禹刷啵助手 (修復版) 💗</h3>
-        <textarea id=\"jiyu-bv-list\" class=\"jiyu-textarea\" placeholder=\"每行輸入一個BV號...\"></textarea>
-        <div class=\"jiyu-status-line\">
-            <span>當前: <span id=\"jiyu-cur-bv\" class=\"jiyu-highlight\">--</span></span>
-            <span>心跳倒計時: <span id=\"jiyu-timer\" class=\"jiyu-highlight\">--:--</span></span>
-        </div>
-        <div class=\"jiyu-status-line\">
-            <span>總輪次: <span id=\"jiyu-cycle\" class=\"jiyu-highlight\">0</span></span>
-            <span>進度: <span id=\"jiyu-progress\" class=\"jiyu-highlight\">0/0</span></span>
-        </div>
-        <div id=\"jiyu-log-box\" class=\"jiyu-log\">準備就緒</div>
-        <button id=\"jiyu-action-btn\" class=\"jiyu-btn\">開始全自動打榜</button>
-    \`;
+    panel.innerHTML = '<h3>💗 极禹刷啵助手 (修復版) 💗</h3><textarea id="jiyu-bv-list" style="width:100%;height:70px;border-radius:10px;border:2px solid #FFE6EE;padding:6px;font-size:12px;" placeholder="每行輸入一個BV號..."></textarea><div id="jiyu-log" style="font-size:11px;color:#888;margin:6px 0;">準備就緒</div><button id="jiyu-btn" class="jiyu-btn">開始全自動打榜</button>';
     document.body.appendChild(panel);
-
-    const ui = {
-        bvText: document.getElementById('jiyu-bv-list'),
-        curBv: document.getElementById('jiyu-cur-bv'),
-        timer: document.getElementById('jiyu-timer'),
-        cycle: document.getElementById('jiyu-cycle'),
-        progress: document.getElementById('jiyu-progress'),
-        log: document.getElementById('jiyu-log-box'),
-        btn: document.getElementById('jiyu-action-btn')
+    const elText = document.getElementById('jiyu-bv-list');
+    const elLog = document.getElementById('jiyu-log');
+    const elBtn = document.getElementById('jiyu-btn');
+    elText.value = config.videos.join('\\n');
+    elBtn.onclick = () => {
+        if(config.enabled){ config.enabled = false; saveConfig(config); elBtn.innerText = '開始全自動打榜'; elLog.innerText = '已停止'; }
+        else{ const m = elText.value.match(/BV1[0-9a-zA-Z]{9}/g); if(!m) return alert('請輸入有效BV號'); config.videos = [...new Set(m)]; config.enabled = true; config.currentIndex = 0; saveConfig(config); elBtn.innerText = '停止打榜'; window.location.href = 'https://www.bilibili.com/video/' + config.videos[0]; }
     };
-
-    ui.bvText.value = config.videos.join('\\n');
-    ui.cycle.innerText = config.cycleCount || 0;
-
-    function setLog(msg) { if (ui.log) ui.log.innerText = msg; }
-    function getPageBv() {
-        const match = window.location.pathname.match(/\\/video\\/(BV1[0-9a-zA-Z]{9})/);
-        return match ? match[1] : null;
+    if(config.enabled){
+        elBtn.innerText = '停止打榜';
+        setTimeout(async () => {
+            let v = document.querySelector('video');
+            for(let i=0; i<30 && !v; i++){ await new Promise(r => setTimeout(r,500)); v = document.querySelector('video'); }
+            if(v){ v.muted = true; try{ await v.play(); }catch(e){} }
+            let rem = config.playDurationSec;
+            const itv = setInterval(() => {
+                if(!config.enabled){ clearInterval(itv); return; }
+                rem--; elLog.innerText = '心跳倒計時: ' + rem + 's';
+                if(rem <= 0){
+                    clearInterval(itv);
+                    config.currentIndex = (config.currentIndex + 1) % config.videos.length;
+                    saveConfig(config);
+                    window.location.href = 'https://www.bilibili.com/video/' + config.videos[config.currentIndex];
+                }
+            }, 1000);
+        }, 2000);
     }
-
-    function navigateNext() {
-        if (!config.enabled || config.videos.length === 0) return;
-        config.currentIndex++;
-        if (config.currentIndex >= config.videos.length) {
-            config.currentIndex = 0;
-            config.cycleCount = (config.cycleCount || 0) + 1;
-        }
-        saveConfig(config);
-        const nextBv = config.videos[config.currentIndex];
-        const delay = Math.floor(Math.random() * 4) + 4;
-        let wait = delay;
-        const t = setInterval(() => {
-            wait--;
-            setLog(\`擬人化隨機延遲中: \${wait}s\`);
-            if (wait <= 0) {
-                clearInterval(t);
-                window.location.href = \`https://www.bilibili.com/video/\${nextBv}\`;
-            }
-        }, 1000);
-    }
-
-    async function startDriver() {
-        const curPageBv = getPageBv();
-        if (!curPageBv) return;
-        const targetBv = config.videos[config.currentIndex];
-        if (targetBv && curPageBv !== targetBv) {
-            window.location.href = \`https://www.bilibili.com/video/\${targetBv}\`;
-            return;
-        }
-        setLog('等待官方播放器就緒...');
-        let video = null;
-        for (let i = 0; i < 30; i++) {
-            video = document.querySelector('video');
-            if (video && video.readyState >= 1) break;
-            await new Promise(r => setTimeout(r, 500));
-        }
-        if (!video) { setTimeout(navigateNext, 4000); return; }
-        if (config.muteAudio) { video.muted = true; video.volume = 0; }
-        try { await video.play(); } catch (e) {}
-        let remain = config.playDurationSec;
-        const interval = setInterval(() => {
-            if (!config.enabled) { clearInterval(interval); return; }
-            remain--;
-            ui.timer.innerText = \`\${remain}s\`;
-            if (remain <= 0) {
-                clearInterval(interval);
-                setLog(\`✅ \${curPageBv} 心跳時長達標！\`);
-                navigateNext();
-            }
-        }, 1000);
-    }
-
-    ui.btn.onclick = () => {
-        if (config.enabled) {
-            config.enabled = false; saveConfig(config);
-            ui.btn.innerText = '開始全自動打榜'; ui.btn.classList.remove('stop');
-            setLog('已停止');
-        } else {
-            const matches = ui.bvText.value.match(/BV1[0-9a-zA-Z]{9}/g);
-            if (!matches || matches.length === 0) { alert('請輸入有效BV號'); return; }
-            config.videos = Array.from(new Set(matches));
-            config.enabled = true; config.currentIndex = 0; saveConfig(config);
-            ui.btn.innerText = '停止打榜'; ui.btn.classList.add('stop');
-            if (getPageBv() === config.videos[0]) { startDriver(); }
-            else { window.location.href = \`https://www.bilibili.com/video/\${config.videos[0]}\`; }
-        }
-    };
-    if (config.enabled) { ui.btn.innerText = '停止打榜'; ui.btn.classList.add('stop'); setTimeout(startDriver, 1500); }
 })();`;
 
             function triggerDownload(filename, content, mime) {
@@ -730,14 +653,10 @@
                 }, 100);
             }
 
-            // 觸發下載 manifest.json
             triggerDownload('manifest.json', manifestContent, 'application/json');
-            
-            // 延遲 500ms 觸發下載 content.js
             setTimeout(() => {
                 triggerDownload('content.js', scriptContent, 'text/javascript');
-                log('📥 插件已下載！放進資料夾載入 Edge 即可', 'success');
-                alert('🎉 manifest.json 與 content.js 已下載完成！\n\n請在電腦桌面新建資料夾，把這兩個檔案放進去，並在 Edge 的 edge://extensions/ 載入即可掛機！');
+                alert('🎉 外掛雙檔案已下載！放進資料夾載入 Edge 即可！');
             }, 500);
         });
 
@@ -745,4 +664,4 @@
     </script>
 </body>
 
-</html></html>
+</html></html></html>
