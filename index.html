@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>⭐️极禹刷啵⭐️</title>
     <style>
-        /* 🎨 精準配色：#FFCCDD 與 #FF799C */
+        /* 🎨 精准配色：#FFCCDD 与 #FF799C */
         :root {
             --primary-pink: #FF799C;
             --light-pink: #FFCCDD;
@@ -24,7 +24,7 @@
         }
 
         body {
-            font-family: -apple-system, "Microsoft JhengHei", sans-serif;
+            font-family: -apple-system, "Microsoft YaHei", "PingFang SC", sans-serif;
             background-color: var(--light-pink);
             background-image: linear-gradient(135deg, #FFCCDD 0%, #FFB3D1 100%);
             min-height: 100vh;
@@ -245,7 +245,7 @@
             font-weight: bold;
         }
 
-        /* 🖥️ 電腦 Edge 擴充套件專屬樣式 */
+        /* 🖥️ 电脑 Edge 扩展专用样式 */
         .ext-btn-row {
             display: flex;
             gap: 10px;
@@ -320,20 +320,20 @@
             <div id="log-window"></div>
         </div>
 
-        <!-- 🖥️ 電腦 Edge 擴充套件下載專區 -->
+        <!-- 🖥️ 电脑 Edge 扩展下载专区 -->
         <div class="card" style="padding: 14px 16px;">
-            <label style="margin-bottom: 4px;">🖥️ Edge 瀏覽器原生擴充套件（可選）</label>
-            <div style="font-size: 11px; color: #888;">下載兩個檔案放進資料夾，即可在 B 站本站原生運行：</div>
+            <label style="margin-bottom: 4px;">🖥️ Edge 浏览器原生扩展（可选）</label>
+            <div style="font-size: 11px; color: #888;">下载两个文件放进文件夹，即可在 B 站本站原生运行：</div>
             <div class="ext-btn-row">
-                <button type="button" id="dl-manifest" class="ext-sub-btn">📥 下載 manifest.json</button>
-                <button type="button" id="dl-content" class="ext-sub-btn">📥 下載 content.js</button>
+                <button type="button" id="dl-manifest" class="ext-sub-btn">📥 下载 manifest.json</button>
+                <button type="button" id="dl-content" class="ext-sub-btn">📥 下载 content.js</button>
             </div>
             <div class="ext-guide">
-                <b>安裝 4 步驟指南：</b><br>
-                1️⃣ 桌面新建資料夾，把下載的兩個檔案放進資料夾<br>
-                2️⃣ 點開 Edge 網址列搜尋 <code>edge://extensions/</code> 回車<br>
-                3️⃣ 開啟頁面左下角的【開發者模式】開關<br>
-                4️⃣ 點擊上方「載入解壓縮的擴充功能」，選取桌面資料夾即可！
+                <b>安装 4 步骤指南：</b><br>
+                1️⃣ 桌面新建文件夹，把下载的两个文件放进文件夹<br>
+                2️⃣ 点开 Edge 地址栏输入 <code>edge://extensions/</code> 回车<br>
+                3️⃣ 开启页面左下角的【开发者模式】开关<br>
+                4️⃣ 点击上方“加载解压缩的扩展”，选择桌面文件夹即可！
             </div>
         </div>
     </div>
@@ -347,7 +347,7 @@
 
         const CONFIG = { intervalMinutes: 5.5 };
 
-        // 🌟 B站官方 BV 转 AV (aid) 纯数学逆向算法（離線秒解，不依賴任何外部網絡或代理）
+        // 🌟 B站官方 BV 转 AV (aid) 纯数学逆向算法（离线秒解，不依赖任何外部网络或代理）
         const XOR_CODE = 23442827791579n;
         const MASK_CODE = 2251799813685247n;
         const BASE58_TABLE = 'FcwAPNKTMug3GV5Lj7EJnHSpqZrydfbvhkxa1r2kW8tSon96UXiBzQ';
@@ -370,7 +370,7 @@
             }
         }
 
-        // 📱 iPhone / Safari 鎖屏後台保活無聲音訊引擎
+        // 📱 iPhone / Safari 锁屏后台保活无声音频引擎
         let audioContext = null;
         let silentOscillator = null;
 
@@ -384,16 +384,16 @@
                 if (audioContext.state === 'suspended') {
                     audioContext.resume();
                 }
-                // 產生極致微弱的 0 分貝正弦波（人耳完全聽不見，但能激發 iOS 音訊背景守護進程）
+                // 产生微弱的 0 分贝正弦波（人耳完全听不见，但能激活 iOS 音频后台守护进程）
                 silentOscillator = audioContext.createOscillator();
                 const gainNode = audioContext.createGain();
-                gainNode.gain.value = 0.00001; // 近乎絕對無聲
+                gainNode.gain.value = 0.00001; // 近乎绝对无声
                 silentOscillator.connect(gainNode);
                 gainNode.connect(audioContext.destination);
                 silentOscillator.start();
-                log('🎧 已啟動手機 Safari 鎖屏後台保活守護', 'info');
+                log('🎧 已启动手机 Safari 锁屏后台保活守护', 'info');
             } catch (e) {
-                // 瀏覽器若禁止音訊上下文則靜默降級
+                // 浏览器若禁止音频上下文则静默降级
             }
         }
 
@@ -410,11 +410,11 @@
             } catch (e) {}
         }
 
-        // 多條備用 CORS 代理線路
+        // 多条备用 CORS 代理线路
         const PROXY_LIST = [
-            { name: '線路1', url: (target) => `https://api.codetabs.com/v1/proxy?quest=${target}` },
-            { name: '線路2', url: (target) => `https://corsproxy.io/?${target}` },
-            { name: '線路3', url: (target) => `https://api.allorigins.win/raw?url=${target}` }
+            { name: '线路1', url: (target) => `https://api.codetabs.com/v1/proxy?quest=${target}` },
+            { name: '线路2', url: (target) => `https://corsproxy.io/?${target}` },
+            { name: '线路3', url: (target) => `https://api.allorigins.win/raw?url=${target}` }
         ];
 
         let state = {
@@ -455,7 +455,7 @@
             el.log.scrollTop = el.log.scrollHeight;
         }
 
-        // 溫和快速探測代理
+        // 温和快速探测代理
         async function fetchWithProxy(targetUrl, timeoutMs = 4000) {
             const encodedUrl = encodeURIComponent(targetUrl);
             for (let proxy of PROXY_LIST) {
@@ -503,9 +503,9 @@
         }
 
         async function enrichVideoData() {
-            log(`🔍 正在驗證視頻數據 (${state.videos.length} 個)...`, 'info');
-            el.status.innerText = '正在校驗視頻';
-            el.stateText.innerText = '校驗中';
+            log(`🔍 正在验证视频数据 (${state.videos.length} 个)...`, 'info');
+            el.status.innerText = '正在校验视频';
+            el.stateText.innerText = '校验中';
 
             let resolvedCount = 0;
             for (let v of state.videos) {
@@ -518,27 +518,27 @@
                         v.cid = res.data.cid ? res.data.cid.toString() : null;
                         v.title = res.data.title || v.bvid;
                         resolvedCount++;
-                        log(`✅ ${v.bvid} 聯網解析: ${v.title.substring(0, 10)}... (AID:${v.aid})`, 'success');
+                        log(`✅ ${v.bvid} 联网解析: ${v.title.substring(0, 10)}... (AID:${v.aid})`, 'success');
                     } else {
-                        log(`✨ ${v.bvid} 啟用高階數學通道 (已還原 AID: ${v.aid})`, 'info');
+                        log(`✨ ${v.bvid} 启用高阶数学通道 (已还原 AID: ${v.aid})`, 'info');
                     }
                 } catch (e) {
-                    log(`✨ ${v.bvid} 啟用高階數學通道 (已還原 AID: ${v.aid})`, 'info');
+                    log(`✨ ${v.bvid} 启用高阶数学通道 (已还原 AID: ${v.aid})`, 'info');
                 }
 
                 await new Promise(r => setTimeout(r, 300));
             }
 
             el.count.innerText = state.videos.length;
-            log(`💗 視頻全部就緒 (${state.videos.length} 個)，準備啟動！`, 'success');
+            log(`💗 视频全部就绪 (${state.videos.length} 个)，准备启动！`, 'success');
             return state.videos.length;
         }
 
         async function runBoostCycle() {
             if (!state.isRunning) return;
-            log('🚀 開始新一輪播放上報...', 'success');
-            el.status.innerText = '正在上報...';
-            el.stateText.innerText = '正在運行';
+            log('🚀 开始新一轮播放上报...', 'success');
+            el.status.innerText = '正在上报...';
+            el.stateText.innerText = '正在运行';
 
             for (let v of state.videos) {
                 if (!state.isRunning) break;
@@ -567,22 +567,22 @@
                     state.totalSent++;
                     el.success.innerText = state.totalSent;
                     const showName = v.title && v.title !== v.bvid ? v.title.substring(0, 8) + '...' : v.bvid;
-                    log(`[√] ${showName} 上報成功 ✅`, 'success');
+                    log(`[√] ${showName} 上报成功 ✅`, 'success');
                 } catch (e) {
-                    log(`❌ ${v.bvid} 請求異常`, 'error');
+                    log(`❌ ${v.bvid} 请求异常`, 'error');
                 }
 
                 await new Promise(r => setTimeout(r, 1500 + Math.random() * 1000));
             }
 
             if (state.isRunning) {
-                log(`💤 本輪完成，休眠 ${CONFIG.intervalMinutes} 分鐘後自動下一輪`, 'info');
+                log(`💤 本轮完成，休眠 ${CONFIG.intervalMinutes} 分钟后自动下一轮`, 'info');
                 startCountdown(CONFIG.intervalMinutes * 60);
             }
         }
 
         function startCountdown(seconds) {
-            el.status.innerText = '等待下一輪...';
+            el.status.innerText = '等待下一轮...';
             el.stateText.innerText = '休眠中💤';
             let remaining = seconds;
             clearInterval(state.countdownId);
@@ -605,22 +605,22 @@
 
         async function start() {
             state.isRunning = true;
-            el.btn.innerText = '停止運行';
+            el.btn.innerText = '停止运行';
             el.btn.classList.add('stop');
             el.bvInput.disabled = true;
 
-            // 啟動 Safari 鎖屏防休眠保活
+            // 启动 Safari 锁屏防休眠保活
             startSilentAudio();
 
             parseManualVideos();
             if (state.videos.length === 0) {
-                log('❌ 請輸入正確的 BV 號', 'error');
+                log('❌ 请输入正确的 BV 号', 'error');
                 stop();
                 return;
             }
 
             el.count.innerText = state.videos.length;
-            log(`💗 已識別 ${state.videos.length} 個視頻，啟動校驗流程...`, 'info');
+            log(`💗 已识别 ${state.videos.length} 个视频，启动校验流程...`, 'info');
 
             await enrichVideoData();
             if (state.isRunning) {
@@ -632,12 +632,12 @@
             state.isRunning = false;
             clearInterval(state.countdownId);
             stopSilentAudio();
-            el.btn.innerText = '開始運行';
+            el.btn.innerText = '开始运行';
             el.btn.classList.remove('stop');
             el.bvInput.disabled = false;
             el.status.innerText = '已停止';
             el.stateText.innerText = '已停止';
-            log('任務已停止', 'warn');
+            log('任务已停止', 'warn');
         }
 
         el.btn.addEventListener('click', () => {
@@ -648,7 +648,7 @@
             }
         });
 
-        // 📥 電腦 Edge 擴充套件檔案一鍵下載功能
+        // 📥 电脑 Edge 扩展文件一键下载功能
         function downloadFile(filename, content) {
             const blob = new Blob([content], { type: 'text/plain;charset=utf-8' });
             const url = URL.createObjectURL(blob);
@@ -659,15 +659,15 @@
             a.click();
             document.body.removeChild(a);
             URL.revokeObjectURL(url);
-            log(`📁 已下載擴充套件檔案：${filename}`, 'success');
+            log(`📁 已下载扩展文件：${filename}`, 'success');
         }
 
-        // manifest.json 內容
+        // manifest.json 内容
         const MANIFEST_CONTENT = JSON.stringify({
             "manifest_version": 3,
             "name": "极禹刷啵 - Edge原生助手",
             "version": "1.0.0",
-            "description": "极禹视频播放与心跳原生助手，在B站原生環境運行",
+            "description": "极禹视频播放与心跳原生助手，在B站原生环境运行",
             "content_scripts": [
                 {
                     "matches": [
@@ -682,11 +682,11 @@
             ]
         }, null, 4);
 
-        // content.js 內容
-        const CONTENT_JS_CONTENT = `// 极禹刷啵 Edge 擴充套件原生執行腳本
-console.log('[极禹刷啵] Edge 原生助手已注入 B 站環境');
+        // content.js 内容
+        const CONTENT_JS_CONTENT = `// 极禹刷啵 Edge 扩展原生运行脚本
+console.log('[极禹刷啵] Edge 原生助手已注入 B 站环境');
 
-// 注入專屬浮窗控制台
+// 注入专属悬浮控制台
 const floatCard = document.createElement('div');
 floatCard.id = 'jiyu-edge-panel';
 floatCard.innerHTML = \`
@@ -695,9 +695,9 @@ floatCard.innerHTML = \`
             <span>💗 极禹刷啵 Edge助手</span>
             <span id="jiyu-mini-close" style="cursor:pointer;color:#999;">✕</span>
         </div>
-        <div style="font-size:11px;color:#888;margin-bottom:8px;">原生登錄態運作中</div>
+        <div style="font-size:11px;color:#888;margin-bottom:8px;">原生登录态运行中</div>
         <button id="jiyu-quick-click" style="width:100%;padding:6px;border:none;border-radius:20px;background:linear-gradient(to right, #FF799C, #FF9EBA);color:white;font-weight:bold;cursor:pointer;">
-            發送當前視頻有效心跳
+            发送当前视频有效心跳
         </button>
         <div id="jiyu-panel-msg" style="margin-top:6px;font-size:10px;color:#FF799C;"></div>
     </div>
@@ -710,7 +710,7 @@ document.getElementById('jiyu-mini-close').onclick = () => {
 
 document.getElementById('jiyu-quick-click').onclick = async () => {
     const msg = document.getElementById('jiyu-panel-msg');
-    msg.innerText = '正在發送原生心跳...';
+    msg.innerText = '正在发送原生心跳...';
     try {
         const bvid = window.location.pathname.split('/video/')[1]?.split('/')[0] || '';
         const aid = window.__INITIAL_STATE__?.aid || '';
@@ -731,9 +731,9 @@ document.getElementById('jiyu-quick-click').onclick = async () => {
             headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
             body: params
         });
-        msg.innerText = '✅ 原生心跳發送成功！';
+        msg.innerText = '✅ 原生心跳发送成功！';
     } catch(e) {
-        msg.innerText = '❌ 發送異常：' + e.message;
+        msg.innerText = '❌ 发送异常：' + e.message;
     }
 };
 `;
@@ -746,7 +746,7 @@ document.getElementById('jiyu-quick-click').onclick = async () => {
             downloadFile('content.js', CONTENT_JS_CONTENT);
         });
 
-        log(`💞 极禹刷啵 ⭐️#${currentSessionId} 已就緒 (雙端適配·後台保活版)`);
+        log(`💞 极禹刷啵 ⭐️#${currentSessionId} 已就绪 (双端适配·后台保活版)`);
     </script>
 </body>
 
