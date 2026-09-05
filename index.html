@@ -244,6 +244,43 @@
             color: #FF799C;
             font-weight: bold;
         }
+
+        /* 🖥️ 電腦 Edge 擴充套件專屬樣式 */
+        .ext-btn-row {
+            display: flex;
+            gap: 10px;
+            margin-top: 8px;
+        }
+
+        .ext-sub-btn {
+            flex: 1;
+            padding: 9px 6px;
+            border: 1px solid var(--primary-pink);
+            background: #FFF0F4;
+            color: #D6456D;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-align: center;
+        }
+
+        .ext-sub-btn:hover {
+            background: var(--primary-pink);
+            color: white;
+        }
+
+        .ext-guide {
+            font-size: 11px;
+            color: #888;
+            line-height: 1.6;
+            margin-top: 10px;
+            background: #FFF9FA;
+            padding: 10px;
+            border-radius: 10px;
+            border: 1px solid #FFE6EE;
+        }
     </style>
 </head>
 
@@ -251,7 +288,7 @@
     <div class="container">
         <div style="text-align: center;">
             <h1>💗极禹刷啵 💗</h1>
-            <p id="mode-tag">EDGE Mode</p>
+            <p id="mode-tag">EDGE & Safari Mode</p>
         </div>
 
         <div class="multi-tip"> 建立edge账号后，点击头像 新增无痕页面 每个页面登录不同的edge账号和b站号，最多3-5个避免ip风险！
@@ -282,6 +319,23 @@
         <div>
             <div id="log-window"></div>
         </div>
+
+        <!-- 🖥️ 電腦 Edge 擴充套件下載專區 -->
+        <div class="card" style="padding: 14px 16px;">
+            <label style="margin-bottom: 4px;">🖥️ Edge 瀏覽器原生擴充套件（可選）</label>
+            <div style="font-size: 11px; color: #888;">下載兩個檔案放進資料夾，即可在 B 站本站原生運行：</div>
+            <div class="ext-btn-row">
+                <button type="button" id="dl-manifest" class="ext-sub-btn">📥 下載 manifest.json</button>
+                <button type="button" id="dl-content" class="ext-sub-btn">📥 下載 content.js</button>
+            </div>
+            <div class="ext-guide">
+                <b>安裝 4 步驟指南：</b><br>
+                1️⃣ 桌面新建資料夾，把下載的兩個檔案放進資料夾<br>
+                2️⃣ 點開 Edge 網址列搜尋 <code>edge://extensions/</code> 回車<br>
+                3️⃣ 開啟頁面左下角的【開發者模式】開關<br>
+                4️⃣ 點擊上方「載入解壓縮的擴充功能」，選取桌面資料夾即可！
+            </div>
+        </div>
     </div>
 
     <script>
@@ -293,7 +347,7 @@
 
         const CONFIG = { intervalMinutes: 5.5 };
 
-        // 🌟 B站官方 BV转AV(aid) 纯数学逆向解密算法（離線秒解，不依賴任何外部網絡或代理）
+        // 🌟 B站官方 BV 转 AV (aid) 纯数学逆向算法（離線秒解，不依賴任何外部網絡或代理）
         const XOR_CODE = 23442827791579n;
         const MASK_CODE = 2251799813685247n;
         const BASE58_TABLE = 'FcwAPNKTMug3GV5Lj7EJnHSpqZrydfbvhkxa1r2kW8tSon96UXiBzQ';
@@ -314,6 +368,46 @@
             } catch (e) {
                 return null;
             }
+        }
+
+        // 📱 iPhone / Safari 鎖屏後台保活無聲音訊引擎
+        let audioContext = null;
+        let silentOscillator = null;
+
+        function startSilentAudio() {
+            try {
+                const AudioCtx = window.AudioContext || window.webkitAudioContext;
+                if (!AudioCtx) return;
+                if (!audioContext) {
+                    audioContext = new AudioCtx();
+                }
+                if (audioContext.state === 'suspended') {
+                    audioContext.resume();
+                }
+                // 產生極致微弱的 0 分貝正弦波（人耳完全聽不見，但能激發 iOS 音訊背景守護進程）
+                silentOscillator = audioContext.createOscillator();
+                const gainNode = audioContext.createGain();
+                gainNode.gain.value = 0.00001; // 近乎絕對無聲
+                silentOscillator.connect(gainNode);
+                gainNode.connect(audioContext.destination);
+                silentOscillator.start();
+                log('🎧 已啟動手機 Safari 鎖屏後台保活守護', 'info');
+            } catch (e) {
+                // 瀏覽器若禁止音訊上下文則靜默降級
+            }
+        }
+
+        function stopSilentAudio() {
+            try {
+                if (silentOscillator) {
+                    silentOscillator.stop();
+                    silentOscillator.disconnect();
+                    silentOscillator = null;
+                }
+                if (audioContext && audioContext.state !== 'closed') {
+                    audioContext.suspend();
+                }
+            } catch (e) {}
         }
 
         // 多條備用 CORS 代理線路
@@ -341,7 +435,9 @@
             status: document.getElementById('status-text'),
             modeTag: document.getElementById('mode-tag'),
             stateText: document.getElementById('current-state-text'),
-            sessionTag: document.getElementById('session-tag')
+            sessionTag: document.getElementById('session-tag'),
+            dlManifest: document.getElementById('dl-manifest'),
+            dlContent: document.getElementById('dl-content')
         };
 
         el.sessionTag.innerText = "⭐#" + currentSessionId;
@@ -359,7 +455,7 @@
             el.log.scrollTop = el.log.scrollHeight;
         }
 
-        // 溫和快速探測代理（帶超時）
+        // 溫和快速探測代理
         async function fetchWithProxy(targetUrl, timeoutMs = 4000) {
             const encodedUrl = encodeURIComponent(targetUrl);
             for (let proxy of PROXY_LIST) {
@@ -396,7 +492,6 @@
             const uniqueBvs = [...new Set(matchedBvs.map(bv => 'BV' + bv.slice(2)))];
 
             state.videos = uniqueBvs.map(bv => {
-                // 立即運用數學運算還原 aid
                 const calculatedAid = bvToAid(bv);
                 return {
                     bvid: bv,
@@ -407,7 +502,6 @@
             });
         }
 
-        // 雙軌解析：優先聯網拿精確 CID，即使聯網代理失敗，依託數學 aid 也絕不中斷
         async function enrichVideoData() {
             log(`🔍 正在驗證視頻數據 (${state.videos.length} 個)...`, 'info');
             el.status.innerText = '正在校驗視頻';
@@ -417,7 +511,6 @@
             for (let v of state.videos) {
                 if (!state.isRunning) break;
 
-                // 嘗試透過代理取得最新 CID 與標題
                 try {
                     const res = await fetchWithProxy(`https://api.bilibili.com/x/web-interface/view?bvid=${v.bvid}`);
                     if (res && res.code === 0 && res.data) {
@@ -425,9 +518,8 @@
                         v.cid = res.data.cid ? res.data.cid.toString() : null;
                         v.title = res.data.title || v.bvid;
                         resolvedCount++;
-                        log(`✅ ${v.bvid} 聯網解析成功: ${v.title.substring(0, 10)}... (AID:${v.aid})`, 'success');
+                        log(`✅ ${v.bvid} 聯網解析: ${v.title.substring(0, 10)}... (AID:${v.aid})`, 'success');
                     } else {
-                        // 代理未通或無響應，啟用離線精確數學通道
                         log(`✨ ${v.bvid} 啟用高階數學通道 (已還原 AID: ${v.aid})`, 'info');
                     }
                 } catch (e) {
@@ -452,7 +544,6 @@
                 if (!state.isRunning) break;
 
                 try {
-                    // 核心參數構造：具備 aid (無論聯網或數學推導)、bvid、sub_type
                     const payload = {
                         bvid: v.bvid,
                         part: '1',
@@ -481,7 +572,6 @@
                     log(`❌ ${v.bvid} 請求異常`, 'error');
                 }
 
-                // 擬人化平緩隨機間隔 (1.5s ~ 2.5s)
                 await new Promise(r => setTimeout(r, 1500 + Math.random() * 1000));
             }
 
@@ -519,6 +609,9 @@
             el.btn.classList.add('stop');
             el.bvInput.disabled = true;
 
+            // 啟動 Safari 鎖屏防休眠保活
+            startSilentAudio();
+
             parseManualVideos();
             if (state.videos.length === 0) {
                 log('❌ 請輸入正確的 BV 號', 'error');
@@ -538,6 +631,7 @@
         function stop() {
             state.isRunning = false;
             clearInterval(state.countdownId);
+            stopSilentAudio();
             el.btn.innerText = '開始運行';
             el.btn.classList.remove('stop');
             el.bvInput.disabled = false;
@@ -554,7 +648,105 @@
             }
         });
 
-        log(`💞 极禹刷啵 ⭐️#${currentSessionId} 已就緒 (雙軌容災·穩健版)`);
+        // 📥 電腦 Edge 擴充套件檔案一鍵下載功能
+        function downloadFile(filename, content) {
+            const blob = new Blob([content], { type: 'text/plain;charset=utf-8' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = filename;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+            log(`📁 已下載擴充套件檔案：${filename}`, 'success');
+        }
+
+        // manifest.json 內容
+        const MANIFEST_CONTENT = JSON.stringify({
+            "manifest_version": 3,
+            "name": "极禹刷啵 - Edge原生助手",
+            "version": "1.0.0",
+            "description": "极禹视频播放与心跳原生助手，在B站原生環境運行",
+            "content_scripts": [
+                {
+                    "matches": [
+                        "*://*.bilibili.com/*"
+                    ],
+                    "js": ["content.js"],
+                    "run_at": "document_end"
+                }
+            ],
+            "permissions": [
+                "storage"
+            ]
+        }, null, 4);
+
+        // content.js 內容
+        const CONTENT_JS_CONTENT = `// 极禹刷啵 Edge 擴充套件原生執行腳本
+console.log('[极禹刷啵] Edge 原生助手已注入 B 站環境');
+
+// 注入專屬浮窗控制台
+const floatCard = document.createElement('div');
+floatCard.id = 'jiyu-edge-panel';
+floatCard.innerHTML = \`
+    <div style="position:fixed;bottom:20px;right:20px;z-index:999999;background:rgba(255,255,255,0.95);border:2px solid #FF799C;border-radius:16px;padding:12px 16px;box-shadow:0 8px 24px rgba(255,121,156,0.3);font-family:sans-serif;color:#555;font-size:12px;">
+        <div style="font-weight:bold;color:#FF799C;margin-bottom:6px;display:flex;justify-content:space-between;align-items:center;">
+            <span>💗 极禹刷啵 Edge助手</span>
+            <span id="jiyu-mini-close" style="cursor:pointer;color:#999;">✕</span>
+        </div>
+        <div style="font-size:11px;color:#888;margin-bottom:8px;">原生登錄態運作中</div>
+        <button id="jiyu-quick-click" style="width:100%;padding:6px;border:none;border-radius:20px;background:linear-gradient(to right, #FF799C, #FF9EBA);color:white;font-weight:bold;cursor:pointer;">
+            發送當前視頻有效心跳
+        </button>
+        <div id="jiyu-panel-msg" style="margin-top:6px;font-size:10px;color:#FF799C;"></div>
+    </div>
+\`;
+document.body.appendChild(floatCard);
+
+document.getElementById('jiyu-mini-close').onclick = () => {
+    floatCard.style.display = 'none';
+};
+
+document.getElementById('jiyu-quick-click').onclick = async () => {
+    const msg = document.getElementById('jiyu-panel-msg');
+    msg.innerText = '正在發送原生心跳...';
+    try {
+        const bvid = window.location.pathname.split('/video/')[1]?.split('/')[0] || '';
+        const aid = window.__INITIAL_STATE__?.aid || '';
+        const cid = window.__INITIAL_STATE__?.cid || '';
+        
+        const params = new URLSearchParams({
+            aid: aid,
+            cid: cid,
+            bvid: bvid,
+            part: '1',
+            type: '1',
+            sub_type: '0'
+        });
+        
+        await fetch('https://api.bilibili.com/x/click-interface/click/web/h5', {
+            method: 'POST',
+            credentials: 'include',
+            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+            body: params
+        });
+        msg.innerText = '✅ 原生心跳發送成功！';
+    } catch(e) {
+        msg.innerText = '❌ 發送異常：' + e.message;
+    }
+};
+`;
+
+        el.dlManifest.addEventListener('click', () => {
+            downloadFile('manifest.json', MANIFEST_CONTENT);
+        });
+
+        el.dlContent.addEventListener('click', () => {
+            downloadFile('content.js', CONTENT_JS_CONTENT);
+        });
+
+        log(`💞 极禹刷啵 ⭐️#${currentSessionId} 已就緒 (雙端適配·後台保活版)`);
     </script>
 </body>
 
