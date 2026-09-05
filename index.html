@@ -264,7 +264,7 @@
             color: #FF799C;
         }
 
-        /* 3 個後台官方心跳播放器通道（靜音並發） */
+        /* 5 通道靜音並發驅動組件 */
         .hidden-channel {
             position: absolute;
             width: 1px;
@@ -277,10 +277,12 @@
 </head>
 
 <body>
-    <!-- 3 通道並行播放容器 -->
+    <!-- 5 個官方心跳播放器通道（同時並發） -->
     <iframe id="chan-1" class="hidden-channel" src="about:blank" allow="autoplay"></iframe>
     <iframe id="chan-2" class="hidden-channel" src="about:blank" allow="autoplay"></iframe>
     <iframe id="chan-3" class="hidden-channel" src="about:blank" allow="autoplay"></iframe>
+    <iframe id="chan-4" class="hidden-channel" src="about:blank" allow="autoplay"></iframe>
+    <iframe id="chan-5" class="hidden-channel" src="about:blank" allow="autoplay"></iframe>
 
     <div class="container">
         <div style="text-align: center;">
@@ -338,9 +340,9 @@
         const currentSessionId = window.location.hash.split('session=')[1] || "⭐";
 
         const CONFIG = {
-            playDuration: 38,     // 每個視頻跑滿 38 秒（覆蓋 B 站 30 秒有效心跳）
-            intervalMinutes: 5,   // 一大輪全部刷完後的冷卻分鍾數
-            maxChannels: 3        // 安全並行通道數（同時刷 3 個視頻，防吞防驗證碼）
+            playDuration: 38,     // 每個視頻跑滿 38 秒（覆蓋 B 站有效心跳）
+            intervalMinutes: 5,   // 一大輪全部刷完後的冷卻分鐘數
+            maxChannels: 5        // 🔥 升級為 5 通道同時並發（速度翻 5 倍）
         };
 
         let state = {
@@ -366,7 +368,9 @@
             channels: [
                 document.getElementById('chan-1'),
                 document.getElementById('chan-2'),
-                document.getElementById('chan-3')
+                document.getElementById('chan-3'),
+                document.getElementById('chan-4'),
+                document.getElementById('chan-5')
             ],
             downloadBtn: document.getElementById('download-ext-btn')
         };
@@ -452,30 +456,29 @@
             });
         }
 
-        // 核心：多通道並發打榜主邏輯
+        // 核心：5 通道並發打榜主邏輯
         async function runBoostCycle() {
             if (!state.isRunning) return;
-            log('🚀 开始新一轮（3通道并发打榜）...', 'success');
+            log('🚀 开始新一轮（5通道并发打榜）...', 'success');
             el.status.innerText = '執行中...';
             el.stateText.innerText = '正在运行';
 
-            // 將所有視頻按 3 個一組打包，並發運行
+            // 將所有視頻按 5 個一組打包，並發運行
             for (let i = 0; i < state.videos.length; i += CONFIG.maxChannels) {
                 if (!state.isRunning) break;
 
                 const currentBatch = state.videos.slice(i, i + CONFIG.maxChannels);
                 const batchBvs = currentBatch.map(v => v.bvid);
 
-                log(`▶️ 通道並發中: ${batchBvs.join(' | ')}`);
+                log(`▶️ 5通道並發: ${batchBvs.join(' | ')}`);
 
-                // 同時啟動多個通道載入官方播放器上報心跳
+                // 同時啟動 5 個通道載入官方播放器上報心跳
                 currentBatch.forEach((v, idx) => {
                     const chan = el.channels[idx];
                     if (chan) {
                         chan.src = `https://player.bilibili.com/player.html?bvid=${v.bvid}&autoplay=1&muted=1&page=1`;
                     }
 
-                    // 輔助 API 發送
                     const params = new URLSearchParams({
                         bvid: v.bvid,
                         part: '1',
@@ -491,7 +494,7 @@
                     }).catch(() => {});
                 });
 
-                // 多個視頻同時倒計時 38 秒
+                // 5 個視頻同時倒計時 38 秒
                 let remain = CONFIG.playDuration;
                 while (remain > 0 && state.isRunning) {
                     el.status.innerText = `心跳累計: ${remain}s (同時刷${currentBatch.length}個)`;
@@ -501,7 +504,7 @@
 
                 if (!state.isRunning) break;
 
-                // 本組視頻全部達標
+                // 本組 5 個視頻全部達標
                 currentBatch.forEach(v => {
                     state.totalSent++;
                     log(` ${v.bvid} 播放成功 ✅`);
@@ -558,7 +561,7 @@
             }
 
             el.count.innerText = state.videos.length;
-            log(`${state.videos.length} 个视频准备就绪💗（3 通道并发啟動）`, 'success');
+            log(`${state.videos.length} 个视频准备就绪💗（5 通道并发啟動）`, 'success');
             runBoostCycle();
         }
 
@@ -664,4 +667,4 @@
     </script>
 </body>
 
-</html></html></html>
+</html></html></html></html>
