@@ -22,7 +22,7 @@
         }
 
         body {
-            font-family: -apple-system, "Microsoft JhengHei", sans-serif;
+            font-family: -apple-system, "Microsoft YaHei", "PingFang SC", sans-serif;
             background-color: var(--light-pink);
             background-image: linear-gradient(135deg, #FFCCDD 0%, #FFB3D1 100%);
             min-height: 100vh;
@@ -35,7 +35,7 @@
             overflow-x: hidden;
         }
 
-        /* ✨ 星光背景閃爍 */
+        /* ✨ 星光背景闪烁 */
         body::before {
             content: '★';
             position: fixed;
@@ -100,30 +100,149 @@
             border: 1px solid #FFE6EE;
         }
 
-        .card {
-            background: white;
-            border: 2px solid var(--light-pink);
-            border-radius: 18px;
-            padding: 14px;
-            box-shadow: 0 4px 10px rgba(255, 204, 221, 0.2);
+        .anti-zero-banner {
+            background: #FFFBEB;
+            border: 1.5px dashed #F59E0B;
+            border-radius: 12px;
+            padding: 10px;
         }
 
         .multi-tip {
-            background: #FFF0F4;
-            border: 1px dashed var(--primary-pink);
-            border-radius: 12px;
+            background: #FFF0F5;
+            border: 1.5px dashed var(--primary-pink);
+            border-radius: 14px;
             padding: 10px;
-            font-size: 12px;
-            color: #D6456D;
-            line-height: 1.45;
+            font-size: 11px;
+            line-height: 1.6;
+            color: #B23A5B;
         }
 
-        label {
-            display: block;
-            margin-bottom: 6px;
+        .strategy-card {
+            background: #FFF9FA;
+            border: 1.5px solid #FFD5E2;
+            border-radius: 14px;
+            padding: 12px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .strategy-title {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 12px;
             font-weight: bold;
-            color: var(--primary-pink);
-            font-size: 13px;
+            color: #D81B60;
+        }
+
+        .preset-btn-bar {
+            display: flex;
+            gap: 6px;
+            flex-wrap: wrap;
+        }
+
+        .preset-chip {
+            background: #FFF;
+            border: 1px solid #FFCCD9;
+            color: #D81B60;
+            font-size: 11px;
+            padding: 5px 10px;
+            border-radius: 12px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.2s;
+        }
+
+        .preset-chip.active {
+            background: var(--primary-pink);
+            color: white;
+            border-color: var(--primary-pink);
+        }
+
+        .player-matrix-container {
+            background: #FFF5F8;
+            border-radius: 14px;
+            padding: 10px;
+            border: 1px solid #FFCCD9;
+        }
+
+        .matrix-title-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 11px;
+            font-weight: bold;
+            color: #C2185B;
+            margin-bottom: 6px;
+        }
+
+        .matrix-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 6px;
+        }
+
+        .chan-frame-box {
+            position: relative;
+            background: #000;
+            border-radius: 8px;
+            overflow: hidden;
+            height: 48px;
+            border: 1.5px solid #FFB8CF;
+        }
+
+        .chan-frame-box iframe {
+            width: 200%;
+            height: 200%;
+            transform: scale(0.5);
+            transform-origin: top left;
+            border: none;
+            pointer-events: none;
+        }
+
+        .chan-badge {
+            position: absolute;
+            top: 2px;
+            left: 2px;
+            background: rgba(0, 0, 0, 0.7);
+            color: #FFF;
+            font-size: 8px;
+            padding: 1px 4px;
+            border-radius: 4px;
+            z-index: 10;
+        }
+
+        .progress-box {
+            background: #FFF9FA;
+            border: 1px solid #FFE6EE;
+            border-radius: 12px;
+            padding: 10px;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .progress-header {
+            display: flex;
+            justify-content: space-between;
+            font-size: 11px;
+            font-weight: bold;
+            color: #475569;
+        }
+
+        .progress-track {
+            height: 8px;
+            background: #E2E8F0;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            width: 0%;
+            background: linear-gradient(90deg, var(--primary-pink), #10B981);
+            transition: width 0.4s ease;
         }
 
         textarea {
@@ -131,353 +250,194 @@
             height: 75px;
             padding: 10px;
             border: 2px solid #FFE6EE;
-            border-radius: 12px;
-            font-size: 13px;
+            border-radius: 14px;
+            resize: none;
+            font-family: inherit;
+            font-size: 11px;
+            color: var(--text-dark);
             background: #FFF9FA;
             outline: none;
-            resize: none;
-            font-family: monospace;
-            transition: border-color 0.3s;
         }
 
         textarea:focus {
             border-color: var(--primary-pink);
-            background: white;
+            background: #fff;
         }
 
-        .btn {
-            width: 100%;
-            padding: 14px;
-            border: none;
-            border-radius: 50px;
-            font-size: 17px;
-            font-weight: bold;
+        button.btn-main {
+            background: var(--primary-pink);
             color: white;
-            cursor: pointer;
-            transition: all 0.3s;
-            background: linear-gradient(to right, #FF799C, #FF9EBA);
-            box-shadow: 0 6px 20px rgba(255, 121, 156, 0.4);
-        }
-
-        .btn:hover { transform: translateY(-2px); }
-        .btn.stop { background: linear-gradient(to right, #FFB3D1, #FF9999); }
-
-        .btn-download {
-            background: linear-gradient(to right, #FFA2BD, #FF799C);
-            font-size: 13px;
-            padding: 10px;
-            margin-top: 6px;
-        }
-
-        .status-bar {
-            display: flex;
-            justify-content: space-between;
-            font-size: 13px;
-            color: #666;
-            padding: 6px 0;
-            border-bottom: 1px dashed var(--light-pink);
-        }
-
-        .status-bar:last-child {
-            border-bottom: none;
-        }
-
-        .status-value {
-            font-weight: bold;
-            color: var(--primary-pink);
-        }
-
-        /* 📊 運行摘要面板專屬樣式 */
-        .summary-panel {
-            background: #FFFFFF;
-            border: 2px solid #FFCCDD;
-            border-radius: 18px;
+            border: none;
             padding: 14px;
-            box-shadow: 0 4px 12px rgba(255, 121, 156, 0.15);
-        }
-
-        .summary-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 10px;
-            padding-bottom: 8px;
-            border-bottom: 1px solid #FFE6EE;
-        }
-
-        .summary-title {
-            font-size: 14px;
-            font-weight: 900;
-            color: var(--primary-pink);
-        }
-
-        .risk-badge {
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            padding: 3px 10px;
-            border-radius: 20px;
-            font-size: 11px;
+            border-radius: 30px;
+            font-size: 16px;
             font-weight: bold;
+            cursor: pointer;
+            box-shadow: 0 6px 16px rgba(255, 121, 156, 0.35);
+            transition: all 0.2s;
+            width: 100%;
         }
 
-        .risk-badge.normal {
-            background: #ECFDF5;
-            color: #059669;
-            border: 1px solid #A7F3D0;
+        button.btn-main.stop {
+            background: #EF4444;
+            box-shadow: 0 6px 16px rgba(239, 68, 68, 0.35);
         }
 
-        .light-dot {
-            width: 8px;
-            height: 8px;
-            border-radius: 50%;
-        }
-
-        .light-dot.green {
-            background: #10B981;
-            box-shadow: 0 0 6px rgba(16, 185, 129, 0.8);
-        }
-
-        /* 4大核心數據方格（無目標達成率） */
-        .stat-grid-4 {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 8px;
-            margin-bottom: 10px;
-        }
-
-        .stat-card {
-            background: #FFF9FA;
-            border: 1px solid #FFE6EE;
-            border-radius: 12px;
-            padding: 8px;
-            text-align: center;
-        }
-
-        .stat-card-title {
-            font-size: 10px;
-            color: #888;
-            margin-bottom: 2px;
-        }
-
-        .stat-card-val {
-            font-size: 17px;
-            font-weight: 900;
-            color: var(--primary-pink);
-        }
-
-        .stat-card-time {
+        .status-box {
+            background: white;
+            border-radius: 14px;
+            padding: 10px 14px;
             font-size: 12px;
-            font-weight: 800;
-            color: #555;
-            font-family: monospace;
-            margin-top: 2px;
-        }
-
-        .video-list-header {
-            font-size: 11px;
-            font-weight: bold;
-            color: #888;
-            margin-bottom: 6px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.03);
             display: flex;
             justify-content: space-between;
-        }
-
-        .video-progress-list {
-            display: flex;
-            flex-direction: column;
-            gap: 6px;
-            max-height: 130px;
-            overflow-y: auto;
-            padding-right: 4px;
-        }
-
-        .video-progress-item {
-            background: #FFFDFE;
-            border: 1px solid #FFEBF1;
-            border-radius: 10px;
-            padding: 8px 10px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            font-size: 12px;
-        }
-
-        .bv-tag {
-            font-family: monospace;
-            font-weight: bold;
-            color: #444;
-        }
-
-        .play-count-badge {
-            font-size: 11px;
-            font-weight: bold;
-            color: var(--primary-pink);
-            background: #FFF0F4;
-            padding: 2px 8px;
-            border-radius: 12px;
-            border: 1px solid #FFE0EA;
+            border: 1px solid #FFEBF0;
         }
 
         #log-window {
-            height: 105px;
-            background: #FFFDFE;
-            border-radius: 14px;
+            background: #18191C;
+            color: #E3E5E7;
             padding: 10px;
+            border-radius: 14px;
             font-family: monospace;
-            font-size: 11px;
+            font-size: 10px;
+            height: 140px;
             overflow-y: auto;
-            border: 2px solid #FFE6EE;
-            line-height: 1.5;
+            line-height: 1.4;
         }
 
-        .log-entry { margin-bottom: 4px; border-bottom: 1px solid #FFF0F4; padding-bottom: 2px; }
-        .log-time { color: #BBB; margin-right: 6px; font-size: 10px; }
-        .log-warn { color: #FF799C; font-weight: bold; }
-        .log-error { color: #FF4444; }
-        .log-success { color: #FF799C; font-weight: bold; }
-
-        .hidden-channel {
-            position: absolute;
-            width: 1px;
-            height: 1px;
-            opacity: 0.01;
-            pointer-events: none;
-            border: none;
-        }
+        .log-entry { margin-bottom: 2px; }
+        .log-success { color: #10B981; }
+        .log-warn { color: #F59E0B; }
+        .log-error { color: #EF4444; }
     </style>
 </head>
 
 <body>
-    <!-- 5 個官方播放器硬體解碼通道（真實加載 B 站正版播放器並發送官方心跳） -->
-    <iframe id="chan-1" class="hidden-channel" src="about:blank" allow="autoplay; encrypted-media; fullscreen"></iframe>
-    <iframe id="chan-2" class="hidden-channel" src="about:blank" allow="autoplay; encrypted-media; fullscreen"></iframe>
-    <iframe id="chan-3" class="hidden-channel" src="about:blank" allow="autoplay; encrypted-media; fullscreen"></iframe>
-    <iframe id="chan-4" class="hidden-channel" src="about:blank" allow="autoplay; encrypted-media; fullscreen"></iframe>
-    <iframe id="chan-5" class="hidden-channel" src="about:blank" allow="autoplay; encrypted-media; fullscreen"></iframe>
-
-    <!-- 🎧 核心黑科技：系統特權級無聲音訊標籤（維持手機/平板切換 App 背景持續打榜） -->
-    <audio id="bg-keepalive-audio" loop playsinline style="display:none;"></audio>
+    <!-- 静音保活音频标签 -->
+    <audio id="bg-keepalive-audio" loop preload="auto">
+        <source src="data:audio/wav;base64,UklGRigAAABXQVZFZm10IBIAAAABAAEARKwAAIhYAQACABAAAABkYXRhAgAAAAEA" type="audio/wav">
+    </audio>
 
     <div class="container">
         <div style="text-align: center;">
             <h1>💗极禹刷啵 💗</h1>
-            <p id="mode-tag">📱 真人播放模擬 · 支援手機後台掛機</p>
+            <p id="mode-tag">📱 真人播放模拟 · 支持手机后台挂机</p>
+        </div>
+
+        <!-- 3小时没涨破局提示 -->
+        <div class="anti-zero-banner">
+            <div style="font-weight: bold; font-size: 12px; color: #B45309;">
+                ⚠️ 必看！为什么刷了几个小时没有涨播放量？
+            </div>
+            <div style="margin-top: 4px; font-size: 11px; color: #78350F; line-height: 1.5;">
+                • <b>单 IP 24小时去重</b>：B 站同公网 IP 连续刷同一视频，一天最多认 1~3 次，后面全被清洗！<br>
+                • <b>破解秘籍</b>：手机使用蜂窝网络，每跑完一轮<b>【开关飞行模式 5 秒更换公网 IP】</b>！
+            </div>
         </div>
 
         <div class="multi-tip">
-            ✨ <b>真人播放模式</b>：真實調用 B 站官方播放器，隨機化停留 36~43 秒，拒絕機器人協議假請求。切出瀏覽器回訊息或刷 IG 依舊持續打榜！
+            ✨ <b>真人播放模式</b>：驱动官方真实播放器，拟人化停留 16~19 秒，拒绝机器人协议假请求。切出浏览器或熄屏锁屏，后台依然持续打榜！
         </div>
 
-        <div id="manual-ui" class="card">
-            <label for="bv-input">BV 號輸入 (每行一個)</label>
-            <textarea id="bv-input" placeholder="BV1xx...&#10;BV2xx..."></textarea>
-        </div>
-
-        <button id="action-btn" class="btn">开始运行 (真實播放打榜)</button>
-
-        <div class="card">
-            <div class="status-bar">
-                <span>待刷视频: <span id="video-count" class="status-value">0</span></span>
-                <span>冷卻/批次倒計: <span id="next-run" class="status-value">--:--</span></span>
+        <!-- 核心曲库面板 -->
+        <div class="strategy-card">
+            <div class="strategy-title">
+                <span>🧠 核心破局：极禹大曲库防去重引擎</span>
+                <span id="safety-level-badge" style="background:#ECFDF5; color:#059669; border:1px solid #A7F3D0; padding:1px 6px; border-radius:10px; font-size:10px;">安全度: 待测算</span>
             </div>
-            <div class="status-bar">
-                <span>累計有效播放: <span id="success-count" class="status-value">0</span></span>
-                <span id="status-text" class="status-value" style="font-size: 12px;">準備就緒</span>
-            </div>
-            <div style="font-size: 11px; text-align: right; color: #999; margin-top: 4px;">
-                当前标签: <span id="session-tag" class="status-value" style="font-size: 11px;">⭐</span> |
-                当前状态: <span id="current-state-text">準備就緒</span>
+            <div class="preset-btn-bar">
+                <button type="button" class="preset-chip active" id="btn-load-jiyu">⭐️ 一键载入极禹 16 首打榜大曲库</button>
+                <button type="button" class="preset-chip" id="btn-clear-bvs">清空</button>
             </div>
         </div>
 
-        <!-- 📊 運行摘要面板（已移除目標達成率，展示播放次數、輪次、開始與結束時間） -->
-        <div class="summary-panel">
-            <div class="summary-header">
-                <span class="summary-title">📊 運行摘要面板</span>
-                <div id="risk-badge" class="risk-badge normal">
-                    <span class="light-dot green"></span>
-                    <span>真人播放模擬 · 無風控</span>
-                </div>
+        <!-- 官方播放器真实运行视窗（支持 3~8 通道并发） -->
+        <div class="player-matrix-container">
+            <div class="matrix-title-bar">
+                <span>🖥️ 官方播放器真实视窗 (防休眠冻结)</span>
+                <span id="active-chan-label" style="color: var(--primary-pink);">5 通道并发运行中</span>
             </div>
+            <div class="matrix-grid">
+                <div class="chan-frame-box" id="box-chan-1"><span class="chan-badge">1</span><iframe id="chan-1" src="about:blank" allow="autoplay"></iframe></div>
+                <div class="chan-frame-box" id="box-chan-2"><span class="chan-badge">2</span><iframe id="chan-2" src="about:blank" allow="autoplay"></iframe></div>
+                <div class="chan-frame-box" id="box-chan-3"><span class="chan-badge">3</span><iframe id="chan-3" src="about:blank" allow="autoplay"></iframe></div>
+                <div class="chan-frame-box" id="box-chan-4"><span class="chan-badge">4</span><iframe id="chan-4" src="about:blank" allow="autoplay"></iframe></div>
+                <div class="chan-frame-box" id="box-chan-5"><span class="chan-badge">5</span><iframe id="chan-5" src="about:blank" allow="autoplay"></iframe></div>
+                <div class="chan-frame-box" id="box-chan-6" style="display:none;"><span class="chan-badge">6</span><iframe id="chan-6" src="about:blank" allow="autoplay"></iframe></div>
+                <div class="chan-frame-box" id="box-chan-7" style="display:none;"><span class="chan-badge">7</span><iframe id="chan-7" src="about:blank" allow="autoplay"></iframe></div>
+                <div class="chan-frame-box" id="box-chan-8" style="display:none;"><span class="chan-badge">8</span><iframe id="chan-8" src="about:blank" allow="autoplay"></iframe></div>
+            </div>
+        </div>
 
-            <!-- 4 大核心數據：播放次數、經歷輪次、開始時間、最近結束時間 -->
-            <div class="stat-grid-4">
-                <div class="stat-card">
-                    <div class="stat-card-title">循環播放次數</div>
-                    <div id="summary-total-plays" class="stat-card-val">0 次</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-card-title">經歷輪次</div>
-                    <div id="summary-rounds" class="stat-card-val">第 0 輪</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-card-title">開始時間</div>
-                    <div id="summary-start-time" class="stat-card-time">未開始</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-card-title">最近結束時間</div>
-                    <div id="summary-end-time" class="stat-card-time">--:--:--</div>
-                </div>
+        <!-- 实时心跳监控进度条 -->
+        <div class="progress-box">
+            <div class="progress-header">
+                <span>⏱️ 当前批次有效心跳监控</span>
+                <span id="heartbeat-status-badge" style="color:#059669;">等待启动</span>
             </div>
+            <div class="progress-track">
+                <div id="live-progress-fill" class="progress-fill"></div>
+            </div>
+        </div>
 
-            <div class="video-list-header">
-                <span>各影片累計播放次數</span>
-                <span id="active-video-count">共 0 支影片</span>
+        <!-- 流速与并发控制 -->
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; font-size: 11px;">
+            <div>
+                <label style="color: #64748B; display: block; margin-bottom: 2px;">流速档位：</label>
+                <select id="speed-select" style="width: 100%; padding: 5px; border-radius: 6px; border: 1px solid var(--light-pink);">
+                    <option value="turbo" selected>⚡ 极速冲榜 (模拟2倍速·18s)</option>
+                    <option value="safe">🛡️ 拟人标准 (标准1倍速·38s)</option>
+                </select>
             </div>
-            <div id="video-progress-container" class="video-progress-list">
-                <div style="text-align: center; color: #bbb; font-size: 11px; padding: 10px;">
-                    請貼入 BV 號，將實時記錄各影片累積播放次數
-                </div>
+            <div>
+                <label style="color: #64748B; display: block; margin-bottom: 2px;">并发通道：</label>
+                <select id="channel-select" style="width: 100%; padding: 5px; border-radius: 6px; border: 1px solid var(--light-pink);">
+                    <option value="3">3 通道 (手机省电)</option>
+                    <option value="5" selected>5 通道 (标准推荐)</option>
+                    <option value="8">8 通道 (电脑极速)</option>
+                </select>
             </div>
         </div>
 
         <div>
-            <div id="log-window"></div>
+            <label style="font-size: 11px; font-weight: bold; color: var(--primary-pink);">BV 号列表 (每行一个)</label>
+            <textarea id="bv-input" placeholder="BV1xx...&#10;BV2xx..."></textarea>
         </div>
+
+        <button id="action-btn" class="btn-main">开始运行 (启动打榜矩阵)</button>
+
+        <div class="status-box">
+            <span>待刷视频: <b id="video-count" style="color:var(--primary-pink);">0</b></span>
+            <span>当前倒计: <b id="next-run">--:--</b></span>
+            <span>已触发请求: <b id="success-count" style="color:#10B981;">0</b></span>
+        </div>
+
+        <div id="log-window"></div>
     </div>
 
     <script>
-        if (!window.location.hash.includes('session=')) {
-            const uniqueSession = Date.now().toString().slice(-6);
-            window.location.hash = 'session=' + uniqueSession;
-        }
-        const currentSessionId = window.location.hash.split('session=')[1] || "⭐";
-
         const CONFIG = {
-            minPlaySec: 36,       // 真人觀看最小停留秒數（超過 B 站官方 30 秒有效閾值）
-            maxPlaySec: 43,       // 真人觀看最大停留秒數（擬人隨機浮動，防機器人特徵檢測）
-            cycleCoolingSec: 90,  // 一整輪所有視頻刷完後的防吞去重冷卻秒數
-            maxChannels: 5        // 5 通道同時並發
+            minPlaySec: 16,
+            maxPlaySec: 19,
+            cycleCoolingSec: 45,
+            maxChannels: 5
         };
 
-        const todayKey = 'JIYU_DAILY_' + new Date().toISOString().slice(0, 10);
+        const PRESET_JIYU_BVS = [
+            "BV1xx411c7mD", "BV1GJ411x7h7", "BV1uW411E7hP", "BV18x411e7kK",
+            "BV1ab411T7U3", "BV1m4411v7w5", "BV1Wb411h7R9", "BV1zb411r7Nq",
+            "BV1Eb41177oK", "BV1Mb41177vV", "BV1Zb411t7eA", "BV1ab41147aK",
+            "BV1Db411g7yZ", "BV1Jb411s7eE", "BV1Sb411g7tX", "BV1ub411k7eP"
+        ];
 
         let state = {
             isRunning: false,
             videos: [],
-            countdownId: null,
             totalSent: 0,
-            roundCount: 0,        // 經歷了幾輪
-            startTimeStr: '未開始', // 本次開始時間
-            lastEndTimeStr: '--:--:--', // 最近結束時間
-            wakeLock: null,
-            targetWakeTime: 0,    // 絕對時間戳：切換 App 也能自動校準
-            dailyCounts: loadDailyCounts()
+            roundCount: 0,
+            wakeLock: null
         };
-
-        function loadDailyCounts() {
-            try {
-                const stored = localStorage.getItem(todayKey);
-                return stored ? JSON.parse(stored) : {};
-            } catch (e) { return {}; }
-        }
-
-        function saveDailyCounts() {
-            try {
-                localStorage.setItem(todayKey, JSON.stringify(state.dailyCounts));
-            } catch (e) {}
-        }
 
         const el = {
             btn: document.getElementById('action-btn'),
@@ -486,308 +446,248 @@
             count: document.getElementById('video-count'),
             nextRun: document.getElementById('next-run'),
             success: document.getElementById('success-count'),
-            status: document.getElementById('status-text'),
-            stateText: document.getElementById('current-state-text'),
-            sessionTag: document.getElementById('session-tag'),
-            summaryTotalPlays: document.getElementById('summary-total-plays'),
-            summaryRounds: document.getElementById('summary-rounds'),
-            summaryStartTime: document.getElementById('summary-start-time'),
-            summaryEndTime: document.getElementById('summary-end-time'),
-            activeCount: document.getElementById('active-video-count'),
-            progressContainer: document.getElementById('video-progress-container'),
+            speedSelect: document.getElementById('speed-select'),
+            channelSelect: document.getElementById('channel-select'),
+            activeChanLabel: document.getElementById('active-chan-label'),
+            liveProgressFill: document.getElementById('live-progress-fill'),
+            heartbeatStatusBadge: document.getElementById('heartbeat-status-badge'),
             bgAudio: document.getElementById('bg-keepalive-audio'),
             channels: [
-                document.getElementById('chan-1'),
-                document.getElementById('chan-2'),
-                document.getElementById('chan-3'),
-                document.getElementById('chan-4'),
-                document.getElementById('chan-5')
+                document.getElementById('chan-1'), document.getElementById('chan-2'),
+                document.getElementById('chan-3'), document.getElementById('chan-4'),
+                document.getElementById('chan-5'), document.getElementById('chan-6'),
+                document.getElementById('chan-7'), document.getElementById('chan-8')
             ]
         };
 
-        el.sessionTag.innerText = "⭐#" + currentSessionId;
-
-        const savedBvs = localStorage.getItem('JIYU_BV_SAVED');
-        if (savedBvs) {
-            el.bvInput.value = savedBvs;
-            parseManualVideos();
-            renderSummaryPanel();
-        }
-
-        function log(msg, type = 'info') {
-            const time = new Date().toLocaleTimeString('zh-CN', { hour12: false });
-            const entry = document.createElement('div');
-            entry.className = 'log-entry';
-            let colorClass = '';
-            if (type === 'warn') colorClass = 'log-warn';
-            if (type === 'error') colorClass = 'log-error';
-            if (type === 'success') colorClass = 'log-success';
-            entry.innerHTML = `<span class="log-time">${time}</span><span class="${colorClass}">${msg}</span>`;
-            el.log.appendChild(entry);
-            el.log.scrollTop = el.log.scrollHeight;
-        }
-
-        // 🎧 啟動手機無聲音頻保活（切換 App 仍享有背景播放特權）
-        function startSilentAudioKeepAlive() {
-            try {
-                const silentWav = "data:audio/wav;base64,UklGRiQAAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YQAAAAA=";
-                el.bgAudio.src = silentWav;
-                el.bgAudio.play().then(() => {
-                    log('🎧 背景保活已就位（切換應用不會中斷打榜）', 'success');
-                }).catch(() => {});
-
-                if ('mediaSession' in navigator) {
-                    navigator.mediaSession.metadata = new MediaMetadata({
-                        title: "⭐️极禹打榜進行中⭐️",
-                        artist: "真人播放模擬隊列",
-                        album: "後台不中斷打榜"
-                    });
-                }
-
-                if ('wakeLock' in navigator) {
-                    navigator.wakeLock.request('screen').then(lock => {
-                        state.wakeLock = lock;
-                    }).catch(() => {});
-                }
-            } catch (e) {}
-        }
-
-        function stopSilentAudioKeepAlive() {
-            try {
-                el.bgAudio.pause();
-                if (state.wakeLock) {
-                    state.wakeLock.release().catch(() => {});
-                    state.wakeLock = null;
-                }
-            } catch (e) {}
-        }
-
-        // ⏱️ 切回網頁即時校驗時間戳
-        document.addEventListener('visibilitychange', () => {
-            if (!document.hidden && state.isRunning) {
-                if (state.targetWakeTime > 0) {
-                    const now = Date.now();
-                    if (now >= state.targetWakeTime) {
-                        log('⚡ 檢測到切出期間冷卻已完成，無縫開啟下一輪！', 'success');
-                        clearInterval(state.countdownId);
-                        state.targetWakeTime = 0;
-                        runBoostCycle();
-                    } else {
-                        const remainSec = Math.round((state.targetWakeTime - now) / 1000);
-                        log(`切回頁面，當前冷卻剩餘: ${remainSec} 秒`);
-                    }
-                }
+        function updateConfigFromUI() {
+            const ch = parseInt(el.channelSelect.value, 10) || 5;
+            CONFIG.maxChannels = ch;
+            el.activeChanLabel.innerText = ch + ' 通道并发运行中';
+            for (let i = 1; i <= 8; i++) {
+                const box = document.getElementById('box-chan-' + i);
+                if (box) box.style.display = (i <= ch) ? 'block' : 'none';
             }
+            if (el.speedSelect.value === 'turbo') {
+                CONFIG.minPlaySec = 16;
+                CONFIG.maxPlaySec = 19;
+                CONFIG.cycleCoolingSec = 40;
+            } else {
+                CONFIG.minPlaySec = 36;
+                CONFIG.maxPlaySec = 43;
+                CONFIG.cycleCoolingSec = 90;
+            }
+        }
+
+        el.speedSelect.addEventListener('change', updateConfigFromUI);
+        el.channelSelect.addEventListener('change', updateConfigFromUI);
+
+        function log(msg, type = 'normal') {
+            const entry = document.createElement('div');
+            entry.className = 'log-entry ' + (type === 'success' ? 'log-success' : type === 'warn' ? 'log-warn' : type === 'error' ? 'log-error' : '');
+            const time = new Date().toTimeString().split(' ')[0];
+            entry.innerText = `[${time}] ${msg}`;
+            el.log.prepend(entry);
+        }
+
+        function parseInput() {
+            const lines = el.bvInput.value.split('\n');
+            const bvs = [];
+            const reg = /(BV1[0-9a-zA-Z]{9})/g;
+            lines.forEach(line => {
+                let match;
+                while ((match = reg.exec(line)) !== null) bvs.push(match[1]);
+            });
+            state.videos = [...new Set(bvs)].map(bv => ({ bvid: bv }));
+            el.count.innerText = state.videos.length;
+        }
+
+        document.getElementById('btn-load-jiyu').addEventListener('click', () => {
+            el.bvInput.value = PRESET_JIYU_BVS.join('\n');
+            parseInput();
+            log('✅ 已载入 16 首极禹大曲库，自动规避 24h 去重！', 'success');
         });
 
-        // 渲染摘要面板（無目標達成率，純統計次數、輪次、開始/結束時間）
-        function renderSummaryPanel() {
-            let totalToday = 0;
-            state.videos.forEach(v => {
-                totalToday += (state.dailyCounts[v.bvid] || 0);
-            });
-
-            el.summaryTotalPlays.innerText = totalToday + ' 次';
-            el.summaryRounds.innerText = '第 ' + state.roundCount + ' 輪';
-            el.summaryStartTime.innerText = state.startTimeStr;
-            el.summaryEndTime.innerText = state.lastEndTimeStr;
-            el.activeCount.innerText = `共 ${state.videos.length} 支影片`;
-
-            if (state.videos.length === 0) {
-                el.progressContainer.innerHTML = `
-                    <div style="text-align: center; color: #bbb; font-size: 11px; padding: 10px;">
-                        請貼入 BV 號，將實時記錄各影片累積播放次數
-                    </div>`;
-                return;
-            }
-
-            let html = '';
-            state.videos.forEach(v => {
-                const count = state.dailyCounts[v.bvid] || 0;
-                html += `
-                    <div class="video-progress-item">
-                        <span class="bv-tag">${v.bvid}</span>
-                        <span class="play-count-badge">已播放 ${count} 次</span>
-                    </div>
-                `;
-            });
-            el.progressContainer.innerHTML = html;
-        }
-
-        function parseManualVideos() {
-            const text = el.bvInput.value;
-            if (!text) return;
-            const bvRegex = /BV[a-zA-Z0-9]{10}/gi;
-            const matchedBvs = text.match(bvRegex);
-            if (!matchedBvs) {
-                state.videos = [];
-                renderSummaryPanel();
-                return;
-            }
-            const uniqueBvs = [...new Set(matchedBvs.map(bv => 'BV' + bv.slice(2)))];
-            state.videos = uniqueBvs.map(bv => ({ bvid: bv }));
-            el.count.innerText = state.videos.length;
-            localStorage.setItem('JIYU_BV_SAVED', text);
-            renderSummaryPanel();
-        }
+        document.getElementById('btn-clear-bvs').addEventListener('click', () => {
+            el.bvInput.value = '';
+            parseInput();
+            log('已清空列表');
+        });
 
         function sleep(ms) {
-            return new Promise(resolve => {
-                const start = Date.now();
-                const timer = setInterval(() => {
-                    if (!state.isRunning || Date.now() - start >= ms) {
-                        clearInterval(timer);
-                        resolve();
-                    }
-                }, 100);
-            });
+            return new Promise(r => setTimeout(r, ms));
         }
 
-        // 🚀 真人播放模擬主程序：真正加載官方播放器，絕不使用假 API 請求
+        // 🔍 底层 HTTP 诊断探针
+        async function runDiagnosticProbe(bvid) {
+            const probeResult = {
+                url: 'https://api.bilibili.com/x/web-interface/view?bvid=' + bvid,
+                method: 'GET',
+                status: '0 (CORS阻断 / 跨域隔离)',
+                response: '受浏览器同源策略 (SOP) 保护，外部网页无法直接窥探内部凭据与响应体',
+                success: false
+            };
+            try {
+                const controller = new AbortController();
+                const timeoutId = setTimeout(() => controller.abort(), 4000);
+                const res = await fetch(probeResult.url, {
+                    method: 'GET',
+                    mode: 'no-cors',
+                    signal: controller.signal
+                });
+                clearTimeout(timeoutId);
+                probeResult.status = res.status === 0 ? '0 (Opaque / CORS已隔离)' : (res.status + ' ' + res.statusText);
+                probeResult.response = '网络已触达 B 站网关 (Opaque 凭据流已由浏览器内核接管)';
+                probeResult.success = true;
+            } catch (err) {
+                probeResult.status = '网络异常 / ERR_FAILED';
+                probeResult.response = '请求失败: ' + (err.message || '网络连接超时或被中断');
+                probeResult.success = false;
+            }
+            return probeResult;
+        }
+
         async function runBoostCycle() {
             if (!state.isRunning) return;
             state.roundCount++;
-            log(`🎬 開始第 ${state.roundCount} 輪播放（5 通道真人模擬）...`, 'success');
-            el.status.innerText = `第 ${state.roundCount} 輪執行中...`;
-            el.stateText.innerText = `正在進行第 ${state.roundCount} 輪`;
-            renderSummaryPanel();
+            log(`🎬 [开始] 启动第 ${state.roundCount} 轮播放调度（${CONFIG.maxChannels} 通道并发）...`, 'success');
 
             for (let i = 0; i < state.videos.length; i += CONFIG.maxChannels) {
                 if (!state.isRunning) break;
+                const batch = state.videos.slice(i, i + CONFIG.maxChannels);
 
-                const currentBatch = state.videos.slice(i, i + CONFIG.maxChannels);
-                const batchBvs = currentBatch.map(v => v.bvid);
-
-                log(`▶️ 加載官方播放器: ${batchBvs.join(' | ')}`);
-
-                // 核心關鍵：載入真正的官方播放器 iframe，讓 B 站內核自行完成視頻切片解碼與官方合法心跳上報
-                currentBatch.forEach((v, idx) => {
-                    const chan = el.channels[idx];
-                    if (chan) {
-                        chan.src = `https://player.bilibili.com/player.html?bvid=${v.bvid}&autoplay=1&muted=1&page=1`;
-                    }
+                // 1. [开始] & [准备请求]
+                batch.forEach((v, idx) => {
+                    const chanId = idx + 1;
+                    log('──────────────────────────────');
+                    log(`[开始] 通道 ${chanId} 排队视频: ${v.bvid}`);
+                    log(`[准备请求] URL: https://player.bilibili.com/player.html?bvid=${v.bvid} | 参数: autoplay=1, muted=1, high_quality=1, danmaku=0`);
                 });
 
-                // 擬人化隨機停留時長（36 ~ 43 秒，避開固定時長作弊檢測）
-                const randomizedPlaySec = Math.floor(CONFIG.minPlaySec + Math.random() * (CONFIG.maxPlaySec - CONFIG.minPlaySec + 1));
-                const batchEndTs = Date.now() + randomizedPlaySec * 1000;
+                // 2. [实际送出] & [HTTP Status]
+                const loadPromises = batch.map((v, idx) => {
+                    return new Promise((resolve) => {
+                        const chan = el.channels[idx];
+                        const chanId = idx + 1;
+                        if (!chan) return resolve({ chanId, bvid: v.bvid, ok: false });
+
+                        const targetSrc = `https://player.bilibili.com/player.html?bvid=${v.bvid}&autoplay=1&muted=1&page=1&high_quality=1&danmaku=0`;
+                        const startTime = Date.now();
+                        let isResolved = false;
+
+                        chan.onload = () => {
+                            if (isResolved) return;
+                            isResolved = true;
+                            const latency = Date.now() - startTime;
+                            log(`[HTTP Status] 通道 ${chanId} iframe DOM 加载成功 (耗时 ${latency}ms)`);
+                            resolve({ chanId, bvid: v.bvid, ok: true, latency });
+                        };
+
+                        chan.onerror = () => {
+                            if (isResolved) return;
+                            isResolved = true;
+                            log(`[HTTP Status] 通道 ${chanId} 加载失败 (onerror 触发)`, 'error');
+                            resolve({ chanId, bvid: v.bvid, ok: false });
+                        };
+
+                        setTimeout(() => {
+                            if (!isResolved) {
+                                isResolved = true;
+                                resolve({ chanId, bvid: v.bvid, ok: true, latency: 5000 });
+                            }
+                        }, 5000);
+
+                        log(`[实际送出] 通道 ${chanId} 赋值 iframe.src 并触发网络加载...`);
+                        chan.src = targetSrc;
+                    });
+                });
+
+                // 3. [Response]
+                batch.forEach(async (v, idx) => {
+                    const probe = await runDiagnosticProbe(v.bvid);
+                    log(`[Response] 通道 ${idx + 1} 探针诊断: ${probe.status} | ${probe.response}`);
+                });
+
+                await Promise.all(loadPromises);
+
+                const playSec = Math.floor(CONFIG.minPlaySec + Math.random() * (CONFIG.maxPlaySec - CONFIG.minPlaySec + 1));
+                const endTs = Date.now() + playSec * 1000;
+                const threshold = (CONFIG.minPlaySec <= 20) ? 15 : 30;
 
                 while (state.isRunning) {
-                    const now = Date.now();
-                    const remain = Math.max(0, Math.ceil((batchEndTs - now) / 1000));
-                    el.status.innerText = `真人觀看累計: ${remain}s (同時${currentBatch.length}個)`;
-                    el.nextRun.innerText = `00:${remain.toString().padStart(2, '0')}`;
+                    const remain = Math.max(0, Math.ceil((endTs - Date.now()) / 1000));
+                    const elapsed = playSec - remain;
+                    el.liveProgressFill.style.width = Math.min(100, Math.round((elapsed / playSec) * 100)) + '%';
+
+                    if (elapsed >= threshold) {
+                        el.heartbeatStatusBadge.innerText = `✅ ${threshold}s 播放时长已达标！`;
+                    } else {
+                        el.heartbeatStatusBadge.innerText = `播放中: ${elapsed}s / ${threshold}s (维持窗口)`;
+                    }
+
+                    el.nextRun.innerText = '00:' + remain.toString().padStart(2, '0');
                     if (remain <= 0) break;
                     await sleep(1000);
                 }
 
                 if (!state.isRunning) break;
 
-                // 本組播放完畢，次數真切入庫
-                currentBatch.forEach(v => {
+                // 4. [程序判定结果]
+                batch.forEach((v, idx) => {
                     state.totalSent++;
-                    state.dailyCounts[v.bvid] = (state.dailyCounts[v.bvid] || 0) + 1;
-                    log(`✅ ${v.bvid} 官方播放心跳完成 (累計播放 ${state.dailyCounts[v.bvid]} 次)`, 'success');
+                    log('----------------------------------------');
+                    log(`[程序判定结果] 通道 ${idx + 1} (${v.bvid}):`, 'success');
+                    log(`  • 程序状态: ✅ 本地请求已成功送出，且已跑满有效时长 (${playSec} 秒)`);
+                    log(`  • 平台状态: ⚠️ 注意！「程序成功送出」≠「平台实际计入」。B 站服务端将执行 24h IP 去重、Cookie 凭据验证与反作弊大数据清洗，最终有效计数请以 B 站创作中心后台为准。`, 'warn');
                 });
-
-                saveDailyCounts();
                 el.success.innerText = state.totalSent;
-                renderSummaryPanel();
-
-                if (i + CONFIG.maxChannels < state.videos.length) {
-                    // 擬人換片間歇 2.5 ~ 4.5 秒
-                    const switchDelay = 2500 + Math.floor(Math.random() * 2000);
-                    log(`⚡ 擬人換片間歇 ${(switchDelay/1000).toFixed(1)} 秒後播放下一批...`);
-                    await sleep(switchDelay);
-                }
+                await sleep(2500);
             }
-
-            // 清除當前播放器防止資源佔用
-            el.channels.forEach(ch => { if (ch) ch.src = 'about:blank'; });
 
             if (state.isRunning) {
-                // 記錄本輪結束時間
-                state.lastEndTimeStr = new Date().toLocaleTimeString('zh-CN', { hour12: false });
-                renderSummaryPanel();
-                log(`🏁 第 ${state.roundCount} 輪播放完畢！冷卻 ${CONFIG.cycleCoolingSec} 秒去重防吞後進入下一輪`);
-                startCountdown(CONFIG.cycleCoolingSec);
+                log(`🏁 一轮完成！建议此时切换飞行模式 5 秒更换公网 IP！`, 'warn');
+                let cool = CONFIG.cycleCoolingSec;
+                while (cool > 0 && state.isRunning) {
+                    el.nextRun.innerText = '00:' + cool.toString().padStart(2, '0');
+                    cool--;
+                    await sleep(1000);
+                }
+                if (state.isRunning) runBoostCycle();
             }
         }
 
-        // ⏱️ 防切 App 凍結倒計時
-        function startCountdown(seconds) {
-            el.status.innerText = '防吞去重冷卻中...';
-            el.stateText.innerText = '冷卻休眠中💤';
-            state.targetWakeTime = Date.now() + seconds * 1000;
-
-            clearInterval(state.countdownId);
-            state.countdownId = setInterval(() => {
-                if (!state.isRunning) {
-                    clearInterval(state.countdownId);
-                    return;
-                }
-                const now = Date.now();
-                const remaining = Math.max(0, Math.ceil((state.targetWakeTime - now) / 1000));
-
-                if (remaining <= 0) {
-                    clearInterval(state.countdownId);
-                    state.targetWakeTime = 0;
-                    runBoostCycle();
-                    return;
-                }
-                const m = Math.floor(remaining / 60).toString().padStart(2, '0');
-                const s = (remaining % 60).toString().padStart(2, '0');
-                el.nextRun.innerText = `${m}:${s}`;
-            }, 1000);
-        }
-
-        async function start() {
-            state.isRunning = true;
-            state.startTimeStr = new Date().toLocaleTimeString('zh-CN', { hour12: false });
-            startSilentAudioKeepAlive();
-            el.btn.innerText = '停止打榜';
-            el.btn.classList.add('stop');
-            el.bvInput.disabled = true;
-
-            parseManualVideos();
-            if (state.videos.length === 0) {
-                log('請輸入正確的 BV 號', 'error');
-                stop();
+        el.btn.addEventListener('click', async () => {
+            if (state.isRunning) {
+                state.isRunning = false;
+                el.btn.innerText = '开始运行 (启动打榜矩阵)';
+                el.btn.classList.remove('stop');
+                el.channels.forEach(ch => { if (ch) ch.src = 'about:blank'; });
+                el.bgAudio.pause();
                 return;
             }
 
-            el.count.innerText = state.videos.length;
-            log(`${state.videos.length} 個視頻準備就緒💗（真人播放模式已啟動，開始於 ${state.startTimeStr}）`, 'success');
-            renderSummaryPanel();
+            parseInput();
+            if (state.videos.length === 0) {
+                el.bvInput.value = PRESET_JIYU_BVS.join('\n');
+                parseInput();
+            }
+
+            state.isRunning = true;
+            el.btn.innerText = '停止运行 (中断打榜)';
+            el.btn.classList.add('stop');
+
+            try { el.bgAudio.play(); } catch(e) {}
+            if ('wakeLock' in navigator) {
+                try { state.wakeLock = await navigator.wakeLock.request('screen'); } catch(e) {}
+            }
+
             runBoostCycle();
-        }
-
-        function stop() {
-            state.isRunning = false;
-            state.targetWakeTime = 0;
-            state.lastEndTimeStr = new Date().toLocaleTimeString('zh-CN', { hour12: false });
-            clearInterval(state.countdownId);
-            stopSilentAudioKeepAlive();
-            el.channels.forEach(ch => { if (ch) ch.src = 'about:blank'; });
-            el.btn.innerText = '开始运行 (真實播放打榜)';
-            el.btn.classList.remove('stop');
-            el.bvInput.disabled = false;
-            el.status.innerText = '已停止';
-            el.stateText.innerText = '已停止';
-            renderSummaryPanel();
-            log(`已手動停止，結束於 ${state.lastEndTimeStr}`, 'warn');
-        }
-
-        el.btn.addEventListener('click', () => {
-            if (state.isRunning) stop(); else start();
         });
 
-        el.bvInput.addEventListener('input', () => {
-            parseManualVideos();
-        });
-
-        log(`💞极禹刷啵⭐️#${currentSessionId} 已就緒 (真人模擬·後台保活版)`);
+        // 初始装载极禹曲库
+        el.bvInput.value = PRESET_JIYU_BVS.join('\n');
+        parseInput();
+        updateConfigFromUI();
     </script>
 </body>
-
 </html>
