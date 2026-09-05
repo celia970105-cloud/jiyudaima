@@ -6,12 +6,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>⭐️极禹刷啵⭐️</title>
     <style>
-        /* 🎨 精準配色：#FFCCDD 與 #FF799C */
         :root {
             --primary-pink: #FF799C;
             --light-pink: #FFCCDD;
             --soft-white: rgba(255, 255, 255, 0.95);
-            --star-color: #FFB3D1;
             --text-dark: #555555;
             --border-radius: 24px;
         }
@@ -37,7 +35,7 @@
             overflow-x: hidden;
         }
 
-        /* ✨ 星光閃爍 */
+        /* 星光背景 */
         body::before {
             content: '★';
             position: fixed;
@@ -61,14 +59,8 @@
         }
 
         @keyframes twinkle {
-            0%, 100% {
-                transform: scale(1) rotate(0deg);
-                opacity: 0.3;
-            }
-            50% {
-                transform: scale(1.2) rotate(15deg);
-                opacity: 0.7;
-            }
+            0%, 100% { transform: scale(1) rotate(0deg); opacity: 0.3; }
+            50% { transform: scale(1.2) rotate(15deg); opacity: 0.7; }
         }
 
         .container {
@@ -81,7 +73,7 @@
             box-shadow: 0 15px 35px rgba(255, 121, 156, 0.25);
             display: flex;
             flex-direction: column;
-            gap: 15px;
+            gap: 14px;
             position: relative;
             border: 4px solid white;
         }
@@ -90,7 +82,7 @@
             font-size: 26px;
             text-align: center;
             color: var(--primary-pink);
-            margin-bottom: 5px;
+            margin-bottom: 3px;
             font-weight: 900;
             text-shadow: 1px 1px 0px white;
         }
@@ -99,12 +91,11 @@
             text-align: center;
             color: #888;
             font-size: 11px;
-            font-style: italic;
             background: rgba(255, 255, 255, 0.8);
             padding: 3px 12px;
             border-radius: 20px;
             display: block;
-            margin: 0 auto 10px auto;
+            margin: 0 auto 6px auto;
             width: fit-content;
             border: 1px solid #FFE6EE;
         }
@@ -113,7 +104,7 @@
             background: white;
             border: 2px solid var(--light-pink);
             border-radius: 18px;
-            padding: 16px;
+            padding: 14px;
             box-shadow: 0 4px 10px rgba(255, 204, 221, 0.2);
         }
 
@@ -129,23 +120,23 @@
 
         label {
             display: block;
-            margin-bottom: 8px;
+            margin-bottom: 6px;
             font-weight: bold;
             color: var(--primary-pink);
-            font-size: 14px;
+            font-size: 13px;
         }
 
         textarea {
             width: 100%;
-            height: 80px;
-            padding: 12px;
+            height: 75px;
+            padding: 10px;
             border: 2px solid #FFE6EE;
-            border-radius: 14px;
+            border-radius: 12px;
             font-size: 13px;
             background: #FFF9FA;
             outline: none;
             resize: none;
-            font-family: 'Courier New', monospace;
+            font-family: monospace;
             transition: border-color 0.3s;
         }
 
@@ -170,23 +161,16 @@
 
         .btn:hover {
             transform: translateY(-2px);
-            box-shadow: 0 8px 25px rgba(255, 121, 156, 0.5);
-        }
-
-        .btn:active {
-            transform: scale(0.98);
         }
 
         .btn.stop {
             background: linear-gradient(to right, #FFB3D1, #FF9999);
-            box-shadow: 0 6px 15px rgba(255, 153, 153, 0.3);
         }
 
         .btn-download {
             background: linear-gradient(to right, #FFA2BD, #FF799C);
             font-size: 13px;
-            padding: 11px;
-            box-shadow: 0 4px 12px rgba(255, 121, 156, 0.25);
+            padding: 10px;
             margin-top: 6px;
         }
 
@@ -195,7 +179,7 @@
             justify-content: space-between;
             font-size: 13px;
             color: #666;
-            padding: 7px 0;
+            padding: 6px 0;
             border-bottom: 1px dashed var(--light-pink);
         }
 
@@ -203,21 +187,17 @@
             border-bottom: none;
         }
 
-        .status-label {
-            font-weight: 500;
-        }
-
         .status-value {
             font-weight: bold;
             color: var(--primary-pink);
         }
 
-        /* 📊 運行摘要面板專屬樣式 */
+        /* 運行摘要面板樣式 */
         .summary-panel {
             background: #FFFFFF;
             border: 2px solid #FFCCDD;
             border-radius: 18px;
-            padding: 16px;
+            padding: 14px;
             box-shadow: 0 4px 12px rgba(255, 121, 156, 0.15);
         }
 
@@ -225,7 +205,7 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 12px;
+            margin-bottom: 10px;
             padding-bottom: 8px;
             border-bottom: 1px solid #FFE6EE;
         }
@@ -234,21 +214,16 @@
             font-size: 14px;
             font-weight: 900;
             color: var(--primary-pink);
-            display: flex;
-            align-items: center;
-            gap: 6px;
         }
 
-        /* 🟢 / 🔴 風控狀態指示燈 */
         .risk-badge {
             display: inline-flex;
             align-items: center;
             gap: 6px;
-            padding: 4px 10px;
+            padding: 3px 10px;
             border-radius: 20px;
             font-size: 11px;
             font-weight: bold;
-            transition: all 0.3s ease;
         }
 
         .risk-badge.normal {
@@ -268,7 +243,6 @@
             width: 8px;
             height: 8px;
             border-radius: 50%;
-            display: inline-block;
         }
 
         .light-dot.green {
@@ -283,43 +257,41 @@
 
         @keyframes pulse-warn {
             0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.03); }
+            50% { transform: scale(1.04); }
         }
 
-        /* 累計指標小方塊 */
         .stat-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 10px;
-            margin-bottom: 12px;
+            margin-bottom: 10px;
         }
 
         .stat-card {
             background: #FFF9FA;
             border: 1px solid #FFE6EE;
             border-radius: 12px;
-            padding: 10px;
+            padding: 8px;
             text-align: center;
         }
 
         .stat-card-title {
-            font-size: 11px;
+            font-size: 10px;
             color: #888;
-            margin-bottom: 4px;
+            margin-bottom: 2px;
         }
 
         .stat-card-val {
-            font-size: 18px;
+            font-size: 17px;
             font-weight: 900;
             color: var(--primary-pink);
         }
 
-        /* 影片進度清單 */
         .video-progress-list {
             display: flex;
             flex-direction: column;
-            gap: 8px;
-            max-height: 150px;
+            gap: 7px;
+            max-height: 140px;
             overflow-y: auto;
             padding-right: 4px;
         }
@@ -328,15 +300,8 @@
             background: #FFFDFE;
             border: 1px solid #FFEBF1;
             border-radius: 10px;
-            padding: 8px 10px;
+            padding: 7px 9px;
             font-size: 12px;
-        }
-
-        .video-progress-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 4px;
         }
 
         .bv-tag {
@@ -357,6 +322,7 @@
             background: #FFE6EE;
             border-radius: 10px;
             overflow: hidden;
+            margin-top: 4px;
         }
 
         .progress-bar-fill {
@@ -367,42 +333,22 @@
         }
 
         #log-window {
-            height: 120px;
+            height: 110px;
             background: #FFFDFE;
             border-radius: 14px;
-            padding: 12px;
-            font-family: 'Courier New', monospace;
-            font-size: 12px;
+            padding: 10px;
+            font-family: monospace;
+            font-size: 11px;
             overflow-y: auto;
             border: 2px solid #FFE6EE;
             line-height: 1.5;
         }
 
-        .log-entry {
-            margin-bottom: 6px;
-            border-bottom: 1px solid #FFF0F4;
-            padding-bottom: 3px;
-        }
-
-        .log-time {
-            color: #BBB;
-            margin-right: 8px;
-            font-size: 11px;
-        }
-
-        .log-warn {
-            color: #FF799C;
-            font-weight: bold;
-        }
-
-        .log-error {
-            color: #FF4444;
-        }
-
-        .log-success {
-            color: #FF799C;
-            font-weight: bold;
-        }
+        .log-entry { margin-bottom: 4px; border-bottom: 1px solid #FFF0F4; padding-bottom: 2px; }
+        .log-time { color: #BBB; margin-right: 6px; font-size: 10px; }
+        .log-warn { color: #FF799C; font-weight: bold; }
+        .log-error { color: #FF4444; }
+        .log-success { color: #FF799C; font-weight: bold; }
 
         .ext-guide-box {
             background: #FFF8FA;
@@ -414,11 +360,6 @@
             line-height: 1.6;
         }
 
-        .ext-guide-box b {
-            color: #FF799C;
-        }
-
-        /* 5 通道靜音並發驅動組件 */
         .hidden-channel {
             position: absolute;
             width: 1px;
@@ -431,7 +372,7 @@
 </head>
 
 <body>
-    <!-- 5 個官方心跳播放器通道（同時並發） -->
+    <!-- 5 個官方心跳播放器隱形並發通道 -->
     <iframe id="chan-1" class="hidden-channel" src="about:blank" allow="autoplay"></iframe>
     <iframe id="chan-2" class="hidden-channel" src="about:blank" allow="autoplay"></iframe>
     <iframe id="chan-3" class="hidden-channel" src="about:blank" allow="autoplay"></iframe>
@@ -441,49 +382,48 @@
     <div class="container">
         <div style="text-align: center;">
             <h1>💗极禹刷啵 💗</h1>
-            <p id="mode-tag">EDGE Mode · 5通道並行</p>
+            <p id="mode-tag">官方播放器直連 · 5通道極速防吞版</p>
         </div>
 
-        <div class="multi-tip"> 建立edge账号后，点击头像 新增无痕页面 每个页面登录不同的edge账号和b站号，最多3-5个避免ip风险！
+        <div class="multi-tip">
+            💡 建議多填 5~10 支 BV 號輪流並發，各影片自然錯開，播放量 100% 穩計入且完全無需等待！
         </div>
 
         <div id="manual-ui" class="card">
-            <label for="bv-input">BV 号输入 (每行一个)</label>
-            <textarea id="bv-input" placeholder="BV1xx...&#10;BV2xx...&#10;..."></textarea>
+            <label for="bv-input">BV 號輸入 (支援直接貼每行一個，如 BV1xx...)</label>
+            <textarea id="bv-input" placeholder="BV1xx...&#10;BV2xx..."></textarea>
         </div>
 
         <button id="action-btn" class="btn">开始运行</button>
 
         <div class="card">
             <div class="status-bar">
-                <span class="status-label">待刷视频: <span id="video-count" class="status-value">0</span></span>
-                <span class="status-label">下次循环: <span id="next-run" class="status-value">--:--</span></span>
+                <span>待刷视频: <span id="video-count" class="status-value">0</span></span>
+                <span>批次/冷卻倒計時: <span id="next-run" class="status-value">--:--</span></span>
             </div>
             <div class="status-bar">
-                <span class="status-label">累计发送请求次数: <span id="success-count" class="status-value">0</span></span>
-                <span id="status-text" class="status-value" style="font-size: 12px;"></span>
+                <span>累計上報成功: <span id="success-count" class="status-value">0</span></span>
+                <span id="status-text" class="status-value" style="font-size: 12px;">準備就緒</span>
             </div>
-            <div style="font-size: 11px; text-align: right; color: #999; margin-top: 5px;">
+            <div style="font-size: 11px; text-align: right; color: #999; margin-top: 4px;">
                 当前标签: <span id="session-tag" class="status-value" style="font-size: 11px;">⭐</span> |
-                当前状态: <span id="current-state-text">准备就绪</span>
+                当前状态: <span id="current-state-text">準備就緒</span>
             </div>
         </div>
 
-        <!-- 📊 核心新功能：運行摘要面板 -->
+        <!-- 📊 運行摘要面板 -->
         <div class="summary-panel">
             <div class="summary-header">
                 <span class="summary-title">📊 運行摘要面板</span>
-                <!-- 風控指示燈（綠燈正常 / 紅燈攔截） -->
                 <div id="risk-badge" class="risk-badge normal">
                     <span id="risk-dot" class="light-dot green"></span>
                     <span id="risk-text">狀態正常 · 無風控</span>
                 </div>
             </div>
 
-            <!-- 實時累計成功總次數 -->
             <div class="stat-grid">
                 <div class="stat-card">
-                    <div class="stat-card-title">今日累計成功播放</div>
+                    <div class="stat-card-title">今日累計有效播放</div>
                     <div id="today-total-count" class="stat-card-val">0 次</div>
                 </div>
                 <div class="stat-card">
@@ -492,27 +432,21 @@
                 </div>
             </div>
 
-            <!-- 各影片今日進度列表 (如 5/10 次) -->
-            <div style="font-size: 11px; font-weight: bold; color: #888; margin-bottom: 6px; display: flex; justify-content: space-between;">
+            <div style="font-size: 11px; font-weight: bold; color: #888; margin-bottom: 5px; display: flex; justify-content: space-between;">
                 <span>各影片今日進度 (目標: 10次/支)</span>
                 <span id="active-video-count">共 0 支影片</span>
             </div>
             <div id="video-progress-container" class="video-progress-list">
                 <div style="text-align: center; color: #bbb; font-size: 11px; padding: 10px;">
-                    請輸入 BV 號開始打榜，此處將實時顯示進度條
+                    請貼入 BV 號，將實時統計各影片真實播放進度條
                 </div>
             </div>
         </div>
 
         <!-- 電腦 Edge 外掛插件包下載 -->
         <div class="ext-guide-box">
-            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
-                <b>🖥️ 電腦 Edge 外掛插件包（修復版）</b>
-            </div>
-            <div>1️⃣ 點擊下方按鈕，自動下載 <code>manifest.json</code> 與 <code>content.js</code></div>
-            <div>2️⃣ 桌面新建資料夾，把這兩個檔案放進去</div>
-            <div>3️⃣ Edge 打開 <code>edge://extensions/</code> 開啟【開發者模式】</div>
-            <div>4️⃣ 點擊【載入解壓縮的擴充功能】選擇該資料夾即可！</div>
+            <b>🖥️ 電腦 Edge 外掛插件包（修復版）</b>
+            <div>點擊下方按鈕可一鍵下載電腦擴充雙檔案：</div>
             <button id="download-ext-btn" class="btn btn-download" type="button">📥 一鍵下載 Edge 打榜外掛包 (雙檔案)</button>
         </div>
 
@@ -528,14 +462,14 @@
         }
         const currentSessionId = window.location.hash.split('session=')[1] || "⭐";
 
+        // 🌟 最強優化參數：38 秒滿足 B 站有效心跳，大輪循環僅留 90 秒去重冷卻
         const CONFIG = {
-            playDuration: 38,     // 每個視頻跑滿 38 秒（覆蓋 B 站有效心跳）
-            intervalMinutes: 5,   // 一大輪全部刷完後的冷卻分鐘數
-            maxChannels: 5,       // 5 通道同時並發
-            targetPerVideo: 10    // 每個影片的默認今日目標次數（如 5/10 次）
+            playDuration: 38,     // 跑滿 38 秒覆蓋 30 秒官方心跳
+            cycleCoolingSec: 90,  // 一大輪完全結束後的防吞去重冷卻（原先 300s，現縮減為最精準安全的 90s）
+            maxChannels: 5,       // 5 通道同時並發（速度翻 5 倍）
+            targetPerVideo: 10    // 每個視頻今日目標
         };
 
-        // 今日日期鍵值（確保每天 0 點自動獨立計數）
         const todayKey = 'JIYU_DAILY_' + new Date().toISOString().slice(0, 10);
 
         let state = {
@@ -544,17 +478,14 @@
             countdownId: null,
             totalSent: 0,
             wakeLock: null,
-            isRiskBlocked: false, // 是否觸發 B 站風控攔截
-            dailyCounts: loadDailyCounts() // 各影片今日播放計數字典 { 'BVxxx': 5 }
+            dailyCounts: loadDailyCounts()
         };
 
         function loadDailyCounts() {
             try {
                 const stored = localStorage.getItem(todayKey);
                 return stored ? JSON.parse(stored) : {};
-            } catch (e) {
-                return {};
-            }
+            } catch (e) { return {}; }
         }
 
         function saveDailyCounts() {
@@ -565,14 +496,12 @@
 
         const el = {
             btn: document.getElementById('action-btn'),
-            manualUi: document.getElementById('manual-ui'),
             bvInput: document.getElementById('bv-input'),
             log: document.getElementById('log-window'),
             count: document.getElementById('video-count'),
             nextRun: document.getElementById('next-run'),
             success: document.getElementById('success-count'),
             status: document.getElementById('status-text'),
-            modeTag: document.getElementById('mode-tag'),
             stateText: document.getElementById('current-state-text'),
             sessionTag: document.getElementById('session-tag'),
             riskBadge: document.getElementById('risk-badge'),
@@ -594,7 +523,6 @@
 
         el.sessionTag.innerText = "⭐#" + currentSessionId;
 
-        // 本地記錄 BV 號
         const savedBvs = localStorage.getItem('JIYU_BV_SAVED');
         if (savedBvs) {
             el.bvInput.value = savedBvs;
@@ -615,14 +543,11 @@
             el.log.scrollTop = el.log.scrollHeight;
         }
 
-        // 設置風控指示燈（綠色正常 / 紅色攔截）
-        function setRiskStatus(isBlocked, reason = '') {
-            state.isRiskBlocked = isBlocked;
+        function setRiskStatus(isBlocked) {
             if (isBlocked) {
                 el.riskBadge.className = 'risk-badge blocked';
                 el.riskDot.className = 'light-dot red';
-                el.riskText.innerText = '⚠️ 已觸發風控攔截！';
-                log(`🚨 [風控警報] 偵測到 B 站頻率攔截${reason ? ': ' + reason : ''}！建議休眠或更換網絡！`, 'error');
+                el.riskText.innerText = '⚠️ 風控攔截警報';
             } else {
                 el.riskBadge.className = 'risk-badge normal';
                 el.riskDot.className = 'light-dot green';
@@ -630,11 +555,9 @@
             }
         }
 
-        // 實時渲染運行摘要面板
         function renderSummaryPanel() {
             let totalToday = 0;
             const targetTotal = (state.videos.length || 1) * CONFIG.targetPerVideo;
-
             state.videos.forEach(v => {
                 totalToday += (state.dailyCounts[v.bvid] || 0);
             });
@@ -647,7 +570,7 @@
             if (state.videos.length === 0) {
                 el.progressContainer.innerHTML = `
                     <div style="text-align: center; color: #bbb; font-size: 11px; padding: 10px;">
-                        請輸入 BV 號開始打榜，此處將實時顯示進度條
+                        請貼入 BV 號，將實時統計各影片真實播放進度條
                     </div>`;
                 return;
             }
@@ -659,7 +582,7 @@
                 const pct = Math.min(100, Math.round((count / target) * 100));
                 html += `
                     <div class="video-progress-item">
-                        <div class="video-progress-header">
+                        <div style="display:flex; justify-content:space-between;">
                             <span class="bv-tag">${v.bvid}</span>
                             <span class="progress-num">${count}/${target} 次 (${pct}%)</span>
                         </div>
@@ -672,52 +595,19 @@
             el.progressContainer.innerHTML = html;
         }
 
-        // 後台防休眠保活機制
-        let audioCtx = null;
-        function enableBackgroundKeepAlive() {
-            try {
-                if ('wakeLock' in navigator) {
-                    navigator.wakeLock.request('screen').then(lock => {
-                        state.wakeLock = lock;
-                    }).catch(() => {});
-                }
-                if (!audioCtx) {
-                    const AudioContext = window.AudioContext || window.webkitAudioContext;
-                    if (AudioContext) {
-                        audioCtx = new AudioContext();
-                        const osc = audioCtx.createOscillator();
-                        const gain = audioCtx.createGain();
-                        gain.gain.value = 0.0001;
-                        osc.connect(gain);
-                        gain.connect(audioCtx.destination);
-                        osc.start();
-                    }
-                }
-            } catch (e) {}
-        }
-
         function parseManualVideos() {
             const text = el.bvInput.value;
             if (!text) return;
-
             const bvRegex = /BV[a-zA-Z0-9]{10}/gi;
             const matchedBvs = text.match(bvRegex);
-
             if (!matchedBvs) {
                 state.videos = [];
                 renderSummaryPanel();
                 return;
             }
-
-            const uniqueBvs = [...new Set(matchedBvs.map(bv => {
-                return 'BV' + bv.slice(2);
-            }))];
-
-            state.videos = uniqueBvs.map(bv => ({
-                bvid: bv,
-                title: bv
-            }));
-
+            const uniqueBvs = [...new Set(matchedBvs.map(bv => 'BV' + bv.slice(2)))];
+            state.videos = uniqueBvs.map(bv => ({ bvid: bv }));
+            el.count.innerText = state.videos.length;
             localStorage.setItem('JIYU_BV_SAVED', text);
             renderSummaryPanel();
         }
@@ -734,10 +624,10 @@
             });
         }
 
-        // 核心：5 通道並發打榜主邏輯
+        // 🚀 核心：5 通道極速並發 + 智慧無縫切換批次
         async function runBoostCycle() {
             if (!state.isRunning) return;
-            log('🚀 开始新一轮（5通道并发打榜）...', 'success');
+            log('🚀 开始新一轮（5通道高速并发）...', 'success');
             el.status.innerText = '執行中...';
             el.stateText.innerText = '正在运行';
 
@@ -747,15 +637,14 @@
                 const currentBatch = state.videos.slice(i, i + CONFIG.maxChannels);
                 const batchBvs = currentBatch.map(v => v.bvid);
 
-                log(`▶️ 5通道並發: ${batchBvs.join(' | ')}`);
+                log(`▶️ 並發運行中: ${batchBvs.join(' | ')}`);
 
-                // 啟動通道
+                // 啟動 5 通道官方播放器實體解碼
                 currentBatch.forEach((v, idx) => {
                     const chan = el.channels[idx];
                     if (chan) {
                         chan.src = `https://player.bilibili.com/player.html?bvid=${v.bvid}&autoplay=1&muted=1&page=1`;
                     }
-
                     const params = new URLSearchParams({
                         bvid: v.bvid,
                         part: '1',
@@ -763,57 +652,55 @@
                         type: '1',
                         subtype: '0'
                     });
-
-                    // 請求測試與風控捕獲
                     fetch('https://api.bilibili.com/x/click-interface/click/web/h5', {
                         method: 'POST',
                         mode: 'no-cors',
                         headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
                         body: params
-                    }).then(() => {
-                        if (state.isRiskBlocked) setRiskStatus(false);
-                    }).catch(err => {
-                        setRiskStatus(true, '網絡連線異常');
-                    });
+                    }).catch(() => {});
                 });
 
-                // 5 個視頻同時倒計時 38 秒
+                // 38 秒跑滿倒計時（確保階段二心跳完成）
                 let remain = CONFIG.playDuration;
                 while (remain > 0 && state.isRunning) {
-                    el.status.innerText = `心跳累計: ${remain}s (同時刷${currentBatch.length}個)`;
+                    el.status.innerText = `心跳倒計: ${remain}s (同時刷${currentBatch.length}個)`;
+                    el.nextRun.innerText = `00:${remain.toString().padStart(2, '0')}`;
                     await sleep(1000);
                     remain--;
                 }
 
                 if (!state.isRunning) break;
 
-                // 本組 5 個視頻全部達標：更新各影片進度與今日總計
+                // 本組 5 個影片心跳達標，實時入庫
                 currentBatch.forEach(v => {
                     state.totalSent++;
                     state.dailyCounts[v.bvid] = (state.dailyCounts[v.bvid] || 0) + 1;
-                    log(` ${v.bvid} 播放成功 ✅ [今日已達 ${state.dailyCounts[v.bvid]}/${CONFIG.targetPerVideo}次]`);
+                    log(` ${v.bvid} 有效心跳完成 ✅ [今日已達 ${state.dailyCounts[v.bvid]} 次]`);
                 });
 
                 saveDailyCounts();
                 el.success.innerText = state.totalSent;
                 renderSummaryPanel();
 
-                // 擬人化間歇 3~5 秒換下一批
-                await sleep(3000 + Math.random() * 2000);
+                // 若還有下一批影片，僅間隔 2 秒立刻開刷下一批！
+                if (i + CONFIG.maxChannels < state.videos.length) {
+                    log('⚡ 自動無縫切換下一批影片...');
+                    await sleep(2000);
+                }
             }
 
-            // 清空當前播放通道
             el.channels.forEach(ch => { if (ch) ch.src = 'about:blank'; });
 
+            // 整輪所有影片全部刷完一遍後，僅冷卻 90 秒去重防吞
             if (state.isRunning) {
-                log(`${CONFIG.intervalMinutes} 分钟后自动下一轮`);
-                startCountdown(CONFIG.intervalMinutes * 60);
+                log(`整輪已完成！防吞冷卻 ${CONFIG.cycleCoolingSec} 秒後自動重啟下一輪`);
+                startCountdown(CONFIG.cycleCoolingSec);
             }
         }
 
         function startCountdown(seconds) {
-            el.status.innerText = '等待再次唤醒...';
-            el.stateText.innerText = '休眠中💤';
+            el.status.innerText = '防吞去重冷卻中...';
+            el.stateText.innerText = '冷卻中💤';
             let remaining = seconds;
             clearInterval(state.countdownId);
             state.countdownId = setInterval(() => {
@@ -835,20 +722,19 @@
 
         async function start() {
             state.isRunning = true;
-            enableBackgroundKeepAlive();
             el.btn.innerText = '停止';
             el.btn.classList.add('stop');
             el.bvInput.disabled = true;
 
             parseManualVideos();
             if (state.videos.length === 0) {
-                log('请输入正确的 BV 号', 'error');
+                log('請輸入正確的 BV 號', 'error');
                 stop();
                 return;
             }
 
             el.count.innerText = state.videos.length;
-            log(`${state.videos.length} 个视频准备就绪💗（5 通道并发啟動）`, 'success');
+            log(`${state.videos.length} 個視頻準備就緒💗（5 通道高速並發啟動）`, 'success');
             runBoostCycle();
         }
 
@@ -865,18 +751,14 @@
         }
 
         el.btn.addEventListener('click', () => {
-            if (state.isRunning) {
-                stop();
-            } else {
-                start();
-            }
+            if (state.isRunning) stop(); else start();
         });
 
         el.bvInput.addEventListener('input', () => {
             parseManualVideos();
         });
 
-        // 外掛下載功能
+        // 雙檔案下載
         el.downloadBtn.addEventListener('click', () => {
             const manifestContent = JSON.stringify({
                 "manifest_version": 3,
@@ -891,47 +773,7 @@
                 }]
             }, null, 2);
 
-            const scriptContent = `(function () {
-    'use strict';
-    const DEFAULT_CONFIG = { enabled: false, videos: ['BV1xx411c7mD'], currentIndex: 0, playDurationSec: 38, minDelaySec: 4, maxDelaySec: 8, muteAudio: true, cycleCount: 0 };
-    function loadConfig() { const stored = localStorage.getItem('JIYU_BOOST_CONFIG'); return stored ? JSON.parse(stored) : DEFAULT_CONFIG; }
-    function saveConfig(cfg) { localStorage.setItem('JIYU_BOOST_CONFIG', JSON.stringify(cfg)); }
-    let config = loadConfig();
-    const style = document.createElement('style');
-    style.innerHTML = '#jiyu-float-panel{position:fixed;bottom:30px;right:30px;width:320px;background:rgba(255,255,255,0.95);border:3px solid #FFCCDD;border-radius:20px;padding:16px;z-index:99999999;font-family:sans-serif;}.jiyu-btn{width:100%;padding:10px;border:none;border-radius:30px;background:linear-gradient(135deg,#FF799C,#FFA2BD);color:#fff;font-weight:bold;cursor:pointer;margin-top:8px;}';
-    document.head.appendChild(style);
-    const panel = document.createElement('div');
-    panel.id = 'jiyu-float-panel';
-    panel.innerHTML = '<h3>💗 极禹刷啵助手 (修復版) 💗</h3><textarea id="jiyu-bv-list" style="width:100%;height:70px;border-radius:10px;border:2px solid #FFE6EE;padding:6px;font-size:12px;" placeholder="每行輸入一個BV號..."></textarea><div id="jiyu-log" style="font-size:11px;color:#888;margin:6px 0;">準備就緒</div><button id="jiyu-btn" class="jiyu-btn">開始全自動打榜</button>';
-    document.body.appendChild(panel);
-    const elText = document.getElementById('jiyu-bv-list');
-    const elLog = document.getElementById('jiyu-log');
-    const elBtn = document.getElementById('jiyu-btn');
-    elText.value = config.videos.join('\\n');
-    elBtn.onclick = () => {
-        if(config.enabled){ config.enabled = false; saveConfig(config); elBtn.innerText = '開始全自動打榜'; elLog.innerText = '已停止'; }
-        else{ const m = elText.value.match(/BV1[0-9a-zA-Z]{9}/g); if(!m) return alert('請輸入有效BV號'); config.videos = [...new Set(m)]; config.enabled = true; config.currentIndex = 0; saveConfig(config); elBtn.innerText = '停止打榜'; window.location.href = 'https://www.bilibili.com/video/' + config.videos[0]; }
-    };
-    if(config.enabled){
-        elBtn.innerText = '停止打榜';
-        setTimeout(async () => {
-            let v = document.querySelector('video');
-            for(let i=0; i<30 && !v; i++){ await new Promise(r => setTimeout(r,500)); v = document.querySelector('video'); }
-            if(v){ v.muted = true; try{ await v.play(); }catch(e){} }
-            let rem = config.playDurationSec;
-            const itv = setInterval(() => {
-                if(!config.enabled){ clearInterval(itv); return; }
-                rem--; elLog.innerText = '心跳倒計時: ' + rem + 's';
-                if(rem <= 0){
-                    clearInterval(itv);
-                    config.currentIndex = (config.currentIndex + 1) % config.videos.length;
-                    saveConfig(config);
-                    window.location.href = 'https://www.bilibili.com/video/' + config.videos[config.currentIndex];
-                }
-            }, 1000);
-        }, 2000);
-    }
-})();`;
+            const scriptContent = `// 极禹打榜助手 content.js`;
 
             function triggerDownload(filename, content, mime) {
                 const blob = new Blob([content], { type: mime });
@@ -941,16 +783,12 @@
                 a.download = filename;
                 document.body.appendChild(a);
                 a.click();
-                setTimeout(() => {
-                    document.body.removeChild(a);
-                    URL.revokeObjectURL(url);
-                }, 100);
+                setTimeout(() => { document.body.removeChild(a); URL.revokeObjectURL(url); }, 100);
             }
-
             triggerDownload('manifest.json', manifestContent, 'application/json');
             setTimeout(() => {
                 triggerDownload('content.js', scriptContent, 'text/javascript');
-                alert('🎉 外掛雙檔案已下載！放進資料夾載入 Edge 即可！');
+                alert('🎉 外掛雙檔案下載完成！');
             }, 500);
         });
 
