@@ -68,7 +68,7 @@
             background: var(--soft-white);
             backdrop-filter: blur(10px);
             width: 100%;
-            max-width: 440px;
+            max-width: 420px;
             padding: 25px;
             border-radius: var(--border-radius);
             box-shadow: 0 15px 35px rgba(255, 121, 156, 0.25);
@@ -83,7 +83,7 @@
             font-size: 26px;
             text-align: center;
             color: var(--primary-pink);
-            margin-bottom: 3px;
+            margin-bottom: 5px;
             font-weight: 900;
             text-shadow: 1px 1px 0px white;
         }
@@ -97,7 +97,7 @@
             padding: 3px 12px;
             border-radius: 20px;
             display: block;
-            margin: 0 auto 6px auto;
+            margin: 0 auto 8px auto;
             width: fit-content;
             border: 1px solid #FFE6EE;
         }
@@ -122,7 +122,7 @@
 
         label {
             display: block;
-            margin-bottom: 6px;
+            margin-bottom: 8px;
             font-weight: bold;
             color: var(--primary-pink);
             font-size: 14px;
@@ -130,7 +130,7 @@
 
         textarea {
             width: 100%;
-            height: 85px;
+            height: 90px;
             padding: 12px;
             border: 2px solid #FFE6EE;
             border-radius: 14px;
@@ -145,25 +145,6 @@
         textarea:focus {
             border-color: var(--primary-pink);
             background: white;
-        }
-
-        .settings-row {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-top: 8px;
-            font-size: 12px;
-            color: #666;
-        }
-
-        .settings-row select {
-            padding: 4px 8px;
-            border-radius: 8px;
-            border: 1px solid var(--light-pink);
-            outline: none;
-            color: var(--primary-pink);
-            font-weight: bold;
-            background: #FFF9FA;
         }
 
         .btn {
@@ -199,7 +180,7 @@
             justify-content: space-between;
             font-size: 13px;
             color: #666;
-            padding: 8px 0;
+            padding: 9px 0;
             border-bottom: 1px dashed var(--light-pink);
         }
 
@@ -216,8 +197,61 @@
             color: var(--primary-pink);
         }
 
+        /* 視訊預覽靜音畫布（簡潔精緻，不突兀） */
+        #stage-box {
+            display: none;
+            background: white;
+            border: 2px solid var(--light-pink);
+            border-radius: 18px;
+            padding: 12px;
+            box-shadow: 0 4px 10px rgba(255, 204, 221, 0.2);
+        }
+
+        .stage-title {
+            font-size: 12px;
+            font-weight: bold;
+            color: var(--primary-pink);
+            margin-bottom: 8px;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .stage-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 8px;
+        }
+
+        .stage-item {
+            position: relative;
+            background: #000;
+            border-radius: 10px;
+            overflow: hidden;
+            height: 96px;
+            border: 1px solid #FFE6EE;
+        }
+
+        .stage-item iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+
+        .item-tag {
+            position: absolute;
+            top: 4px;
+            left: 4px;
+            background: rgba(0, 0, 0, 0.65);
+            color: #FFF;
+            font-size: 9px;
+            padding: 2px 6px;
+            border-radius: 4px;
+            pointer-events: none;
+            z-index: 5;
+        }
+
         #log-window {
-            height: 120px;
+            height: 130px;
             background: #FFFDFE;
             border-radius: 14px;
             padding: 10px;
@@ -254,61 +288,6 @@
             font-weight: bold;
         }
 
-        /* 🎬 官方原生播放器嵌入矩阵 */
-        #player-matrix-container {
-            display: none;
-            background: white;
-            border: 2px solid var(--light-pink);
-            border-radius: 18px;
-            padding: 12px;
-            box-shadow: 0 4px 10px rgba(255, 204, 221, 0.2);
-        }
-
-        .player-header {
-            font-size: 12px;
-            font-weight: bold;
-            color: var(--primary-pink);
-            margin-bottom: 8px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .player-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 8px;
-        }
-
-        .player-slot {
-            position: relative;
-            background: #000;
-            border-radius: 10px;
-            overflow: hidden;
-            height: 105px;
-            border: 1px solid #FFE6EE;
-        }
-
-        .player-slot iframe {
-            width: 100%;
-            height: 100%;
-            border: none;
-        }
-
-        .slot-badge {
-            position: absolute;
-            top: 4px;
-            left: 4px;
-            background: rgba(0, 0, 0, 0.65);
-            color: #FFF;
-            font-size: 9px;
-            padding: 2px 6px;
-            border-radius: 4px;
-            pointer-events: none;
-            z-index: 5;
-        }
-
-        /* 🖥️ 电脑 Edge 扩展专用 */
         .ext-btn-row {
             display: flex;
             gap: 10px;
@@ -351,53 +330,35 @@
     <div class="container">
         <div style="text-align: center;">
             <h1>💗极禹刷啵 💗</h1>
-            <p id="mode-tag">官方播放器原生真刷模式</p>
+            <p id="mode-tag">EDGE & Safari Mode</p>
         </div>
 
-        <div class="multi-tip">
-            ✨ <b>真机播放器内核</b>：直接载入 B 站官方播放器播放真实流切片，自动向 B 站汇报合法心跳，100% 避开作弊过滤，真真切切计入有效播放量！
+        <div class="multi-tip"> 建立edge账号后，点击头像 新增无痕页面 每个页面登录不同的edge账号和b站号，最多3-5个避免ip风险！
         </div>
 
         <div id="manual-ui" class="card">
-            <label for="bv-input">BV 号输入 (支持多视频，每行一个)</label>
+            <label for="bv-input">BV 号输入 (支持多个，每行一个)</label>
             <textarea id="bv-input" placeholder="BV1xx...&#10;BV2xx...&#10;..."></textarea>
-
-            <div class="settings-row">
-                <span>每轮有效观赏时长:</span>
-                <select id="watch-duration">
-                    <option value="35">35 秒 (最推荐·必计入)</option>
-                    <option value="25">25 秒 (快速高效)</option>
-                    <option value="50">50 秒 (超稳权重)</option>
-                </select>
-            </div>
-            <div class="settings-row">
-                <span>同时并行播放窗口:</span>
-                <select id="matrix-size">
-                    <option value="2">2 个视频同时播 (手机最顺)</option>
-                    <option value="4">4 视频矩阵 (电脑/平板推荐)</option>
-                    <option value="1">1 个视频单循环</option>
-                </select>
-            </div>
         </div>
 
-        <button id="action-btn" class="btn">开始真机播放</button>
+        <button id="action-btn" class="btn">开始运行</button>
 
-        <!-- 🎬 真实播放器渲染区 -->
-        <div id="player-matrix-container">
-            <div class="player-header">
-                <span>🎬 原生播放器实时运行中 (默认静音)</span>
-                <span id="player-status-tag" style="color:#D6456D; font-size:11px;">加载中...</span>
+        <!-- 視訊播放流區域（自動靜音運行） -->
+        <div id="stage-box">
+            <div class="stage-title">
+                <span>实时运行中 (已自动静音)</span>
+                <span id="stage-sub" style="color:#D6456D; font-size:11px;">智能调配中</span>
             </div>
-            <div id="player-grid" class="player-grid"></div>
+            <div id="stage-grid" class="stage-grid"></div>
         </div>
 
         <div class="card">
             <div class="status-bar">
-                <span class="status-label">待刷视频库: <span id="video-count" class="status-value">0</span></span>
-                <span class="status-label">当前运行倒数: <span id="next-run" class="status-value">--:--</span></span>
+                <span class="status-label">待刷视频: <span id="video-count" class="status-value">0</span></span>
+                <span class="status-label">本轮倒数: <span id="next-run" class="status-value">--:--</span></span>
             </div>
             <div class="status-bar">
-                <span class="status-label">已产生真实播放: <span id="success-count" class="status-value">0</span></span>
+                <span class="status-label">累计播放次数: <span id="success-count" class="status-value">0</span></span>
                 <span id="status-text" class="status-value" style="font-size: 12px;">准备就绪</span>
             </div>
             <div style="font-size: 11px; text-align: right; color: #999; margin-top: 5px;">
@@ -413,7 +374,7 @@
         <!-- 🖥️ 电脑 Edge 扩展下载专区 -->
         <div class="card" style="padding: 14px 16px;">
             <label style="margin-bottom: 4px;">🖥️ Edge 浏览器原生扩展（可选）</label>
-            <div style="font-size: 11px; color: #888;">电脑端若习惯直接挂在 B 站本站，可下载扩展：</div>
+            <div style="font-size: 11px; color: #888;">下载两个文件放进文件夹，即可在 B 站本站原生运行：</div>
             <div class="ext-btn-row">
                 <button type="button" id="dl-manifest" class="ext-sub-btn">📥 下载 manifest.json</button>
                 <button type="button" id="dl-content" class="ext-sub-btn">📥 下载 content.js</button>
@@ -435,7 +396,7 @@
         }
         const currentSessionId = window.location.hash.split('session=')[1] || "⭐";
 
-        // 📱 iPhone / Safari 锁屏后台保活无声音频
+        // 📱 Safari 锁屏后台保活无声音频
         let audioContext = null;
         let silentOscillator = null;
 
@@ -451,7 +412,6 @@
                 silentOscillator.connect(gainNode);
                 gainNode.connect(audioContext.destination);
                 silentOscillator.start();
-                log('🎧 锁屏后台守护已开启 (不影响正常操作)', 'info');
             } catch (e) {}
         }
 
@@ -472,19 +432,17 @@
             isRunning: false,
             videos: [],
             totalViews: 0,
-            loopTimer: null,
             countdownTimer: null,
-            currentIndex: 0
+            playlist: [],
+            playPointer: 0
         };
 
         const el = {
             btn: document.getElementById('action-btn'),
             bvInput: document.getElementById('bv-input'),
-            watchDuration: document.getElementById('watch-duration'),
-            matrixSize: document.getElementById('matrix-size'),
-            playerContainer: document.getElementById('player-matrix-container'),
-            playerGrid: document.getElementById('player-grid'),
-            playerStatusTag: document.getElementById('player-status-tag'),
+            stageBox: document.getElementById('stage-box'),
+            stageGrid: document.getElementById('stage-grid'),
+            stageSub: document.getElementById('stage-sub'),
             log: document.getElementById('log-window'),
             count: document.getElementById('video-count'),
             nextRun: document.getElementById('next-run'),
@@ -523,57 +481,67 @@
             state.videos = [...new Set(matchedBvs.map(bv => 'BV' + bv.slice(2)))];
         }
 
-        // 核心：动态载入 B 站官方原生播放器
-        function mountPlayerMatrix() {
+        // Fisher-Yates 算法：每一轮播放前将视频顺序完全随机打散
+        function shufflePlaylist() {
+            state.playlist = [...state.videos];
+            for (let i = state.playlist.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [state.playlist[i], state.playlist[j]] = [state.playlist[j], state.playlist[i]];
+            }
+            state.playPointer = 0;
+        }
+
+        // 智能自适应调度引擎
+        function playNextBatch() {
             if (!state.isRunning || state.videos.length === 0) return;
 
-            const concurrency = parseInt(el.matrixSize.value, 10);
-            const durationSec = parseInt(el.watchDuration.value, 10);
-
-            el.playerGrid.innerHTML = '';
-            el.playerContainer.style.display = 'block';
-
-            // 调整网格布局
-            if (concurrency === 1) {
-                el.playerGrid.style.gridTemplateColumns = '1fr';
-            } else {
-                el.playerGrid.style.gridTemplateColumns = 'repeat(2, 1fr)';
+            // 若当前随机列表已全部播完，重新动态打散开启新一轮
+            if (state.playPointer >= state.playlist.length) {
+                shufflePlaylist();
+                log('🔄 本轮视频已全部完成，随机重排进入新一轮...', 'info');
             }
 
-            // 提取当前轮次要播放的 BV 列表
+            // 智能选择最佳并行数（若只输入1个则单路；若输入多个则手机2路并行最流畅）
+            const batchSize = state.playlist.length === 1 ? 1 : 2;
             const currentBatch = [];
-            for (let i = 0; i < concurrency; i++) {
-                const targetBv = state.videos[(state.currentIndex + i) % state.videos.length];
-                currentBatch.push(targetBv);
+
+            for (let i = 0; i < batchSize && state.playPointer < state.playlist.length; i++) {
+                currentBatch.push(state.playlist[state.playPointer]);
+                state.playPointer++;
             }
-            state.currentIndex = (state.currentIndex + concurrency) % state.videos.length;
+
+            // 智能随机时长：30 ~ 38 秒随机浮动，彻底符合真人观影习惯
+            const durationSec = Math.floor(30 + Math.random() * 8);
+
+            // 渲染并自动起播（自动静音）
+            el.stageGrid.innerHTML = '';
+            el.stageBox.style.display = 'block';
+            el.stageGrid.style.gridTemplateColumns = currentBatch.length === 1 ? '1fr' : 'repeat(2, 1fr)';
 
             currentBatch.forEach((bvid, idx) => {
                 const slot = document.createElement('div');
-                slot.className = 'player-slot';
+                slot.className = 'stage-item';
 
                 const badge = document.createElement('div');
-                badge.className = 'slot-badge';
-                badge.innerText = `视频 #${idx + 1}: ${bvid}`;
+                badge.className = 'item-tag';
+                badge.innerText = `${bvid}`;
                 slot.appendChild(badge);
 
-                // 嵌入 B 站官方 Web 原生播放器 (muted=1 静音自动起播，high_quality=0 省流量，autoplay=1 自动播放)
                 const iframe = document.createElement('iframe');
                 iframe.src = `https://player.bilibili.com/player.html?bvid=${bvid}&autoplay=1&muted=1&high_quality=0&danmaku=0&t=1`;
                 iframe.setAttribute('allow', 'autoplay; encrypted-media; picture-in-picture');
                 iframe.setAttribute('sandbox', 'allow-scripts allow-same-origin allow-popups');
 
                 slot.appendChild(iframe);
-                el.playerGrid.appendChild(slot);
-
-                log(`🎬 官方播放器载入: ${bvid} 正在播放真实切片流...`, 'info');
+                el.stageGrid.appendChild(slot);
             });
 
-            el.status.innerText = `播放中 (${currentBatch.length}路并行)`;
-            el.stateText.innerText = '正在产生播放量';
-            el.playerStatusTag.innerText = `有效观赏计时中 (${durationSec}秒)`;
+            log(`🚀 正在播放: ${currentBatch.join(', ')}`, 'info');
+            el.status.innerText = '正在运行';
+            el.stateText.innerText = '运行中';
+            el.stageSub.innerText = `${durationSec} 秒后自动轮换`;
 
-            // 启动倒计时
+            // 倒计时流转
             let remaining = durationSec;
             clearInterval(state.countdownTimer);
             state.countdownTimer = setInterval(() => {
@@ -588,15 +556,13 @@
 
                 if (remaining < 0) {
                     clearInterval(state.countdownTimer);
-                    // 本批次完成有效观赏，播放量计入
                     state.totalViews += currentBatch.length;
                     el.success.innerText = state.totalViews;
-                    log(`✨ 本批次 [${currentBatch.join(', ')}] 已完成官方心跳汇报，真实播放量 +${currentBatch.length}！`, 'success');
+                    log(`[√] ${currentBatch.join(', ')} 播放有效完成 ✅`, 'success');
 
-                    // 准备进入下一轮轮播
                     if (state.isRunning) {
-                        el.status.innerText = '轮换下一批视频...';
-                        setTimeout(mountPlayerMatrix, 2000);
+                        // 平缓随机过渡（1.5s ~ 2.5s）后轮播下一组
+                        setTimeout(playNextBatch, 1500 + Math.random() * 1000);
                     }
                 }
             }, 1000);
@@ -605,7 +571,7 @@
         async function start() {
             parseManualVideos();
             if (state.videos.length === 0) {
-                log('❌ 请输入正确的 BV 号或 B 站链接', 'error');
+                log('❌ 请输入正确的 BV 号', 'error');
                 return;
             }
 
@@ -613,34 +579,30 @@
             el.btn.innerText = '停止运行';
             el.btn.classList.add('stop');
             el.bvInput.disabled = true;
-            el.watchDuration.disabled = true;
-            el.matrixSize.disabled = true;
 
             startSilentAudio();
             el.count.innerText = state.videos.length;
-            log(`💗 已就绪 ${state.videos.length} 个视频，启动官方原生播放内核...`, 'info');
+            log(`💗 已就绪 ${state.videos.length} 个视频，开始智能轮换...`, 'info');
 
-            mountPlayerMatrix();
+            shufflePlaylist();
+            playNextBatch();
         }
 
         function stop() {
             state.isRunning = false;
             clearInterval(state.countdownTimer);
-            clearTimeout(state.loopTimer);
             stopSilentAudio();
 
-            el.playerGrid.innerHTML = '';
-            el.playerContainer.style.display = 'none';
+            el.stageGrid.innerHTML = '';
+            el.stageBox.style.display = 'none';
 
-            el.btn.innerText = '开始真机播放';
+            el.btn.innerText = '开始运行';
             el.btn.classList.remove('stop');
             el.bvInput.disabled = false;
-            el.watchDuration.disabled = false;
-            el.matrixSize.disabled = false;
             el.status.innerText = '已停止';
             el.stateText.innerText = '已停止';
             el.nextRun.innerText = '--:--';
-            log('任务已停止，播放器已安全释放', 'warn');
+            log('任务已停止', 'warn');
         }
 
         el.btn.addEventListener('click', () => {
@@ -651,7 +613,7 @@
             }
         });
 
-        // 📥 电脑 Edge 扩展文件一键下载
+        // 📥 电脑 Edge 扩展文件下载
         function downloadFile(filename, content) {
             const blob = new Blob([content], { type: 'text/plain;charset=utf-8' });
             const url = URL.createObjectURL(blob);
@@ -742,7 +704,7 @@ document.getElementById('jiyu-quick-click').onclick = async () => {
             downloadFile('content.js', CONTENT_JS_CONTENT);
         });
 
-        log(`💞 极禹刷啵 ⭐️#${currentSessionId} 已就绪 (官方播放器真机矩阵版)`);
+        log(`💞 极禹刷啵 ⭐️#${currentSessionId} 已就绪`);
     </script>
 </body>
 
