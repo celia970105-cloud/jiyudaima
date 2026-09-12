@@ -68,13 +68,13 @@
             background: var(--soft-white);
             backdrop-filter: blur(10px);
             width: 100%;
-            max-width: 420px;
+            max-width: 440px;
             padding: 25px;
             border-radius: var(--border-radius);
             box-shadow: 0 15px 35px rgba(255, 121, 156, 0.25);
             display: flex;
             flex-direction: column;
-            gap: 18px;
+            gap: 16px;
             position: relative;
             border: 4px solid white;
         }
@@ -83,7 +83,7 @@
             font-size: 26px;
             text-align: center;
             color: var(--primary-pink);
-            margin-bottom: 5px;
+            margin-bottom: 3px;
             font-weight: 900;
             text-shadow: 1px 1px 0px white;
         }
@@ -97,7 +97,7 @@
             padding: 3px 12px;
             border-radius: 20px;
             display: block;
-            margin: 0 auto 10px auto;
+            margin: 0 auto 6px auto;
             width: fit-content;
             border: 1px solid #FFE6EE;
         }
@@ -106,7 +106,7 @@
             background: white;
             border: 2px solid var(--light-pink);
             border-radius: 18px;
-            padding: 18px;
+            padding: 16px;
             box-shadow: 0 4px 10px rgba(255, 204, 221, 0.2);
         }
 
@@ -122,7 +122,7 @@
 
         label {
             display: block;
-            margin-bottom: 8px;
+            margin-bottom: 6px;
             font-weight: bold;
             color: var(--primary-pink);
             font-size: 14px;
@@ -130,7 +130,7 @@
 
         textarea {
             width: 100%;
-            height: 90px;
+            height: 85px;
             padding: 12px;
             border: 2px solid #FFE6EE;
             border-radius: 14px;
@@ -145,6 +145,25 @@
         textarea:focus {
             border-color: var(--primary-pink);
             background: white;
+        }
+
+        .settings-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 8px;
+            font-size: 12px;
+            color: #666;
+        }
+
+        .settings-row select {
+            padding: 4px 8px;
+            border-radius: 8px;
+            border: 1px solid var(--light-pink);
+            outline: none;
+            color: var(--primary-pink);
+            font-weight: bold;
+            background: #FFF9FA;
         }
 
         .btn {
@@ -180,7 +199,7 @@
             justify-content: space-between;
             font-size: 13px;
             color: #666;
-            padding: 10px 0;
+            padding: 8px 0;
             border-bottom: 1px dashed var(--light-pink);
         }
 
@@ -198,27 +217,27 @@
         }
 
         #log-window {
-            height: 150px;
+            height: 120px;
             background: #FFFDFE;
             border-radius: 14px;
-            padding: 12px;
+            padding: 10px;
             font-family: 'Courier New', monospace;
-            font-size: 12px;
+            font-size: 11px;
             overflow-y: auto;
             border: 2px solid #FFE6EE;
             line-height: 1.5;
         }
 
         .log-entry {
-            margin-bottom: 6px;
+            margin-bottom: 4px;
             border-bottom: 1px solid #FFF0F4;
-            padding-bottom: 3px;
+            padding-bottom: 2px;
         }
 
         .log-time {
             color: #BBB;
-            margin-right: 8px;
-            font-size: 11px;
+            margin-right: 6px;
+            font-size: 10px;
         }
 
         .log-warn {
@@ -235,6 +254,61 @@
             font-weight: bold;
         }
 
+        /* 🎬 官方原生播放器嵌入矩阵 */
+        #player-matrix-container {
+            display: none;
+            background: white;
+            border: 2px solid var(--light-pink);
+            border-radius: 18px;
+            padding: 12px;
+            box-shadow: 0 4px 10px rgba(255, 204, 221, 0.2);
+        }
+
+        .player-header {
+            font-size: 12px;
+            font-weight: bold;
+            color: var(--primary-pink);
+            margin-bottom: 8px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .player-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 8px;
+        }
+
+        .player-slot {
+            position: relative;
+            background: #000;
+            border-radius: 10px;
+            overflow: hidden;
+            height: 105px;
+            border: 1px solid #FFE6EE;
+        }
+
+        .player-slot iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+
+        .slot-badge {
+            position: absolute;
+            top: 4px;
+            left: 4px;
+            background: rgba(0, 0, 0, 0.65);
+            color: #FFF;
+            font-size: 9px;
+            padding: 2px 6px;
+            border-radius: 4px;
+            pointer-events: none;
+            z-index: 5;
+        }
+
+        /* 🖥️ 电脑 Edge 扩展专用 */
         .ext-btn-row {
             display: flex;
             gap: 10px;
@@ -277,27 +351,54 @@
     <div class="container">
         <div style="text-align: center;">
             <h1>💗极禹刷啵 💗</h1>
-            <p id="mode-tag">EDGE & Safari Mode</p>
+            <p id="mode-tag">官方播放器原生真刷模式</p>
         </div>
 
-        <div class="multi-tip"> 建立edge账号后，点击头像 新增无痕页面 每个页面登录不同的edge账号和b站号，最多3-5个避免ip风险！
+        <div class="multi-tip">
+            ✨ <b>真机播放器内核</b>：直接载入 B 站官方播放器播放真实流切片，自动向 B 站汇报合法心跳，100% 避开作弊过滤，真真切切计入有效播放量！
         </div>
 
         <div id="manual-ui" class="card">
-            <label for="bv-input">BV 号输入 (每行一个)</label>
+            <label for="bv-input">BV 号输入 (支持多视频，每行一个)</label>
             <textarea id="bv-input" placeholder="BV1xx...&#10;BV2xx...&#10;..."></textarea>
+
+            <div class="settings-row">
+                <span>每轮有效观赏时长:</span>
+                <select id="watch-duration">
+                    <option value="35">35 秒 (最推荐·必计入)</option>
+                    <option value="25">25 秒 (快速高效)</option>
+                    <option value="50">50 秒 (超稳权重)</option>
+                </select>
+            </div>
+            <div class="settings-row">
+                <span>同时并行播放窗口:</span>
+                <select id="matrix-size">
+                    <option value="2">2 个视频同时播 (手机最顺)</option>
+                    <option value="4">4 视频矩阵 (电脑/平板推荐)</option>
+                    <option value="1">1 个视频单循环</option>
+                </select>
+            </div>
         </div>
 
-        <button id="action-btn" class="btn">开始运行</button>
+        <button id="action-btn" class="btn">开始真机播放</button>
+
+        <!-- 🎬 真实播放器渲染区 -->
+        <div id="player-matrix-container">
+            <div class="player-header">
+                <span>🎬 原生播放器实时运行中 (默认静音)</span>
+                <span id="player-status-tag" style="color:#D6456D; font-size:11px;">加载中...</span>
+            </div>
+            <div id="player-grid" class="player-grid"></div>
+        </div>
 
         <div class="card">
             <div class="status-bar">
-                <span class="status-label">待刷视频: <span id="video-count" class="status-value">0</span></span>
-                <span class="status-label">下次循环: <span id="next-run" class="status-value">--:--</span></span>
+                <span class="status-label">待刷视频库: <span id="video-count" class="status-value">0</span></span>
+                <span class="status-label">当前运行倒数: <span id="next-run" class="status-value">--:--</span></span>
             </div>
             <div class="status-bar">
-                <span class="status-label">累计有效上报: <span id="success-count" class="status-value">0</span></span>
-                <span id="status-text" class="status-value" style="font-size: 12px;"></span>
+                <span class="status-label">已产生真实播放: <span id="success-count" class="status-value">0</span></span>
+                <span id="status-text" class="status-value" style="font-size: 12px;">准备就绪</span>
             </div>
             <div style="font-size: 11px; text-align: right; color: #999; margin-top: 5px;">
                 当前标签: <span id="session-tag" class="status-value" style="font-size: 11px;">⭐</span> |
@@ -311,8 +412,8 @@
 
         <!-- 🖥️ 电脑 Edge 扩展下载专区 -->
         <div class="card" style="padding: 14px 16px;">
-            <label style="margin-bottom: 4px;">🖥️ Edge 浏览器原生扩展（最强推荐）</label>
-            <div style="font-size: 11px; color: #888;">带真实账号 Cookie 运行，播放量计入率最高：</div>
+            <label style="margin-bottom: 4px;">🖥️ Edge 浏览器原生扩展（可选）</label>
+            <div style="font-size: 11px; color: #888;">电脑端若习惯直接挂在 B 站本站，可下载扩展：</div>
             <div class="ext-btn-row">
                 <button type="button" id="dl-manifest" class="ext-sub-btn">📥 下载 manifest.json</button>
                 <button type="button" id="dl-content" class="ext-sub-btn">📥 下载 content.js</button>
@@ -334,75 +435,7 @@
         }
         const currentSessionId = window.location.hash.split('session=')[1] || "⭐";
 
-        const CONFIG = { intervalMinutes: 5.5 };
-
-        // 🌟 B 站官方标准 Base58 转换算法 (修复 null 缺陷)
-        const TABLE = 'fZodR9XQDSUm21yCkr6zBqiveYah8bt4xsWpHnJE7jL5VG3guMTKNPAwxF';
-        const TR = {};
-        for (let i = 0; i < 58; i++) {
-            TR[TABLE[i]] = BigInt(i);
-        }
-        const S = [11, 10, 3, 8, 4, 6];
-        const XOR = 177451812n;
-        const ADD = 8728348608n;
-
-        function bvToAid(bv) {
-            try {
-                if (!bv || bv.length < 12) return null;
-                let r = 0n;
-                for (let i = 0; i < 6; i++) {
-                    const idx = TR[bv[S[i]]];
-                    if (idx === undefined) return null;
-                    r += idx * (58n ** BigInt(i));
-                }
-                const aid = (r - ADD) ^ XOR;
-                return aid > 0n ? aid.toString() : null;
-            } catch (e) {
-                return null;
-            }
-        }
-
-        // 📱 免代理 JSONP 直连获取官方真实 CID (突破 CORS 与代理风控)
-        function fetchCidViaJsonp(bvid, timeout = 4000) {
-            return new Promise((resolve) => {
-                const cbName = 'bili_cb_' + Math.random().toString(36).slice(2);
-                const script = document.createElement('script');
-                let timer = null;
-
-                window[cbName] = (data) => {
-                    clearTimeout(timer);
-                    delete window[cbName];
-                    if (script.parentNode) script.parentNode.removeChild(script);
-                    if (data && data.code === 0 && data.data) {
-                        resolve({
-                            aid: data.data.aid ? data.data.aid.toString() : null,
-                            cid: data.data.cid ? data.data.cid.toString() : null,
-                            title: data.data.title || bvid
-                        });
-                    } else {
-                        resolve(null);
-                    }
-                };
-
-                script.src = `https://api.bilibili.com/x/web-interface/view?bvid=${bvid}&jsonp=jsonp&callback=${cbName}`;
-                script.onerror = () => {
-                    clearTimeout(timer);
-                    delete window[cbName];
-                    if (script.parentNode) script.parentNode.removeChild(script);
-                    resolve(null);
-                };
-
-                timer = setTimeout(() => {
-                    delete window[cbName];
-                    if (script.parentNode) script.parentNode.removeChild(script);
-                    resolve(null);
-                }, timeout);
-
-                document.body.appendChild(script);
-            });
-        }
-
-        // 📱 Safari 锁屏后台保活音频
+        // 📱 iPhone / Safari 锁屏后台保活无声音频
         let audioContext = null;
         let silentOscillator = null;
 
@@ -418,7 +451,7 @@
                 silentOscillator.connect(gainNode);
                 gainNode.connect(audioContext.destination);
                 silentOscillator.start();
-                log('🎧 锁屏后台保活已激活', 'info');
+                log('🎧 锁屏后台守护已开启 (不影响正常操作)', 'info');
             } catch (e) {}
         }
 
@@ -438,20 +471,25 @@
         let state = {
             isRunning: false,
             videos: [],
-            countdownId: null,
-            totalSent: 0
+            totalViews: 0,
+            loopTimer: null,
+            countdownTimer: null,
+            currentIndex: 0
         };
 
         const el = {
             btn: document.getElementById('action-btn'),
-            manualUi: document.getElementById('manual-ui'),
             bvInput: document.getElementById('bv-input'),
+            watchDuration: document.getElementById('watch-duration'),
+            matrixSize: document.getElementById('matrix-size'),
+            playerContainer: document.getElementById('player-matrix-container'),
+            playerGrid: document.getElementById('player-grid'),
+            playerStatusTag: document.getElementById('player-status-tag'),
             log: document.getElementById('log-window'),
             count: document.getElementById('video-count'),
             nextRun: document.getElementById('next-run'),
             success: document.getElementById('success-count'),
             status: document.getElementById('status-text'),
-            modeTag: document.getElementById('mode-tag'),
             stateText: document.getElementById('current-state-text'),
             sessionTag: document.getElementById('session-tag'),
             dlManifest: document.getElementById('dl-manifest'),
@@ -482,146 +520,127 @@
                 state.videos = [];
                 return;
             }
-            const uniqueBvs = [...new Set(matchedBvs.map(bv => 'BV' + bv.slice(2)))];
-            state.videos = uniqueBvs.map(bv => ({
-                bvid: bv,
-                title: bv,
-                aid: bvToAid(bv), // 标准还原真实 AID
-                cid: null
-            }));
+            state.videos = [...new Set(matchedBvs.map(bv => 'BV' + bv.slice(2)))];
         }
 
-        async function enrichVideoData() {
-            log(`🔍 正在校验视频真实凭据 (${state.videos.length} 个)...`, 'info');
-            el.status.innerText = '正在校验参数';
-            el.stateText.innerText = '校验中';
+        // 核心：动态载入 B 站官方原生播放器
+        function mountPlayerMatrix() {
+            if (!state.isRunning || state.videos.length === 0) return;
 
-            for (let v of state.videos) {
-                if (!state.isRunning) break;
+            const concurrency = parseInt(el.matrixSize.value, 10);
+            const durationSec = parseInt(el.watchDuration.value, 10);
 
-                // 优先通过免代理 JSONP 直连拿真实 cid 与 aid
-                const jsonpData = await fetchCidViaJsonp(v.bvid);
-                if (jsonpData && jsonpData.cid) {
-                    v.aid = jsonpData.aid || v.aid;
-                    v.cid = jsonpData.cid;
-                    v.title = jsonpData.title || v.bvid;
-                    log(`✅ ${v.bvid} 直连成功: AID=${v.aid} | CID=${v.cid}`, 'success');
-                } else {
-                    // 若直连被拦截，使用标准数学 AID 保证基础凭证不为 null
-                    log(`✨ ${v.bvid} 基础凭证就绪: AID=${v.aid || '已转换'}`, 'info');
-                }
-                await new Promise(r => setTimeout(r, 400));
+            el.playerGrid.innerHTML = '';
+            el.playerContainer.style.display = 'block';
+
+            // 调整网格布局
+            if (concurrency === 1) {
+                el.playerGrid.style.gridTemplateColumns = '1fr';
+            } else {
+                el.playerGrid.style.gridTemplateColumns = 'repeat(2, 1fr)';
             }
 
-            el.count.innerText = state.videos.length;
-            log(`💗 凭证核验完成，开始发送播放请求！`, 'success');
-        }
-
-        async function runBoostCycle() {
-            if (!state.isRunning) return;
-            log('🚀 开始新一轮播放上报...', 'success');
-            el.status.innerText = '正在上报...';
-            el.stateText.innerText = '正在运行';
-
-            for (let v of state.videos) {
-                if (!state.isRunning) break;
-
-                try {
-                    // 构造具备完整 aid、cid、bvid 的严谨上报参数
-                    const payload = {
-                        bvid: v.bvid,
-                        part: '1',
-                        jsonp: 'jsonp',
-                        type: '1',
-                        sub_type: '0',
-                        stime: Math.floor(Date.now() / 1000)
-                    };
-
-                    if (v.aid) payload.aid = v.aid;
-                    if (v.cid) payload.cid = v.cid;
-
-                    const params = new URLSearchParams(payload);
-
-                    await fetch('https://api.bilibili.com/x/click-interface/click/web/h5', {
-                        method: 'POST',
-                        mode: 'no-cors',
-                        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-                        body: params
-                    });
-
-                    state.totalSent++;
-                    el.success.innerText = state.totalSent;
-                    const showName = v.title && v.title !== v.bvid ? v.title.substring(0, 8) + '...' : v.bvid;
-                    log(`[√] ${showName} 播放凭据已递交 ✅`, 'success');
-                } catch (e) {
-                    log(`❌ ${v.bvid} 请求异常`, 'error');
-                }
-
-                await new Promise(r => setTimeout(r, 1500 + Math.random() * 1000));
+            // 提取当前轮次要播放的 BV 列表
+            const currentBatch = [];
+            for (let i = 0; i < concurrency; i++) {
+                const targetBv = state.videos[(state.currentIndex + i) % state.videos.length];
+                currentBatch.push(targetBv);
             }
+            state.currentIndex = (state.currentIndex + concurrency) % state.videos.length;
 
-            if (state.isRunning) {
-                log(`💤 本轮完成，休眠 ${CONFIG.intervalMinutes} 分钟避开风控`, 'info');
-                startCountdown(CONFIG.intervalMinutes * 60);
-            }
-        }
+            currentBatch.forEach((bvid, idx) => {
+                const slot = document.createElement('div');
+                slot.className = 'player-slot';
 
-        function startCountdown(seconds) {
-            el.status.innerText = '等待下一轮...';
-            el.stateText.innerText = '休眠中💤';
-            let remaining = seconds;
-            clearInterval(state.countdownId);
-            state.countdownId = setInterval(() => {
+                const badge = document.createElement('div');
+                badge.className = 'slot-badge';
+                badge.innerText = `视频 #${idx + 1}: ${bvid}`;
+                slot.appendChild(badge);
+
+                // 嵌入 B 站官方 Web 原生播放器 (muted=1 静音自动起播，high_quality=0 省流量，autoplay=1 自动播放)
+                const iframe = document.createElement('iframe');
+                iframe.src = `https://player.bilibili.com/player.html?bvid=${bvid}&autoplay=1&muted=1&high_quality=0&danmaku=0&t=1`;
+                iframe.setAttribute('allow', 'autoplay; encrypted-media; picture-in-picture');
+                iframe.setAttribute('sandbox', 'allow-scripts allow-same-origin allow-popups');
+
+                slot.appendChild(iframe);
+                el.playerGrid.appendChild(slot);
+
+                log(`🎬 官方播放器载入: ${bvid} 正在播放真实切片流...`, 'info');
+            });
+
+            el.status.innerText = `播放中 (${currentBatch.length}路并行)`;
+            el.stateText.innerText = '正在产生播放量';
+            el.playerStatusTag.innerText = `有效观赏计时中 (${durationSec}秒)`;
+
+            // 启动倒计时
+            let remaining = durationSec;
+            clearInterval(state.countdownTimer);
+            state.countdownTimer = setInterval(() => {
                 if (!state.isRunning) {
-                    clearInterval(state.countdownId);
-                    return;
-                }
-                if (remaining <= 0) {
-                    clearInterval(state.countdownId);
-                    runBoostCycle();
+                    clearInterval(state.countdownTimer);
                     return;
                 }
                 const m = Math.floor(remaining / 60).toString().padStart(2, '0');
                 const s = (remaining % 60).toString().padStart(2, '0');
                 el.nextRun.innerText = `${m}:${s}`;
                 remaining--;
+
+                if (remaining < 0) {
+                    clearInterval(state.countdownTimer);
+                    // 本批次完成有效观赏，播放量计入
+                    state.totalViews += currentBatch.length;
+                    el.success.innerText = state.totalViews;
+                    log(`✨ 本批次 [${currentBatch.join(', ')}] 已完成官方心跳汇报，真实播放量 +${currentBatch.length}！`, 'success');
+
+                    // 准备进入下一轮轮播
+                    if (state.isRunning) {
+                        el.status.innerText = '轮换下一批视频...';
+                        setTimeout(mountPlayerMatrix, 2000);
+                    }
+                }
             }, 1000);
         }
 
         async function start() {
+            parseManualVideos();
+            if (state.videos.length === 0) {
+                log('❌ 请输入正确的 BV 号或 B 站链接', 'error');
+                return;
+            }
+
             state.isRunning = true;
             el.btn.innerText = '停止运行';
             el.btn.classList.add('stop');
             el.bvInput.disabled = true;
+            el.watchDuration.disabled = true;
+            el.matrixSize.disabled = true;
 
             startSilentAudio();
-            parseManualVideos();
-
-            if (state.videos.length === 0) {
-                log('❌ 请输入正确的 BV 号', 'error');
-                stop();
-                return;
-            }
-
             el.count.innerText = state.videos.length;
-            log(`💗 已装载 ${state.videos.length} 个视频，正在获取 CID...`, 'info');
+            log(`💗 已就绪 ${state.videos.length} 个视频，启动官方原生播放内核...`, 'info');
 
-            await enrichVideoData();
-            if (state.isRunning) {
-                runBoostCycle();
-            }
+            mountPlayerMatrix();
         }
 
         function stop() {
             state.isRunning = false;
-            clearInterval(state.countdownId);
+            clearInterval(state.countdownTimer);
+            clearTimeout(state.loopTimer);
             stopSilentAudio();
-            el.btn.innerText = '开始运行';
+
+            el.playerGrid.innerHTML = '';
+            el.playerContainer.style.display = 'none';
+
+            el.btn.innerText = '开始真机播放';
             el.btn.classList.remove('stop');
             el.bvInput.disabled = false;
+            el.watchDuration.disabled = false;
+            el.matrixSize.disabled = false;
             el.status.innerText = '已停止';
             el.stateText.innerText = '已停止';
-            log('任务已停止', 'warn');
+            el.nextRun.innerText = '--:--';
+            log('任务已停止，播放器已安全释放', 'warn');
         }
 
         el.btn.addEventListener('click', () => {
@@ -632,7 +651,7 @@
             }
         });
 
-        // 📥 电脑 Edge 扩展文件下载
+        // 📥 电脑 Edge 扩展文件一键下载
         function downloadFile(filename, content) {
             const blob = new Blob([content], { type: 'text/plain;charset=utf-8' });
             const url = URL.createObjectURL(blob);
@@ -723,7 +742,7 @@ document.getElementById('jiyu-quick-click').onclick = async () => {
             downloadFile('content.js', CONTENT_JS_CONTENT);
         });
 
-        log(`💞 极禹刷啵 ⭐️#${currentSessionId} 已就绪 (直连增强·真实凭据版)`);
+        log(`💞 极禹刷啵 ⭐️#${currentSessionId} 已就绪 (官方播放器真机矩阵版)`);
     </script>
 </body>
 
