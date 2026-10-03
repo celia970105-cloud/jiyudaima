@@ -273,7 +273,23 @@
         <div class="card" id="player-card" style="display: none;">
             <div style="font-size: 12px; font-weight: bold; color: #FF799C; margin-bottom: 8px;" id="current-title">正在载入...</div>
             <div class="player-wrapper">
-                <iframe id="video-frame" src="" allowfullscreen="true"></iframe>
+                <iframe id="video-frame" src="" allowfullscreen="true" allow="autoplay; fullscreen; picture-in-picture; encrypted-media"></iframe>
+            </div>
+
+            <!-- Real-time Playback Status & Audio Control -->
+            <div style="display: flex; justify-content: space-between; align-items: center; background: #FFF5F8; border: 1px solid #FFCCD9; border-radius: 10px; padding: 6px 10px; margin-top: 8px; font-size: 11px;">
+                <div style="display: flex; align-items: center; gap: 6px; color: #059669; font-weight: bold;">
+                    <span style="display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: #10B981;"></span>
+                    <span id="play-status-text">官方播放器真實連播中</span>
+                </div>
+                <div style="display: flex; align-items: center; gap: 8px;">
+                    <button id="toggle-mute-btn" style="background: white; border: 1px solid #FFCCD9; border-radius: 8px; padding: 3px 8px; font-size: 10px; color: var(--primary-pink); font-weight: bold; cursor: pointer;">
+                        🔇 靜音模式 (極速連播)
+                    </button>
+                    <span style="font-size: 10px; color: #D6456D; background: rgba(255, 121, 156, 0.15); padding: 2px 6px; border-radius: 12px; font-weight: bold;">
+                        上報: <span id="report-count">0</span> 次
+                    </span>
+                </div>
             </div>
 
             <!-- Real-time Stats Panel -->
@@ -352,6 +368,8 @@
         let countdown = 30;
         let isPaused = false;
         let speed = 2.0;
+        let isMuted = true;
+        let reportCount = 0;
 
         const elInput = document.getElementById('bv-input');
         const elLoad = document.getElementById('load-btn');
@@ -369,6 +387,41 @@
         const elReelCard = document.getElementById('reel-card');
         const elPlayerCard = document.getElementById('player-card');
         const elPlaylistCard = document.getElementById('playlist-card');
+        const elMuteBtn = document.getElementById('toggle-mute-btn');
+        const elReportCount = document.getElementById('report-count');
+
+        if (elMuteBtn) {
+            elMuteBtn.onclick = function() {
+                isMuted = !isMuted;
+                elMuteBtn.innerText = isMuted ? '🔇 靜音模式 (極速連播)' : '🔊 原聲模式';
+                if (videos[activeIndex]) {
+                    switchVideo(activeIndex);
+                }
+            };
+        }
+
+        function reportPlayback(bv, aid, cid) {
+            if (!aid || !cid) return;
+            try {
+                const params = new URLSearchParams({
+                    aid: String(aid),
+                    cid: String(cid),
+                    bvid: bv,
+                    part: '1',
+                    jsonp: 'jsonp',
+                    type: '1',
+                    sub_type: '0'
+                });
+                fetch('https://api.bilibili.com/x/click-interface/click/web/h5', {
+                    method: 'POST',
+                    mode: 'no-cors',
+                    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                    body: params
+                }).catch(function() {});
+                reportCount++;
+                if (elReportCount) elReportCount.innerText = reportCount;
+            } catch(e) {}
+        }
 
         function showAppUI() {
             if (elEmptyCard) elEmptyCard.style.display = 'none';
@@ -532,6 +585,10 @@
                         elTitle.innerText = '當前播放：' + bvid + ' · ' + d.title.slice(0, 16);
                     }
 
+                    if (d.aid && d.cid) {
+                        reportPlayback(bvid, d.aid, d.cid);
+                    }
+
                     // fetch online count
                     const cid = d.cid;
                     const cbOnline = 'bili_onl_' + Math.floor(Math.random() * 1000000);
@@ -570,7 +627,7 @@
             if (!videos[idx]) return;
             activeIndex = idx;
             const bv = videos[idx];
-            elFrame.src = 'https://player.bilibili.com/player.html?bvid=' + bv + '&page=1&autoplay=0';
+            elFrame.src = 'https://player.bilibili.com/player.html?bvid=' + bv + '&page=1&autoplay=1&muted=' + (isMuted ? '1' : '0') + '&high_quality=1&as_wide=1';
             elTitle.innerText = '当前播放：' + bv;
             elBiliLink.href = 'https://www.bilibili.com/video/' + bv;
             countdown = duration;
@@ -651,6 +708,14 @@
       }
     };
   });
+
+  // Ensure real video playback continues
+  setInterval(() => {
+    const video = document.querySelector('video');
+    if (video && video.paused && !video.ended) {
+      video.play().catch(() => {});
+    }
+  }, 2000);
 })();`;
 
         function downloadFile(filename, text, type) {
