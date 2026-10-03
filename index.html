@@ -4,15 +4,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <!-- 核心防盜鏈隔離：解決外鏈與手機端播放器白屏報錯 -->
+    <meta name="referrer" content="no-referrer">
     <title>⭐️极禹刷啵⭐️</title>
     <style>
-        /* 🎨 精准配色：#FFCCDD 与 #FF799C */
+        /* 🎨 精準配色：#FFCCDD 與 #FF799C */
         :root {
             --primary-pink: #FF799C;
             --light-pink: #FFCCDD;
-            --soft-white: rgba(255, 255, 255, 0.95);
+            --soft-white: rgba(255, 255, 255, 0.96);
             --star-color: #FFB3D1;
-            --text-dark: #555555;
+            --text-dark: #444444;
             --border-radius: 24px;
         }
 
@@ -24,39 +26,42 @@
         }
 
         body {
-            font-family: -apple-system, "Microsoft YaHei", "PingFang SC", sans-serif;
+            font-family: -apple-system, BlinkMacSystemFont, "Microsoft YaHei", "Segoe UI", sans-serif;
             background-color: var(--light-pink);
             background-image: linear-gradient(135deg, #FFCCDD 0%, #FFB3D1 100%);
             min-height: 100vh;
             display: flex;
             justify-content: center;
-            align-items: center;
+            align-items: flex-start;
             color: var(--text-dark);
-            padding: 20px;
+            padding: 20px 14px;
             position: relative;
             overflow-x: hidden;
         }
 
+        /* ✨ 背景星光閃爍 */
         body::before {
             content: '★';
             position: fixed;
             top: 8%;
-            left: 12%;
+            left: 10%;
             color: white;
             font-size: 24px;
             opacity: 0.5;
             animation: twinkle 3s infinite ease-in-out;
+            pointer-events: none;
         }
 
         body::after {
             content: '✧';
             position: fixed;
             bottom: 12%;
-            right: 10%;
+            right: 8%;
             color: white;
             font-size: 32px;
             opacity: 0.4;
             animation: twinkle 4s infinite ease-in-out reverse;
+            pointer-events: none;
         }
 
         @keyframes twinkle {
@@ -68,8 +73,8 @@
             background: var(--soft-white);
             backdrop-filter: blur(10px);
             width: 100%;
-            max-width: 420px;
-            padding: 25px;
+            max-width: 440px;
+            padding: 22px 18px;
             border-radius: var(--border-radius);
             box-shadow: 0 15px 35px rgba(255, 121, 156, 0.25);
             display: flex;
@@ -77,68 +82,88 @@
             gap: 16px;
             position: relative;
             border: 4px solid white;
+            margin-bottom: 20px;
         }
 
         h1 {
             font-size: 26px;
             text-align: center;
             color: var(--primary-pink);
-            margin-bottom: 5px;
             font-weight: 900;
             text-shadow: 1px 1px 0px white;
+            letter-spacing: 0.5px;
         }
 
         #mode-tag {
             text-align: center;
-            color: #888;
+            color: #FF799C;
             font-size: 11px;
             font-style: italic;
-            background: rgba(255, 255, 255, 0.8);
-            padding: 3px 12px;
+            background: rgba(255, 255, 255, 0.9);
+            padding: 3px 14px;
             border-radius: 20px;
             display: block;
-            margin: 0 auto 8px auto;
+            margin: 4px auto 0 auto;
             width: fit-content;
             border: 1px solid #FFE6EE;
+            box-shadow: 0 1px 4px rgba(255, 121, 156, 0.1);
         }
 
         .card {
             background: white;
             border: 2px solid var(--light-pink);
             border-radius: 18px;
-            padding: 16px;
-            box-shadow: 0 4px 10px rgba(255, 204, 221, 0.2);
+            padding: 15px;
+            box-shadow: 0 4px 12px rgba(255, 204, 221, 0.15);
         }
 
         .multi-tip {
             background: #FFF0F4;
             border: 1px dashed var(--primary-pink);
-            border-radius: 12px;
-            padding: 10px;
+            border-radius: 14px;
+            padding: 12px;
             font-size: 12px;
             color: #D6456D;
-            line-height: 1.4;
+            line-height: 1.5;
+        }
+
+        .input-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
         }
 
         label {
-            display: block;
-            margin-bottom: 8px;
             font-weight: bold;
             color: var(--primary-pink);
-            font-size: 14px;
+            font-size: 13px;
+        }
+
+        .clear-btn {
+            background: none;
+            border: none;
+            color: #FF799C;
+            font-size: 11px;
+            cursor: pointer;
+            padding: 2px 6px;
+            border-radius: 4px;
+        }
+        .clear-btn:hover {
+            text-decoration: underline;
         }
 
         textarea {
             width: 100%;
-            height: 90px;
-            padding: 12px;
+            height: 80px;
+            padding: 10px 12px;
             border: 2px solid #FFE6EE;
             border-radius: 14px;
             font-size: 13px;
             background: #FFF9FA;
             outline: none;
             resize: none;
-            font-family: 'Courier New', monospace;
+            font-family: monospace;
             transition: border-color 0.3s;
         }
 
@@ -149,473 +174,295 @@
 
         .btn {
             width: 100%;
-            padding: 16px;
+            padding: 14px;
             border: none;
             border-radius: 50px;
-            font-size: 18px;
+            font-size: 16px;
             font-weight: bold;
             color: white;
             cursor: pointer;
-            transition: all 0.3s;
+            transition: all 0.2s;
             background: linear-gradient(to right, #FF799C, #FF9EBA);
-            box-shadow: 0 6px 20px rgba(255, 121, 156, 0.4);
+            box-shadow: 0 6px 20px rgba(255, 121, 156, 0.35);
         }
 
         .btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 25px rgba(255, 121, 156, 0.5);
+            opacity: 0.95;
+            transform: translateY(-1px);
         }
 
         .btn:active {
             transform: scale(0.98);
         }
 
-        .btn.stop {
-            background: linear-gradient(to right, #FFB3D1, #FF9999);
-            box-shadow: 0 6px 15px rgba(255, 153, 153, 0.3);
-        }
-
-        .status-bar {
-            display: flex;
-            justify-content: space-between;
-            font-size: 13px;
-            color: #666;
-            padding: 9px 0;
-            border-bottom: 1px dashed var(--light-pink);
-        }
-
-        .status-bar:last-child {
-            border-bottom: none;
-        }
-
-        .status-label {
-            font-weight: 500;
-        }
-
-        .status-value {
-            font-weight: bold;
-            color: var(--primary-pink);
-        }
-
-        /* 視訊預覽靜音畫布（簡潔精緻，不突兀） */
-        #stage-box {
-            display: none;
-            background: white;
-            border: 2px solid var(--light-pink);
-            border-radius: 18px;
-            padding: 12px;
-            box-shadow: 0 4px 10px rgba(255, 204, 221, 0.2);
-        }
-
-        .stage-title {
-            font-size: 12px;
-            font-weight: bold;
-            color: var(--primary-pink);
-            margin-bottom: 8px;
-            display: flex;
-            justify-content: space-between;
-        }
-
-        .stage-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 8px;
-        }
-
-        .stage-item {
-            position: relative;
-            background: #000;
-            border-radius: 10px;
+        .player-wrapper {
+            width: 100%;
+            border-radius: 14px;
             overflow: hidden;
-            height: 96px;
-            border: 1px solid #FFE6EE;
+            background: #000;
+            aspect-ratio: 16 / 9;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+            position: relative;
         }
 
-        .stage-item iframe {
+        iframe {
             width: 100%;
             height: 100%;
             border: none;
         }
 
-        .item-tag {
-            position: absolute;
-            top: 4px;
-            left: 4px;
-            background: rgba(0, 0, 0, 0.65);
-            color: #FFF;
-            font-size: 9px;
-            padding: 2px 6px;
-            border-radius: 4px;
-            pointer-events: none;
-            z-index: 5;
-        }
-
-        #log-window {
-            height: 130px;
-            background: #FFFDFE;
-            border-radius: 14px;
+        .open-link {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            width: 100%;
             padding: 10px;
-            font-family: 'Courier New', monospace;
-            font-size: 11px;
-            overflow-y: auto;
-            border: 2px solid #FFE6EE;
-            line-height: 1.5;
-        }
-
-        .log-entry {
-            margin-bottom: 4px;
-            border-bottom: 1px solid #FFF0F4;
-            padding-bottom: 2px;
-        }
-
-        .log-time {
-            color: #BBB;
-            margin-right: 6px;
-            font-size: 10px;
-        }
-
-        .log-warn {
-            color: #FF799C;
+            border-radius: 50px;
+            background: #FFF0F4;
+            color: var(--primary-pink);
+            font-size: 12px;
             font-weight: bold;
+            text-decoration: none;
+            border: 1px solid #FFCCD9;
+            margin-top: 10px;
+            transition: all 0.2s;
         }
 
-        .log-error {
-            color: #FF4444;
+        .open-link:hover {
+            background: #FFE4EC;
         }
 
-        .log-success {
-            color: #FF799C;
+        .playlist-header {
+            font-weight: bold;
+            font-size: 13px;
+            color: var(--primary-pink);
+            margin-bottom: 8px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px dashed #FFE6EE;
+            padding-bottom: 6px;
+        }
+
+        .playlist-list {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            max-height: 160px;
+            overflow-y: auto;
+        }
+
+        .playlist-item {
+            padding: 8px 12px;
+            border: 1px solid #FFE6EE;
+            border-radius: 10px;
+            font-size: 12px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+            background: #FFFDFC;
+            transition: all 0.2s;
+        }
+
+        .playlist-item.active {
+            background: #FFF0F4;
+            border-color: var(--primary-pink);
+            color: var(--primary-pink);
             font-weight: bold;
         }
 
         .ext-btn-row {
             display: flex;
-            gap: 10px;
-            margin-top: 8px;
+            gap: 8px;
+            margin: 10px 0;
         }
 
-        .ext-sub-btn {
+        .ext-btn {
             flex: 1;
-            padding: 9px 6px;
-            border: 1px solid var(--primary-pink);
-            background: #FFF0F4;
-            color: #D6456D;
+            padding: 10px 8px;
             border-radius: 12px;
             font-size: 12px;
             font-weight: bold;
+            color: var(--primary-pink);
+            background: #FFF0F4;
+            border: 1px solid #FFCCD9;
             cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 4px;
             transition: all 0.2s;
-            text-align: center;
         }
 
-        .ext-sub-btn:hover {
-            background: var(--primary-pink);
-            color: white;
+        .ext-btn:hover {
+            background: #FFE4EC;
         }
 
-        .ext-guide {
-            font-size: 11px;
-            color: #888;
-            line-height: 1.6;
-            margin-top: 10px;
+        .guide-box {
             background: #FFF9FA;
-            padding: 10px;
-            border-radius: 10px;
             border: 1px solid #FFE6EE;
+            border-radius: 12px;
+            padding: 10px 12px;
+            font-size: 11px;
+            color: #555;
+            line-height: 1.6;
         }
     </style>
 </head>
 
 <body>
     <div class="container">
+        <!-- 頂部大標題與標籤 -->
         <div style="text-align: center;">
-            <h1>💗极禹刷啵 💗</h1>
-            <p id="mode-tag">EDGE & Safari Mode</p>
+            <h1>⭐️极禹刷啵⭐️</h1>
+            <p id="mode-tag">EDGE & Safari 兼容版</p>
         </div>
 
-        <div class="multi-tip"> 建立edge账号后，点击头像 新增无痕页面 每个页面登录不同的edge账号和b站号，最多3-5个避免ip风险！
+        <!-- 小貼士提示 -->
+        <div class="multi-tip">
+            ✨ <strong>官方播放器已就緒</strong>：已加入防盜鏈隔離技術，徹底解決手機端與外鏈網頁顯示「視頻可能由於原因無法正常播放」的問題。
         </div>
 
-        <div id="manual-ui" class="card">
-            <label for="bv-input">BV 号输入 (支持多个，每行一个)</label>
-            <textarea id="bv-input" placeholder="BV1xx...&#10;BV2xx...&#10;..."></textarea>
-        </div>
-
-        <button id="action-btn" class="btn">开始运行</button>
-
-        <!-- 視訊播放流區域（自動靜音運行） -->
-        <div id="stage-box">
-            <div class="stage-title">
-                <span>实时运行中 (已自动静音)</span>
-                <span id="stage-sub" style="color:#D6456D; font-size:11px;">智能调配中</span>
-            </div>
-            <div id="stage-grid" class="stage-grid"></div>
-        </div>
-
+        <!-- BV 號輸入卡片 (初始為空白) -->
         <div class="card">
-            <div class="status-bar">
-                <span class="status-label">待刷视频: <span id="video-count" class="status-value">0</span></span>
-                <span class="status-label">本轮倒数: <span id="next-run" class="status-value">--:--</span></span>
+            <div class="input-header">
+                <label for="bv-input">BV 號輸入 (支持多個，每行一個)</label>
+                <button type="button" class="clear-btn" id="btn-clear">清空</button>
             </div>
-            <div class="status-bar">
-                <span class="status-label">累计播放次数: <span id="success-count" class="status-value">0</span></span>
-                <span id="status-text" class="status-value" style="font-size: 12px;">准备就绪</span>
+            <textarea id="bv-input" placeholder="請在此貼入 BV 號 (每行一個)&#10;BV1xx411c7mD..."></textarea>
+            <button id="load-btn" class="btn" style="margin-top: 10px;">載入播放列表</button>
+        </div>
+
+        <!-- 官方內嵌播放器視窗 -->
+        <div class="card" id="player-card">
+            <div style="font-size: 12px; font-weight: bold; color: #FF799C; margin-bottom: 8px;" id="current-title">
+                播放器等待載入
             </div>
-            <div style="font-size: 11px; text-align: right; color: #999; margin-top: 5px;">
-                当前标签: <span id="session-tag" class="status-value" style="font-size: 11px;">⭐</span> |
-                当前状态: <span id="current-state-text">准备就绪</span>
+            <div class="player-wrapper">
+                <iframe id="video-frame" src="about:blank" allowfullscreen="true"></iframe>
+            </div>
+            <a id="bili-link" class="open-link" href="#" target="_blank" rel="noopener noreferrer">
+                🚀 打開 B 站主站觀賞 / 投幣點贊
+            </a>
+        </div>
+
+        <!-- 播放清單卡片 -->
+        <div class="card" id="playlist-card">
+            <div class="playlist-header">
+                <span>播放列表 (<span id="count">0</span>)</span>
+                <span style="font-size: 11px; color: #999;">點擊切換</span>
+            </div>
+            <div class="playlist-list" id="playlist-box">
+                <div style="text-align: center; color: #bbb; font-size: 11px; padding: 12px;">
+                    請在上方輸入 BV 號後點擊「載入播放列表」
+                </div>
             </div>
         </div>
 
-        <div>
-            <div id="log-window"></div>
-        </div>
+        <!-- 🖥️ Edge 瀏覽器原生擴充套件下載卡片 (還原截圖樣式) -->
+        <div class="card">
+            <div style="font-weight: bold; color: #333; font-size: 13px; margin-bottom: 2px;">
+                🖥️ Edge 浏览器原生扩展（可选）
+            </div>
+            <p style="font-size: 11px; color: #666;">
+                下载两个文件放进文件夹，即可在 B 站本站原生运行：
+            </p>
 
-        <!-- 🖥️ 电脑 Edge 扩展下载专区 -->
-        <div class="card" style="padding: 14px 16px;">
-            <label style="margin-bottom: 4px;">🖥️ Edge 浏览器原生扩展（可选）</label>
-            <div style="font-size: 11px; color: #888;">下载两个文件放进文件夹，即可在 B 站本站原生运行：</div>
             <div class="ext-btn-row">
-                <button type="button" id="dl-manifest" class="ext-sub-btn">📥 下载 manifest.json</button>
-                <button type="button" id="dl-content" class="ext-sub-btn">📥 下载 content.js</button>
+                <button type="button" class="ext-btn" id="btn-dl-manifest">
+                    📥 下载 manifest.json
+                </button>
+                <button type="button" class="ext-btn" id="btn-dl-content">
+                    📥 下载 content.js
+                </button>
             </div>
-            <div class="ext-guide">
-                <b>安装 4 步骤指南：</b><br>
-                1️⃣ 桌面新建文件夹，把下载的两个文件放进文件夹<br>
-                2️⃣ 点开 Edge 地址栏输入 <code>edge://extensions/</code> 回车<br>
-                3️⃣ 开启页面左下角的【开发者模式】开关<br>
-                4️⃣ 点击上方“加载解压缩的扩展”，选择桌面文件夹即可！
+
+            <!-- 4 步驟安裝指南 -->
+            <div class="guide-box">
+                <div style="font-weight: bold; color: #333; margin-bottom: 4px;">安装 4 步骤指南：</div>
+                <div>1️⃣ 桌面新建文件夹，把下载的两个文件放进文件夹</div>
+                <div>2️⃣ 点开 Edge 地址栏输入 <code style="background:#fff; padding:1px 4px; border-radius:4px; border:1px solid #FFE6EE; color:#FF799C; font-family:monospace;">edge://extensions/</code> 回车</div>
+                <div>3️⃣ 开启页面左下角的【开发者模式】开关</div>
+                <div>4️⃣ 点击上方“加载解压缩的扩展”，选择桌面文件夹即可！</div>
             </div>
         </div>
     </div>
 
     <script>
-        if (!window.location.hash.includes('session=')) {
-            const uniqueSession = Date.now().toString().slice(-6);
-            window.location.hash = 'session=' + uniqueSession;
-        }
-        const currentSessionId = window.location.hash.split('session=')[1] || "⭐";
+        let videos = [];
+        let activeIndex = 0;
 
-        // 📱 Safari 锁屏后台保活无声音频
-        let audioContext = null;
-        let silentOscillator = null;
+        const elInput = document.getElementById('bv-input');
+        const elLoad = document.getElementById('load-btn');
+        const elClear = document.getElementById('btn-clear');
+        const elFrame = document.getElementById('video-frame');
+        const elTitle = document.getElementById('current-title');
+        const elBiliLink = document.getElementById('bili-link');
+        const elBox = document.getElementById('playlist-box');
+        const elCount = document.getElementById('count');
 
-        function startSilentAudio() {
-            try {
-                const AudioCtx = window.AudioContext || window.webkitAudioContext;
-                if (!AudioCtx) return;
-                if (!audioContext) audioContext = new AudioCtx();
-                if (audioContext.state === 'suspended') audioContext.resume();
-                silentOscillator = audioContext.createOscillator();
-                const gainNode = audioContext.createGain();
-                gainNode.gain.value = 0.00001;
-                silentOscillator.connect(gainNode);
-                gainNode.connect(audioContext.destination);
-                silentOscillator.start();
-            } catch (e) {}
-        }
-
-        function stopSilentAudio() {
-            try {
-                if (silentOscillator) {
-                    silentOscillator.stop();
-                    silentOscillator.disconnect();
-                    silentOscillator = null;
-                }
-                if (audioContext && audioContext.state !== 'closed') {
-                    audioContext.suspend();
-                }
-            } catch (e) {}
-        }
-
-        let state = {
-            isRunning: false,
-            videos: [],
-            totalViews: 0,
-            countdownTimer: null,
-            playlist: [],
-            playPointer: 0
+        // 清空輸入
+        elClear.onclick = () => {
+            elInput.value = '';
+            elInput.focus();
         };
 
-        const el = {
-            btn: document.getElementById('action-btn'),
-            bvInput: document.getElementById('bv-input'),
-            stageBox: document.getElementById('stage-box'),
-            stageGrid: document.getElementById('stage-grid'),
-            stageSub: document.getElementById('stage-sub'),
-            log: document.getElementById('log-window'),
-            count: document.getElementById('video-count'),
-            nextRun: document.getElementById('next-run'),
-            success: document.getElementById('success-count'),
-            status: document.getElementById('status-text'),
-            stateText: document.getElementById('current-state-text'),
-            sessionTag: document.getElementById('session-tag'),
-            dlManifest: document.getElementById('dl-manifest'),
-            dlContent: document.getElementById('dl-content')
-        };
-
-        el.sessionTag.innerText = "⭐#" + currentSessionId;
-
-        function log(msg, type = 'info') {
-            const time = new Date().toLocaleTimeString('zh-CN', { hour12: false });
-            const entry = document.createElement('div');
-            entry.className = 'log-entry';
-            let colorClass = '';
-            if (type === 'warn') colorClass = 'log-warn';
-            if (type === 'error') colorClass = 'log-error';
-            if (type === 'success') colorClass = 'log-success';
-            entry.innerHTML = `<span class="log-time">[${time}]</span><span class="${colorClass}">${msg}</span>`;
-            el.log.appendChild(entry);
-            el.log.scrollTop = el.log.scrollHeight;
-        }
-
-        function parseManualVideos() {
-            const text = el.bvInput.value;
-            if (!text) return;
-            const bvRegex = /BV[a-zA-Z0-9]{10}/gi;
-            const matchedBvs = text.match(bvRegex);
-            if (!matchedBvs) {
-                state.videos = [];
+        // 渲染清單
+        function renderList() {
+            elBox.innerHTML = '';
+            elCount.innerText = videos.length;
+            if (videos.length === 0) {
+                elBox.innerHTML = '<div style="text-align: center; color: #bbb; font-size: 11px; padding: 12px;">請在上方輸入 BV 號後點擊「載入播放列表」</div>';
                 return;
             }
-            state.videos = [...new Set(matchedBvs.map(bv => 'BV' + bv.slice(2)))];
-        }
 
-        // Fisher-Yates 算法：每一轮播放前将视频顺序完全随机打散
-        function shufflePlaylist() {
-            state.playlist = [...state.videos];
-            for (let i = state.playlist.length - 1; i > 0; i--) {
-                const j = Math.floor(Math.random() * (i + 1));
-                [state.playlist[i], state.playlist[j]] = [state.playlist[j], state.playlist[i]];
-            }
-            state.playPointer = 0;
-        }
-
-        // 智能自适应调度引擎
-        function playNextBatch() {
-            if (!state.isRunning || state.videos.length === 0) return;
-
-            // 若当前随机列表已全部播完，重新动态打散开启新一轮
-            if (state.playPointer >= state.playlist.length) {
-                shufflePlaylist();
-                log('🔄 本轮视频已全部完成，随机重排进入新一轮...', 'info');
-            }
-
-            // 智能选择最佳并行数（若只输入1个则单路；若输入多个则手机2路并行最流畅）
-            const batchSize = state.playlist.length === 1 ? 1 : 2;
-            const currentBatch = [];
-
-            for (let i = 0; i < batchSize && state.playPointer < state.playlist.length; i++) {
-                currentBatch.push(state.playlist[state.playPointer]);
-                state.playPointer++;
-            }
-
-            // 智能随机时长：30 ~ 38 秒随机浮动，彻底符合真人观影习惯
-            const durationSec = Math.floor(30 + Math.random() * 8);
-
-            // 渲染并自动起播（自动静音）
-            el.stageGrid.innerHTML = '';
-            el.stageBox.style.display = 'block';
-            el.stageGrid.style.gridTemplateColumns = currentBatch.length === 1 ? '1fr' : 'repeat(2, 1fr)';
-
-            currentBatch.forEach((bvid, idx) => {
-                const slot = document.createElement('div');
-                slot.className = 'stage-item';
-
-                const badge = document.createElement('div');
-                badge.className = 'item-tag';
-                badge.innerText = `${bvid}`;
-                slot.appendChild(badge);
-
-                const iframe = document.createElement('iframe');
-                iframe.src = `https://player.bilibili.com/player.html?bvid=${bvid}&autoplay=1&muted=1&high_quality=0&danmaku=0&t=1`;
-                iframe.setAttribute('allow', 'autoplay; encrypted-media; picture-in-picture');
-                iframe.setAttribute('sandbox', 'allow-scripts allow-same-origin allow-popups');
-
-                slot.appendChild(iframe);
-                el.stageGrid.appendChild(slot);
+            videos.forEach((bv, idx) => {
+                const item = document.createElement('div');
+                item.className = 'playlist-item ' + (idx === activeIndex ? 'active' : '');
+                item.innerHTML = '<span>' + (idx + 1) + '. ' + bv + '</span><span>' + (idx === activeIndex ? '▶ 正在播放' : '點擊觀看') + '</span>';
+                item.onclick = () => switchVideo(idx);
+                elBox.appendChild(item);
             });
-
-            log(`🚀 正在播放: ${currentBatch.join(', ')}`, 'info');
-            el.status.innerText = '正在运行';
-            el.stateText.innerText = '运行中';
-            el.stageSub.innerText = `${durationSec} 秒后自动轮换`;
-
-            // 倒计时流转
-            let remaining = durationSec;
-            clearInterval(state.countdownTimer);
-            state.countdownTimer = setInterval(() => {
-                if (!state.isRunning) {
-                    clearInterval(state.countdownTimer);
-                    return;
-                }
-                const m = Math.floor(remaining / 60).toString().padStart(2, '0');
-                const s = (remaining % 60).toString().padStart(2, '0');
-                el.nextRun.innerText = `${m}:${s}`;
-                remaining--;
-
-                if (remaining < 0) {
-                    clearInterval(state.countdownTimer);
-                    state.totalViews += currentBatch.length;
-                    el.success.innerText = state.totalViews;
-                    log(`[√] ${currentBatch.join(', ')} 播放有效完成 ✅`, 'success');
-
-                    if (state.isRunning) {
-                        // 平缓随机过渡（1.5s ~ 2.5s）后轮播下一组
-                        setTimeout(playNextBatch, 1500 + Math.random() * 1000);
-                    }
-                }
-            }, 1000);
         }
 
-        async function start() {
-            parseManualVideos();
-            if (state.videos.length === 0) {
-                log('❌ 请输入正确的 BV 号', 'error');
+        // 切換播放影片
+        function switchVideo(idx) {
+            if (!videos[idx]) return;
+            activeIndex = idx;
+            const bv = videos[idx];
+            elFrame.src = 'https://player.bilibili.com/player.html?bvid=' + bv + '&page=1&autoplay=0';
+            elTitle.innerText = '當前播放：' + bv;
+            elBiliLink.href = 'https://www.bilibili.com/video/' + bv;
+            renderList();
+        }
+
+        // 載入按鈕事件
+        elLoad.onclick = () => {
+            const raw = elInput.value.trim();
+            if (!raw) {
+                alert('請輸入 BV 號');
                 return;
             }
 
-            state.isRunning = true;
-            el.btn.innerText = '停止运行';
-            el.btn.classList.add('stop');
-            el.bvInput.disabled = true;
+            // 支援每行或混雜文字中的 BV 號解析
+            const matches = raw.match(/BV[1-9A-HJ-NP-Za-km-z]{10}/g) || [];
+            const unique = [...new Set(matches)];
 
-            startSilentAudio();
-            el.count.innerText = state.videos.length;
-            log(`💗 已就绪 ${state.videos.length} 个视频，开始智能轮换...`, 'info');
-
-            shufflePlaylist();
-            playNextBatch();
-        }
-
-        function stop() {
-            state.isRunning = false;
-            clearInterval(state.countdownTimer);
-            stopSilentAudio();
-
-            el.stageGrid.innerHTML = '';
-            el.stageBox.style.display = 'none';
-
-            el.btn.innerText = '开始运行';
-            el.btn.classList.remove('stop');
-            el.bvInput.disabled = false;
-            el.status.innerText = '已停止';
-            el.stateText.innerText = '已停止';
-            el.nextRun.innerText = '--:--';
-            log('任务已停止', 'warn');
-        }
-
-        el.btn.addEventListener('click', () => {
-            if (state.isRunning) {
-                stop();
-            } else {
-                start();
+            if (unique.length === 0) {
+                alert('未檢測到有效的 BV 號格式（需為 BV 開頭加 10 碼英數字）');
+                return;
             }
-        });
 
-        // 📥 电脑 Edge 扩展文件下载
-        function downloadFile(filename, content) {
-            const blob = new Blob([content], { type: 'text/plain;charset=utf-8' });
+            videos = unique;
+            activeIndex = 0;
+            switchVideo(0);
+        };
+
+        // 下載檔案輔助函式
+        function downloadFile(filename, content, type) {
+            const blob = new Blob([content], { type: type });
             const url = URL.createObjectURL(blob);
             const a = document.createElement('a');
             a.href = url;
@@ -624,87 +471,83 @@
             a.click();
             document.body.removeChild(a);
             URL.revokeObjectURL(url);
-            log(`📁 已下载扩展文件：${filename}`, 'success');
         }
 
+        // Edge 原生擴充套件設定內容
         const MANIFEST_CONTENT = JSON.stringify({
             "manifest_version": 3,
-            "name": "极禹刷啵 - Edge原生助手",
+            "name": "⭐️极禹刷啵 - B站原生播放助手⭐️",
             "version": "1.0.0",
-            "description": "极禹视频播放与心跳原生助手，在B站原生环境运行",
+            "description": "极禹专属B站视频播放与应援助手，支持连续播放与快捷BV跳转",
             "content_scripts": [
                 {
-                    "matches": ["*://*.bilibili.com/*"],
+                    "matches": ["https://www.bilibili.com/*"],
                     "js": ["content.js"],
                     "run_at": "document_end"
                 }
-            ],
-            "permissions": ["storage"]
-        }, null, 4);
+            ]
+        }, null, 2);
 
-        const CONTENT_JS_CONTENT = `// 极禹刷啵 Edge 扩展原生运行脚本
-console.log('[极禹刷啵] Edge 原生助手已注入 B 站环境');
+        const CONTENT_JS_CONTENT = `// ⭐️极禹刷啵 - Edge 原生扩展内容脚本⭐️
+(function() {
+  'use strict';
+  if (window.top !== window.self) return;
 
-const floatCard = document.createElement('div');
-floatCard.id = 'jiyu-edge-panel';
-floatCard.innerHTML = \`
-    <div style="position:fixed;bottom:20px;right:20px;z-index:999999;background:rgba(255,255,255,0.95);border:2px solid #FF799C;border-radius:16px;padding:12px 16px;box-shadow:0 8px 24px rgba(255,121,156,0.3);font-family:sans-serif;color:#555;font-size:12px;">
-        <div style="font-weight:bold;color:#FF799C;margin-bottom:6px;display:flex;justify-content:space-between;align-items:center;">
-            <span>💗 极禹刷啵 Edge助手</span>
-            <span id="jiyu-mini-close" style="cursor:pointer;color:#999;">✕</span>
-        </div>
-        <div style="font-size:11px;color:#888;margin-bottom:8px;">原生登录态运行中</div>
-        <button id="jiyu-quick-click" style="width:100%;padding:6px;border:none;border-radius:20px;background:linear-gradient(to right, #FF799C, #FF9EBA);color:white;font-weight:bold;cursor:pointer;">
-            发送当前视频有效心跳
-        </button>
-        <div id="jiyu-panel-msg" style="margin-top:6px;font-size:10px;color:#FF799C;"></div>
-    </div>
-\`;
-document.body.appendChild(floatCard);
-
-document.getElementById('jiyu-mini-close').onclick = () => {
-    floatCard.style.display = 'none';
-};
-
-document.getElementById('jiyu-quick-click').onclick = async () => {
-    const msg = document.getElementById('jiyu-panel-msg');
-    msg.innerText = '正在发送原生心跳...';
-    try {
-        const bvid = window.location.pathname.split('/video/')[1]?.split('/')[0] || '';
-        const aid = window.__INITIAL_STATE__?.aid || '';
-        const cid = window.__INITIAL_STATE__?.cid || '';
-        
-        const params = new URLSearchParams({
-            aid: aid,
-            cid: cid,
-            bvid: bvid,
-            part: '1',
-            type: '1',
-            sub_type: '0'
-        });
-        
-        await fetch('https://api.bilibili.com/x/click-interface/click/web/h5', {
-            method: 'POST',
-            credentials: 'include',
-            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-            body: params
-        });
-        msg.innerText = '✅ 原生心跳发送成功！';
-    } catch(e) {
-        msg.innerText = '❌ 发送异常：' + e.message;
+  const style = document.createElement('style');
+  style.innerHTML = \`
+    #jiyu-edge-panel {
+      position: fixed;
+      bottom: 25px;
+      right: 25px;
+      width: 320px;
+      background: rgba(255, 255, 255, 0.96);
+      backdrop-filter: blur(12px);
+      border: 3px solid #FFCCDD;
+      border-radius: 20px;
+      box-shadow: 0 12px 35px rgba(255, 121, 156, 0.35);
+      z-index: 99999999;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      padding: 16px;
+      box-sizing: border-box;
     }
-};
+  \`;
+  document.head.appendChild(style);
+
+  const panel = document.createElement('div');
+  panel.id = 'jiyu-edge-panel';
+  panel.innerHTML = \`
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
+      <h3 style="margin:0;color:#FF799C;font-size:14px;font-weight:900;">⭐️极禹刷啵 - B站原生助手⭐️</h3>
+      <span id="jiyu-close" style="cursor:pointer;color:#bbb;font-size:16px;">✖</span>
+    </div>
+    <div style="background:#FFF0F4;border:1px dashed #FF799C;border-radius:10px;padding:8px;font-size:11px;color:#D6456D;margin-bottom:8px;">
+      🌸 <strong>原生扩展挂载成功！</strong><br>可在当前 B 站标签页原生直连观看。
+    </div>
+    <div style="display:flex;gap:6px;">
+      <input type="text" id="jiyu-input" placeholder="输入 BV 号快速跳转..." style="flex:1;padding:6px 10px;border:1px solid #FFE6EE;border-radius:8px;font-size:12px;outline:none;" />
+      <button type="button" id="jiyu-go" style="padding:6px 12px;border:none;border-radius:8px;background:#FF799C;color:white;font-weight:bold;cursor:pointer;">打开</button>
+    </div>
+  \`;
+  document.body.appendChild(panel);
+
+  document.getElementById('jiyu-close').onclick = () => { panel.style.display = 'none'; };
+  document.getElementById('jiyu-go').onclick = () => {
+    const val = document.getElementById('jiyu-input').value.trim();
+    const m = val.match(/BV[1-9A-HJ-NP-Za-km-z]{10}/);
+    if (m) window.location.href = 'https://www.bilibili.com/video/' + m[0];
+    else alert('请输入正确的 BV 号');
+  };
+})();
 `;
 
-        el.dlManifest.addEventListener('click', () => {
-            downloadFile('manifest.json', MANIFEST_CONTENT);
-        });
+        // 綁定擴充下載事件
+        document.getElementById('btn-dl-manifest').onclick = () => {
+            downloadFile('manifest.json', MANIFEST_CONTENT, 'application/json;charset=utf-8');
+        };
 
-        el.dlContent.addEventListener('click', () => {
-            downloadFile('content.js', CONTENT_JS_CONTENT);
-        });
-
-        log(`💞 极禹刷啵 ⭐️#${currentSessionId} 已就绪`);
+        document.getElementById('btn-dl-content').onclick = () => {
+            downloadFile('content.js', CONTENT_JS_CONTENT, 'application/javascript;charset=utf-8');
+        };
     </script>
 </body>
 
