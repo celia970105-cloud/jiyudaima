@@ -227,17 +227,23 @@
         </div>
 
         <div class="multi-tip">
-            ✨ <strong>官方播放器已就绪</strong>：采用防盗链隔离技术，已解决移动端与外链失效问题。点击播放即可直接观赏，也可一键前往 B 站主站三连应援！
+            ✨ <strong>官方播放器已就绪</strong>：采用防盗链隔离技术，已解决移动端与外链失效问题。在下方贴入您的 BV 号即可一键自动轮播！
         </div>
 
         <div class="card">
             <label for="bv-input">BV 号输入 (支持多个，每行一个)</label>
-            <textarea id="bv-input" placeholder="BV1xx..."></textarea>
+            <textarea id="bv-input" placeholder="BV1xx...&#10;BV2xx..."></textarea>
             <button id="load-btn" class="btn" style="margin-top: 10px;">更新播放列表</button>
         </div>
 
-        <!-- Short Video Reel Mode & Speed Controller -->
-        <div class="card" id="reel-card">
+        <!-- 空列表提示（未貼入影片前顯示） -->
+        <div class="card" id="empty-card" style="text-align: center; color: #888; font-size: 12px; padding: 24px 14px; border: 2px dashed #FFCCDD;">
+            🌸 <strong>暂无已载入的视频</strong><br>
+            <span style="font-size: 11px; color: #aaa; margin-top: 6px; display: inline-block;">请在上方输入 BV 号后点击「更新播放列表」即可开始观赏与轮播！</span>
+        </div>
+
+        <!-- 短影音自動輪播與倍速控制面板（載入影片後自動顯示） -->
+        <div class="card" id="reel-card" style="display: none;">
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
                 <span style="font-weight: 900; font-size: 13px; color: var(--primary-pink); display: flex; align-items: center; gap: 4px;">
                     ⚡ 🎬 短影音自動刷啵模式
@@ -247,7 +253,7 @@
                 </button>
             </div>
 
-            <!-- Duration Selector -->
+            <!-- 切換間隔秒數 -->
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; font-size: 12px;">
                 <span style="color: #666; font-size: 11px;">⏱️ 切換間隔：</span>
                 <div style="display: flex; gap: 4px;" id="duration-btns">
@@ -258,7 +264,7 @@
                 </div>
             </div>
 
-            <!-- Playback Speed Selector -->
+            <!-- 播放倍速 -->
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; font-size: 12px;">
                 <span style="color: #666; font-size: 11px;">⚡ 播放倍速：</span>
                 <div style="display: flex; gap: 4px;" id="speed-btns">
@@ -270,7 +276,7 @@
                 </div>
             </div>
 
-            <!-- Dynamic Countdown & Controls -->
+            <!-- 倒數計時與流暢進度條 -->
             <div style="background: #FFF9FA; border: 1px solid #FFE6EE; border-radius: 12px; padding: 10px; display: flex; flex-direction: column; gap: 8px;">
                 <div style="display: flex; justify-content: space-between; align-items: center; font-size: 11px;">
                     <span id="countdown-text" style="color: var(--primary-pink); font-weight: bold;">
@@ -286,7 +292,6 @@
                     </div>
                 </div>
 
-                <!-- Progress Bar -->
                 <div style="width: 100%; height: 6px; background: #FFE6EE; border-radius: 10px; overflow: hidden;">
                     <div id="countdown-bar" style="width: 0%; height: 100%; background: linear-gradient(90deg, #FF799C, #FFA2BD); border-radius: 10px; transition: width 0.3s ease;"></div>
                 </div>
@@ -298,13 +303,14 @@
             </div>
         </div>
 
-        <div class="card">
+        <!-- 播放器卡片與實時數據 -->
+        <div class="card" id="player-card" style="display: none;">
             <div style="font-size: 12px; font-weight: bold; color: #FF799C; margin-bottom: 8px;" id="current-title">正在载入...</div>
             <div class="player-wrapper">
                 <iframe id="video-frame" src="" allowfullscreen="true"></iframe>
             </div>
 
-            <!-- Real-time Stats Panel -->
+            <!-- 即時數據面板 -->
             <div class="stats-panel">
                 <div class="stat-item">
                     <span class="stat-name">👀 在線人數</span>
@@ -325,7 +331,8 @@
             </a>
         </div>
 
-        <div class="card">
+        <!-- 播放列表卡片 -->
+        <div class="card" id="playlist-card" style="display: none;">
             <div class="playlist-header">
                 <span>播放列表 (<span id="count">0</span>)</span>
                 <span style="font-size: 11px; color: #999;">点击切换</span>
@@ -335,7 +342,7 @@
     </div>
 
     <script>
-        let videos = ["BV1pbbj6bEXB"];
+        let videos = [];
         let activeIndex = 0;
         let autoSwitch = true;
         let duration = 30;
@@ -355,8 +362,17 @@
         const elBar = document.getElementById('countdown-bar');
         const elPauseBtn = document.getElementById('pause-btn');
         const elSkipBtn = document.getElementById('skip-btn');
+        const elEmptyCard = document.getElementById('empty-card');
+        const elReelCard = document.getElementById('reel-card');
+        const elPlayerCard = document.getElementById('player-card');
+        const elPlaylistCard = document.getElementById('playlist-card');
 
-        elInput.value = videos.join('\n');
+        function showAppUI() {
+            if (elEmptyCard) elEmptyCard.style.display = 'none';
+            if (elReelCard) elReelCard.style.display = 'block';
+            if (elPlayerCard) elPlayerCard.style.display = 'block';
+            if (elPlaylistCard) elPlaylistCard.style.display = 'block';
+        }
 
         function updateCountdownUI() {
             if (!elCountdown || !elBar) return;
@@ -488,7 +504,7 @@
                         elTitle.innerText = '當前播放：' + bvid + ' · ' + d.title.slice(0, 16);
                     }
 
-                    // fetch online count
+                    // 抓取即時線上人數
                     const cid = d.cid;
                     const cbOnline = 'bili_onl_' + Math.floor(Math.random() * 1000000);
                     const sOnline = document.createElement('script');
@@ -543,15 +559,17 @@
             const matches = raw.match(/BV[1-9A-HJ-NP-Za-km-z]{10}/g) || [];
             const unique = [...new Set(matches)];
             if (unique.length === 0) {
-                alert('未检测到有效的 BV 号');
+                alert('未检测到有效的 BV 号，请贴入正确的 BV 号（如 BV1xx...）');
                 return;
             }
             videos = unique;
+            showAppUI();
             activeIndex = 0;
             switchVideo(0);
         };
 
         if (videos.length > 0) {
+            showAppUI();
             switchVideo(0);
         }
 
