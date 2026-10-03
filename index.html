@@ -9,9 +9,8 @@
         :root {
             --primary-pink: #FF799C;
             --light-pink: #FFCCDD;
-            --soft-white: rgba(255, 255, 255, 0.95);
-            --star-color: #FFB3D1;
-            --text-dark: #555555;
+            --soft-white: rgba(255, 255, 255, 0.96);
+            --text-dark: #444444;
             --border-radius: 24px;
         }
         * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
@@ -54,7 +53,7 @@
             color: #888;
             font-size: 11px;
             background: rgba(255, 255, 255, 0.85);
-            padding: 3px 12px;
+            padding: 4px 14px;
             border-radius: 20px;
             display: block;
             margin: 4px auto 0 auto;
@@ -74,12 +73,12 @@
             background: white;
             border: 2px solid var(--light-pink);
             border-radius: 18px;
-            padding: 16px;
-            box-shadow: 0 4px 10px rgba(255, 204, 221, 0.2);
+            padding: 14px;
+            box-shadow: 0 4px 10px rgba(255, 204, 221, 0.15);
         }
         label {
             display: block;
-            margin-bottom: 6px;
+            margin-bottom: 8px;
             font-weight: bold;
             color: var(--primary-pink);
             font-size: 13px;
@@ -122,53 +121,6 @@
             width: 100%;
             height: 100%;
             border: none;
-        }
-        .stats-panel {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 8px;
-            margin-top: 10px;
-            background: #FFF7FA;
-            border: 1px solid #FFE4ED;
-            border-radius: 14px;
-            padding: 10px 8px;
-            text-align: center;
-        }
-        .stat-item {
-            background: rgba(255, 255, 255, 0.9);
-            border: 1px solid #FFEBF2;
-            border-radius: 10px;
-            padding: 6px 2px;
-            display: flex;
-            flex-direction: column;
-            gap: 2px;
-            box-shadow: 0 1px 3px rgba(255, 121, 156, 0.08);
-        }
-        .stat-name {
-            font-size: 10px;
-            color: #888;
-        }
-        .stat-val {
-            font-size: 12px;
-            font-weight: bold;
-            color: #333;
-        }
-        .stat-val.pink {
-            color: var(--primary-pink);
-        }
-        .stats-footer {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            font-size: 10px;
-            color: #aaa;
-            margin-top: 6px;
-            padding: 0 4px;
-        }
-        .refresh-btn {
-            color: var(--primary-pink);
-            cursor: pointer;
-            font-weight: 500;
         }
         .playlist-header {
             font-weight: bold;
@@ -215,6 +167,56 @@
             text-decoration: none;
             border: 1px solid #FFCCD9;
         }
+        .stats-panel {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 8px;
+            margin-top: 10px;
+            background: #FFF7FA;
+            border: 1px solid #FFE4ED;
+            border-radius: 14px;
+            padding: 10px 8px;
+            text-align: center;
+        }
+        .stat-item {
+            background: rgba(255, 255, 255, 0.9);
+            border: 1px solid #FFEBF2;
+            border-radius: 10px;
+            padding: 6px 2px;
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+            box-shadow: 0 1px 3px rgba(255, 121, 156, 0.08);
+        }
+        .stat-name {
+            font-size: 10px;
+            color: #888;
+        }
+        .stat-val {
+            font-size: 12px;
+            font-weight: bold;
+            color: #333;
+        }
+        .stat-val.pink {
+            color: var(--primary-pink);
+        }
+        .dur-btn, .spd-btn {
+            padding: 4px 8px;
+            border-radius: 8px;
+            font-size: 11px;
+            font-weight: 600;
+            border: 1px solid #FFCCD9;
+            background: #FFF0F4;
+            color: #D6456D;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .dur-btn.active, .spd-btn.active {
+            background: var(--primary-pink);
+            color: white;
+            border-color: var(--primary-pink);
+            box-shadow: 0 2px 6px rgba(255, 121, 156, 0.3);
+        }
     </style>
 </head>
 <body>
@@ -225,22 +227,84 @@
         </div>
 
         <div class="multi-tip">
-            ✨ <strong>官方播放器已就緒</strong>：已加入防盜鏈隔離技術，徹底解決手機端與外鏈網頁顯示「視頻可能由於原因無法正常播放」的問題。
+            ✨ <strong>官方播放器已就绪</strong>：采用防盗链隔离技术，已解决移动端与外链失效问题。点击播放即可直接观赏，也可一键前往 B 站主站三连应援！
         </div>
 
         <div class="card">
-            <label for="bv-input">BV 號輸入 (支持多個，每行一個)</label>
+            <label for="bv-input">BV 号输入 (支持多个，每行一个)</label>
             <textarea id="bv-input" placeholder="BV1xx..."></textarea>
-            <button id="load-btn" class="btn" style="margin-top: 10px;">載入播放列表</button>
+            <button id="load-btn" class="btn" style="margin-top: 10px;">更新播放列表</button>
+        </div>
+
+        <!-- Short Video Reel Mode & Speed Controller -->
+        <div class="card" id="reel-card">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                <span style="font-weight: 900; font-size: 13px; color: var(--primary-pink); display: flex; align-items: center; gap: 4px;">
+                    ⚡ 🎬 短影音自動刷啵模式
+                </span>
+                <button id="toggle-auto-btn" style="padding: 4px 10px; border-radius: 20px; font-size: 11px; font-weight: bold; cursor: pointer; border: 1px solid #A7F3D0; background: #ECFDF5; color: #059669;">
+                    ● 自動輪播中
+                </button>
+            </div>
+
+            <!-- Duration Selector -->
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; font-size: 12px;">
+                <span style="color: #666; font-size: 11px;">⏱️ 切換間隔：</span>
+                <div style="display: flex; gap: 4px;" id="duration-btns">
+                    <button class="dur-btn" data-sec="15">15秒</button>
+                    <button class="dur-btn active" data-sec="30">30秒</button>
+                    <button class="dur-btn" data-sec="45">45秒</button>
+                    <button class="dur-btn" data-sec="60">60秒</button>
+                </div>
+            </div>
+
+            <!-- Playback Speed Selector -->
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; font-size: 12px;">
+                <span style="color: #666; font-size: 11px;">⚡ 播放倍速：</span>
+                <div style="display: flex; gap: 4px;" id="speed-btns">
+                    <button class="spd-btn" data-spd="1.0">1.0x</button>
+                    <button class="spd-btn" data-spd="1.25">1.25x</button>
+                    <button class="spd-btn" data-spd="1.5">1.5x</button>
+                    <button class="spd-btn active" data-spd="2.0">2.0x 推薦</button>
+                    <button class="spd-btn" data-spd="3.0">3.0x 極速</button>
+                </div>
+            </div>
+
+            <!-- Dynamic Countdown & Controls -->
+            <div style="background: #FFF9FA; border: 1px solid #FFE6EE; border-radius: 12px; padding: 10px; display: flex; flex-direction: column; gap: 8px;">
+                <div style="display: flex; justify-content: space-between; align-items: center; font-size: 11px;">
+                    <span id="countdown-text" style="color: var(--primary-pink); font-weight: bold;">
+                        ⏳ 剩餘 30 秒自動切換下一個 (1/1)
+                    </span>
+                    <div style="display: flex; gap: 6px;">
+                        <button id="pause-btn" style="background: none; border: 1px solid #FFCCD9; border-radius: 6px; padding: 2px 8px; font-size: 10px; color: var(--primary-pink); font-weight: bold; cursor: pointer;">
+                            ⏸ 暫停
+                        </button>
+                        <button id="skip-btn" style="background: #FFF0F4; border: 1px solid #FFCCD9; border-radius: 6px; padding: 2px 8px; font-size: 10px; color: var(--primary-pink); font-weight: bold; cursor: pointer;">
+                            ⏭ 跳過
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Progress Bar -->
+                <div style="width: 100%; height: 6px; background: #FFE6EE; border-radius: 10px; overflow: hidden;">
+                    <div id="countdown-bar" style="width: 0%; height: 100%; background: linear-gradient(90deg, #FF799C, #FFA2BD); border-radius: 10px; transition: width 0.3s ease;"></div>
+                </div>
+
+                <div style="display: flex; justify-content: space-between; font-size: 10px; color: #999;">
+                    <span>💡 官方播放器內建最高 2x，可於右下角選取</span>
+                    <span style="color: var(--primary-pink); font-weight: 500;">🔁 列表自動無限循環</span>
+                </div>
+            </div>
         </div>
 
         <div class="card">
-            <div style="font-size: 12px; font-weight: bold; color: #FF799C; margin-bottom: 8px;" id="current-title">正在載入...</div>
+            <div style="font-size: 12px; font-weight: bold; color: #FF799C; margin-bottom: 8px;" id="current-title">正在载入...</div>
             <div class="player-wrapper">
                 <iframe id="video-frame" src="" allowfullscreen="true"></iframe>
             </div>
 
-            <!-- 實時數據監測面板 -->
+            <!-- Real-time Stats Panel -->
             <div class="stats-panel">
                 <div class="stat-item">
                     <span class="stat-name">👀 在線人數</span>
@@ -255,28 +319,29 @@
                     <span class="stat-val" id="stat-like">--</span>
                 </div>
             </div>
-            <div class="stats-footer">
-                <span>🟢 數據實時同步 (每 30 秒)</span>
-                <span class="refresh-btn" id="refresh-stat-btn">🔄 點擊刷新</span>
-            </div>
 
             <a id="bili-link" class="open-link" style="margin-top: 10px;" href="#" target="_blank" rel="noopener noreferrer">
-                🚀 打開 B 站主站觀賞 / 投幣點贊
+                🚀 打开 B 站主站观赏 / 投币点赞
             </a>
         </div>
 
         <div class="card">
             <div class="playlist-header">
                 <span>播放列表 (<span id="count">0</span>)</span>
-                <span style="font-size: 11px; color: #999;">點擊切換</span>
+                <span style="font-size: 11px; color: #999;">点击切换</span>
             </div>
             <div class="playlist-list" id="playlist-box"></div>
         </div>
     </div>
 
     <script>
-        let videos = [];
+        let videos = ["BV1pbbj6bEXB"];
         let activeIndex = 0;
+        let autoSwitch = true;
+        let duration = 30;
+        let countdown = 30;
+        let isPaused = false;
+        let speed = 2.0;
 
         const elInput = document.getElementById('bv-input');
         const elLoad = document.getElementById('load-btn');
@@ -285,7 +350,112 @@
         const elBiliLink = document.getElementById('bili-link');
         const elBox = document.getElementById('playlist-box');
         const elCount = document.getElementById('count');
-        const elRefresh = document.getElementById('refresh-stat-btn');
+        const elToggleAuto = document.getElementById('toggle-auto-btn');
+        const elCountdown = document.getElementById('countdown-text');
+        const elBar = document.getElementById('countdown-bar');
+        const elPauseBtn = document.getElementById('pause-btn');
+        const elSkipBtn = document.getElementById('skip-btn');
+
+        elInput.value = videos.join('\n');
+
+        function updateCountdownUI() {
+            if (!elCountdown || !elBar) return;
+            const currentTotal = videos.length || 1;
+            if (!autoSwitch) {
+                elCountdown.innerText = '⏸️ 自動輪播已停用';
+                elBar.style.width = '0%';
+                if (elToggleAuto) {
+                    elToggleAuto.innerText = '○ 已關閉輪播';
+                    elToggleAuto.style.background = '#F3F4F6';
+                    elToggleAuto.style.color = '#6B7280';
+                    elToggleAuto.style.borderColor = '#E5E7EB';
+                }
+                return;
+            }
+
+            if (elToggleAuto) {
+                elToggleAuto.innerText = '● 自動輪播中';
+                elToggleAuto.style.background = '#ECFDF5';
+                elToggleAuto.style.color = '#059669';
+                elToggleAuto.style.borderColor = '#A7F3D0';
+            }
+
+            if (isPaused) {
+                elCountdown.innerText = '⏸️ 已暫停倒數 · 剩餘 ' + countdown + ' 秒 (' + (activeIndex + 1) + '/' + currentTotal + ')';
+                if (elPauseBtn) elPauseBtn.innerText = '▶ 繼續';
+            } else {
+                elCountdown.innerText = '⏳ 剩餘 ' + countdown + ' 秒切換下一個 (' + (activeIndex + 1) + '/' + currentTotal + ')';
+                if (elPauseBtn) elPauseBtn.innerText = '⏸ 暫停';
+            }
+
+            const percent = Math.min(100, Math.max(0, ((duration - countdown) / duration) * 100));
+            elBar.style.width = percent + '%';
+        }
+
+        setInterval(function() {
+            if (!autoSwitch || isPaused || videos.length <= 1) return;
+            countdown--;
+            if (countdown <= 0) {
+                countdown = duration;
+                switchVideo((activeIndex + 1) % videos.length);
+            }
+            updateCountdownUI();
+        }, 1000);
+
+        if (elToggleAuto) {
+            elToggleAuto.onclick = function() {
+                autoSwitch = !autoSwitch;
+                if (autoSwitch) {
+                    countdown = duration;
+                    isPaused = false;
+                }
+                updateCountdownUI();
+            };
+        }
+
+        if (elPauseBtn) {
+            elPauseBtn.onclick = function() {
+                isPaused = !isPaused;
+                updateCountdownUI();
+            };
+        }
+
+        if (elSkipBtn) {
+            elSkipBtn.onclick = function() {
+                countdown = duration;
+                switchVideo((activeIndex + 1) % (videos.length || 1));
+            };
+        }
+
+        document.querySelectorAll('.dur-btn').forEach(btn => {
+            btn.onclick = function() {
+                document.querySelectorAll('.dur-btn').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                duration = parseInt(btn.dataset.sec, 10);
+                countdown = duration;
+                updateCountdownUI();
+            };
+        });
+
+        document.querySelectorAll('.spd-btn').forEach(btn => {
+            btn.onclick = function() {
+                document.querySelectorAll('.spd-btn').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                speed = parseFloat(btn.dataset.spd);
+            };
+        });
+
+        function renderList() {
+            elBox.innerHTML = '';
+            elCount.innerText = videos.length;
+            videos.forEach((bv, idx) => {
+                const item = document.createElement('div');
+                item.className = 'playlist-item ' + (idx === activeIndex ? 'active' : '');
+                item.innerHTML = '<span>' + (idx + 1) + '. ' + bv + '</span><span>' + (idx === activeIndex ? '▶ 正在播放' : '點擊觀看') + '</span>';
+                item.onclick = () => switchVideo(idx);
+                elBox.appendChild(item);
+            });
+        }
 
         function formatNum(n) {
             if (n === undefined || n === null) return '--';
@@ -318,7 +488,7 @@
                         elTitle.innerText = '當前播放：' + bvid + ' · ' + d.title.slice(0, 16);
                     }
 
-                    // 查詢當前在線人數
+                    // fetch online count
                     const cid = d.cid;
                     const cbOnline = 'bili_onl_' + Math.floor(Math.random() * 1000000);
                     const sOnline = document.createElement('script');
@@ -355,25 +525,15 @@
             document.body.appendChild(script);
         }
 
-        function renderList() {
-            elBox.innerHTML = '';
-            elCount.innerText = videos.length;
-            videos.forEach((bv, idx) => {
-                const item = document.createElement('div');
-                item.className = 'playlist-item ' + (idx === activeIndex ? 'active' : '');
-                item.innerHTML = '<span>' + (idx + 1) + '. ' + bv + '</span><span>' + (idx === activeIndex ? '▶ 正在播放' : '點擊觀看') + '</span>';
-                item.onclick = () => switchVideo(idx);
-                elBox.appendChild(item);
-            });
-        }
-
         function switchVideo(idx) {
             if (!videos[idx]) return;
             activeIndex = idx;
             const bv = videos[idx];
             elFrame.src = 'https://player.bilibili.com/player.html?bvid=' + bv + '&page=1&autoplay=0';
-            elTitle.innerText = '當前播放：' + bv;
+            elTitle.innerText = '当前播放：' + bv;
             elBiliLink.href = 'https://www.bilibili.com/video/' + bv;
+            countdown = duration;
+            updateCountdownUI();
             fetchLiveStats(bv);
             renderList();
         }
@@ -383,7 +543,7 @@
             const matches = raw.match(/BV[1-9A-HJ-NP-Za-km-z]{10}/g) || [];
             const unique = [...new Set(matches)];
             if (unique.length === 0) {
-                alert('未檢測到有效的 BV 號');
+                alert('未检测到有效的 BV 号');
                 return;
             }
             videos = unique;
@@ -391,15 +551,11 @@
             switchVideo(0);
         };
 
-        if (elRefresh) {
-            elRefresh.onclick = () => {
-                if (videos[activeIndex]) {
-                    fetchLiveStats(videos[activeIndex]);
-                }
-            };
+        if (videos.length > 0) {
+            switchVideo(0);
         }
 
-        setInterval(() => {
+        setInterval(function() {
             if (videos[activeIndex]) {
                 fetchLiveStats(videos[activeIndex]);
             }
