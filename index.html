@@ -4,14 +4,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <meta name="referrer" content="no-referrer">
-    <title>⭐️极禹刷啵⭐️</title>
+    <title>⭐️极禹刷啵 - B站多窗真实同播与计数器⭐️</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
     <style>
         :root {
             --primary-pink: #FF799C;
             --light-pink: #FFCCDD;
             --soft-white: rgba(255, 255, 255, 0.96);
-            --text-dark: #444444;
+            --text-dark: #333333;
             --border-radius: 24px;
         }
         * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
@@ -30,761 +30,353 @@
             background: var(--soft-white);
             backdrop-filter: blur(10px);
             width: 100%;
-            max-width: 440px;
-            padding: 20px;
+            max-width: 960px;
+            padding: 24px 20px;
             border-radius: var(--border-radius);
             box-shadow: 0 15px 35px rgba(255, 121, 156, 0.25);
             display: flex;
             flex-direction: column;
-            gap: 14px;
+            gap: 18px;
             border: 4px solid white;
         }
         h1 {
-            font-size: 24px;
+            font-size: 26px;
             text-align: center;
             color: var(--primary-pink);
             font-weight: 900;
-        }
-        #mode-tag {
-            text-align: center;
-            color: #888;
-            font-size: 11px;
-            font-style: italic;
-            background: rgba(255, 255, 255, 0.9);
-            padding: 2px 10px;
-            border-radius: 20px;
-            display: block;
-            margin: 4px auto 8px auto;
-            width: fit-content;
-            border: 1px solid #FFE6EE;
-        }
-        .card {
-            background: white;
-            border: 2px solid #FFCCDD;
-            border-radius: 18px;
-            padding: 14px;
-            box-shadow: 0 4px 10px rgba(255, 204, 221, 0.2);
-        }
-        .player-wrapper {
-            position: relative;
-            width: 100%;
-            padding-bottom: 56.25%;
-            height: 0;
-            border-radius: 12px;
-            overflow: hidden;
-            background: #000;
-            box-shadow: inset 0 0 10px rgba(0,0,0,0.5);
-        }
-        .player-wrapper iframe {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            border: 0;
-        }
-        .open-link {
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 6px;
-            width: 100%;
-            padding: 10px;
-            background: #FFF0F4;
-            color: var(--primary-pink);
-            text-decoration: none;
-            border-radius: 50px;
-            font-size: 12px;
-            font-weight: bold;
-            border: 1px solid #FFCCD9;
-            transition: all 0.2s;
+            gap: 8px;
         }
-        .open-link:hover {
-            background: #FFE4EC;
-        }
-        .playlist-header {
+        .count-dashboard {
+            background: linear-gradient(135deg, #FFF0F4 0%, #FFE6EE 100%);
+            border: 2px solid #FFCCD9;
+            border-radius: 20px;
+            padding: 16px;
             display: flex;
-            justify-content: space-between;
+            flex-wrap: wrap;
+            justify-content: space-around;
             align-items: center;
-            font-size: 12px;
-            font-weight: bold;
-            color: var(--primary-pink);
-            margin-bottom: 8px;
+            gap: 12px;
+            box-shadow: 0 4px 15px rgba(255, 121, 156, 0.15);
         }
-        .playlist-list {
-            display: flex;
-            flex-direction: column;
-            gap: 6px;
-            max-height: 160px;
-            overflow-y: auto;
-        }
-        .playlist-item {
-            padding: 8px 12px;
-            border-radius: 10px;
-            font-size: 11px;
-            background: #FFFDFC;
-            border: 1px solid #FFE6EE;
-            cursor: pointer;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        .playlist-item.active {
-            background: #FFF0F4;
-            border-color: var(--primary-pink);
-            color: var(--primary-pink);
-            font-weight: bold;
-        }
-        .stats-panel {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 6px;
-            background: #FFF7FA;
-            border: 1px solid #FFE4ED;
-            border-radius: 12px;
-            padding: 8px;
-            margin-top: 10px;
+        .dash-item {
             text-align: center;
         }
-        .stat-item {
-            background: rgba(255, 255, 255, 0.9);
-            border: 1px solid #FFEBF2;
-            border-radius: 8px;
-            padding: 6px 2px;
-        }
-        .stat-name {
-            font-size: 10px;
+        .dash-title {
+            font-size: 11px;
             color: #888;
-            display: block;
+            font-weight: bold;
             margin-bottom: 2px;
         }
-        .stat-val {
-            font-size: 11px;
-            font-weight: bold;
-            color: #333;
-        }
-        .stat-val.pink {
+        .dash-value {
+            font-size: 22px;
+            font-weight: 900;
             color: var(--primary-pink);
+            font-family: monospace;
         }
-        .dur-btn, .spd-btn {
-            padding: 4px 8px;
-            border-radius: 8px;
-            font-size: 11px;
-            font-weight: 600;
-            border: 1px solid #FFCCD9;
+        .card {
             background: white;
-            color: #666;
-            cursor: pointer;
-            transition: all 0.2s;
+            border: 2px solid var(--light-pink);
+            border-radius: 18px;
+            padding: 16px;
+            box-shadow: 0 4px 10px rgba(255, 204, 221, 0.15);
         }
-        .dur-btn.active, .spd-btn.active {
-            background: var(--primary-pink);
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+            color: var(--primary-pink);
+            font-size: 13px;
+        }
+        textarea {
+            width: 100%;
+            height: 70px;
+            padding: 10px;
+            border: 2px solid #FFE6EE;
+            border-radius: 14px;
+            font-size: 13px;
+            background: #FFF9FA;
+            outline: none;
+            resize: none;
+            font-family: monospace;
+        }
+        textarea:focus { border-color: var(--primary-pink); background: white; }
+        .btn-main {
+            width: 100%;
+            padding: 12px;
+            border: none;
+            border-radius: 50px;
+            font-size: 14px;
+            font-weight: bold;
             color: white;
-            border-color: var(--primary-pink);
-            box-shadow: 0 2px 6px rgba(255, 121, 156, 0.3);
+            cursor: pointer;
+            background: linear-gradient(to right, #FF799C, #FF9EBA);
+            box-shadow: 0 4px 15px rgba(255, 121, 156, 0.35);
+        }
+        .video-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 16px;
+        }
+        .video-card {
+            background: white;
+            border: 2px solid #FFCCD9;
+            border-radius: 16px;
+            padding: 12px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            box-shadow: 0 4px 12px rgba(255, 204, 221, 0.2);
+            transition: all 0.3s;
+        }
+        .player-wrapper {
+            width: 100%;
+            border-radius: 12px;
+            overflow: hidden;
+            background: #000;
+            aspect-ratio: 16 / 9;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            position: relative;
+        }
+        iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+        .badge-count {
+            background: #9CA3AF;
+            color: white;
+            padding: 3px 8px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 900;
+            transition: background 0.3s;
+        }
+        .tip-box {
+            background: #FFF0F4;
+            border: 1px dashed var(--primary-pink);
+            border-radius: 12px;
+            padding: 10px 12px;
+            font-size: 11px;
+            color: #D6456D;
+            line-height: 1.5;
         }
     </style>
 </head>
 <body>
     <div class="container">
         <div>
-            <h1>⭐️极禹刷啵⭐️</h1>
-            <p id="mode-tag">EDGE & Safari 兼容版</p>
-        </div>
-
-        <div class="card">
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
-                <label for="bv-input" style="font-weight: bold; color: var(--primary-pink); font-size: 13px;">
-                    BV 号输入 (支持多个，每行一个)
-                </label>
-            </div>
-            <textarea id="bv-input" style="width: 100%; height: 75px; padding: 10px; border: 2px solid #FFE6EE; border-radius: 12px; font-size: 12px; background: #FFF9FA; outline: none; resize: none; font-family: monospace;" placeholder="请贴入 BV 号（例如：BV1pbbj6bEXB）&#10;支持贴入多行"></textarea>
-            <button id="load-btn" style="width: 100%; margin-top: 8px; padding: 10px; border-radius: 50px; border: none; background: linear-gradient(135deg, #FF799C, #FFA2BD); color: white; font-weight: bold; font-size: 13px; cursor: pointer; box-shadow: 0 4px 12px rgba(255, 121, 156, 0.3);">
-                载入并刷新播放列表
-            </button>
-        </div>
-
-        <!-- 初始無影片提示卡片 -->
-        <div id="empty-card" class="card" style="text-align: center; color: #999; font-size: 12px; padding: 24px; border: 2px dashed #FFCCDD;">
-            🌸 暂无已载入的视频，请在上方贴入 BV 号后点击「载入并刷新播放列表」
-        </div>
-
-        <!-- Short Video Reel Mode & Speed Controller Card -->
-        <div class="card" id="reel-card" style="display: none; background: #FFFDFC;">
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; padding-bottom: 6px; border-bottom: 1px dashed #FFE6EE;">
-                <div style="font-weight: bold; color: var(--primary-pink); font-size: 12px; display: flex; align-items: center; gap: 4px;">
-                    <span>⚡ 短影音輪播 & 倍速</span>
-                </div>
-                <button id="toggle-auto-btn" style="padding: 2px 8px; border-radius: 20px; font-size: 11px; font-weight: bold; cursor: pointer; border: 1px solid #A7F3D0; background: #ECFDF5; color: #059669;">
-                    ● 自動輪播中
-                </button>
-            </div>
-
-            <div style="display: flex; flex-direction: column; gap: 10px;">
-                <!-- Duration Selector -->
-                <div style="display: flex; align-items: center; justify-content: space-between;">
-                    <span style="font-size: 11px; color: #666; font-weight: 500;">⏱ 每首輪播間隔：</span>
-                    <div style="display: flex; gap: 4px;">
-                        <button class="dur-btn" data-sec="15">15s</button>
-                        <button class="dur-btn active" data-sec="30">30s</button>
-                        <button class="dur-btn" data-sec="45">45s</button>
-                        <button class="dur-btn" data-sec="60">60s</button>
-                    </div>
-                </div>
-
-                <!-- Playback Speed -->
-                <div style="display: flex; align-items: center; justify-content: space-between;">
-                    <span style="font-size: 11px; color: #666; font-weight: 500;">⚡ 原生推薦倍速：</span>
-                    <div style="display: flex; gap: 4px;">
-                        <button class="spd-btn" data-spd="1.0">1.0x</button>
-                        <button class="spd-btn" data-spd="1.5">1.5x</button>
-                        <button class="spd-btn active" data-spd="2.0">2.0x 推薦</button>
-                        <button class="spd-btn" data-spd="3.0">3.0x</button>
-                    </div>
-                </div>
-
-                <!-- Progress & Action Bar -->
-                <div style="display: flex; justify-content: space-between; align-items: center; font-size: 11px;">
-                    <span id="countdown-text" style="color: var(--primary-pink); font-weight: bold;">
-                        ⏳ 剩餘 30 秒自動切換下一個 (1/1)
-                    </span>
-                    <div style="display: flex; gap: 6px;">
-                        <button id="pause-btn" style="background: none; border: 1px solid #FFCCD9; border-radius: 6px; padding: 2px 8px; font-size: 10px; color: var(--primary-pink); font-weight: bold; cursor: pointer;">
-                            ⏸ 暫停
-                        </button>
-                        <button id="skip-btn" style="background: #FFF0F4; border: 1px solid #FFCCD9; border-radius: 6px; padding: 2px 8px; font-size: 10px; color: var(--primary-pink); font-weight: bold; cursor: pointer;">
-                            ⏭ 跳過
-                        </button>
-                    </div>
-                </div>
-
-                <!-- Progress Bar -->
-                <div style="width: 100%; height: 6px; background: #FFE6EE; border-radius: 10px; overflow: hidden;">
-                    <div id="countdown-bar" style="width: 0%; height: 100%; background: linear-gradient(90deg, #FF799C, #FFA2BD); border-radius: 10px; transition: width 0.3s ease;"></div>
-                </div>
-
-                <div style="display: flex; justify-content: space-between; font-size: 10px; color: #999;">
-                    <span>💡 官方播放器內建最高 2x，可於右下角選取</span>
-                    <span style="color: var(--primary-pink); font-weight: 500;">🔁 列表自動無限循環</span>
-                </div>
-            </div>
-        </div>
-
-        <div class="card" id="player-card" style="display: none;">
-            <div style="font-size: 12px; font-weight: bold; color: #FF799C; margin-bottom: 8px;" id="current-title">正在载入...</div>
-            <div class="player-wrapper">
-                <iframe id="video-frame" src="" allowfullscreen="true" allow="autoplay; fullscreen; picture-in-picture; encrypted-media"></iframe>
-            </div>
-
-            <!-- Real-time Playback Status & Audio Control -->
-            <div style="display: flex; justify-content: space-between; align-items: center; background: #FFF5F8; border: 1px solid #FFCCD9; border-radius: 10px; padding: 6px 10px; margin-top: 8px; font-size: 11px;">
-                <div style="display: flex; align-items: center; gap: 6px; color: #059669; font-weight: bold;">
-                    <span style="display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: #10B981;"></span>
-                    <span id="play-status-text">官方播放器真實連播中</span>
-                </div>
-                <div style="display: flex; align-items: center; gap: 8px;">
-                    <button id="toggle-mute-btn" style="background: white; border: 1px solid #FFCCD9; border-radius: 8px; padding: 3px 8px; font-size: 10px; color: var(--primary-pink); font-weight: bold; cursor: pointer;">
-                        🔇 靜音模式 (極速連播)
-                    </button>
-                    <span style="font-size: 10px; color: #D6456D; background: rgba(255, 121, 156, 0.15); padding: 2px 6px; border-radius: 12px; font-weight: bold;">
-                        上報: <span id="report-count">0</span> 次
-                    </span>
-                </div>
-            </div>
-
-            <!-- Real-time Stats Panel -->
-            <div class="stats-panel">
-                <div class="stat-item">
-                    <span class="stat-name">👀 在線人數</span>
-                    <span class="stat-val pink" id="stat-online">--</span>
-                </div>
-                <div class="stat-item">
-                    <span class="stat-name">▶ 實時播放</span>
-                    <span class="stat-val" id="stat-view">--</span>
-                </div>
-                <div class="stat-item">
-                    <span class="stat-name">👍 點贊數</span>
-                    <span class="stat-val" id="stat-like">--</span>
-                </div>
-            </div>
-
-            <div id="stats-notice" style="display: none; margin-top: 8px; font-size: 10px; color: #B45309; background: #FFFBEB; border: 1px dashed #FCD34D; border-radius: 8px; padding: 6px 8px; line-height: 1.4;">
-                💡 <strong>數據說明：</strong> B 站官方對外部非同源靜態網頁（如 GitHub Pages）實施防盜鏈阻擋（CORS/CORB）。安裝下方【Edge 擴展】在 B 站本站原生運行即可無限制讀取，或點擊下方按鈕直達 B 站官網查看實時數據！
-            </div>
-
-            <a id="bili-link" class="open-link" style="margin-top: 10px;" href="#" target="_blank" rel="noopener noreferrer">
-                🚀 打开 B 站主站观赏 / 投币点赞
-            </a>
-        </div>
-
-        <div class="card" id="playlist-card" style="display: none;">
-            <div class="playlist-header">
-                <span>播放列表 (<span id="count">0</span>)</span>
-                <span style="font-size: 11px; color: #999;">点击切换</span>
-            </div>
-            <div class="playlist-list" id="playlist-box"></div>
-        </div>
-
-        <!-- Edge 浏览器原生扩展（下载包） -->
-        <div class="card" id="extension-card">
-            <div style="font-size: 13px; font-weight: bold; color: #333; margin-bottom: 6px; display: flex; align-items: center; gap: 6px;">
-                <span>🖥️</span>
-                <span>Edge 浏览器原生扩展（下载包）</span>
-            </div>
-            <p style="font-size: 11px; color: #666; margin-bottom: 10px; line-height: 1.4;">
-                突破外部防盗链限制，在 B 站本站原生运行，直接读取官方实时数据，支持 1.25x~16x 极速调整：
+            <h1>⭐️极禹刷啵 - B站多窗真实同播与计数器⭐️</h1>
+            <p style="text-align:center;font-size:12px;color:#888;margin-top:4px;">
+                真实多窗视频渲染 · 正常连续观影 · 本机页面计时 · 跨域安全隔离
             </p>
+        </div>
 
-            <div style="display: flex; flex-direction: column; gap: 8px;">
-                <button id="btn-dl-zip" style="width: 100%; padding: 11px; border-radius: 12px; border: none; background: linear-gradient(135deg, #FF799C, #FFA2BD); color: white; font-weight: bold; font-size: 12px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 6px; box-shadow: 0 4px 10px rgba(255, 121, 156, 0.25);">
-                    <span>📦 一键下载扩展完整包 (.zip)</span>
-                </button>
-                <div style="display: flex; gap: 8px;">
-                    <button id="btn-dl-manifest" style="flex: 1; padding: 8px 6px; border-radius: 10px; border: 1px solid #FFCCD9; background: #FFF0F4; color: #FF799C; font-weight: bold; font-size: 11px; cursor: pointer;">
-                        📥 下载 manifest.json
-                    </button>
-                    <button id="btn-dl-content" style="flex: 1; padding: 8px 6px; border-radius: 10px; border: 1px solid #FFCCD9; background: #FFF0F4; color: #FF799C; font-weight: bold; font-size: 11px; cursor: pointer;">
-                        📥 下载 content.js
-                    </button>
+        <!-- 客观限制与安全隔离提示卡片 -->
+        <div class="tip-box">
+            📌 <strong>同源安全策略与状态说明</strong>：B 站官方嵌入式播放器受浏览器跨域安全隔离（Same-Origin Policy），外部网页无法直接探查播放器内部的播放/暂停状态。下方標示「播放状态未知」，请直接在视窗画面中点击播放以正常观看。
+        </div>
+
+        <!-- BV Input Card -->
+        <div class="card">
+            <label for="bv-input">BV 号输入 (支持多个，每行一个)</label>
+            <textarea id="bv-input" placeholder="BV1pbbj6bEXB&#10;BV1xx411c7mD"></textarea>
+            <button id="load-btn" class="btn-main" style="margin-top: 8px;">载入并开始真实多窗同播</button>
+        </div>
+
+        <!-- Multi Grid View -->
+        <div id="multi-view" class="video-grid"></div>
+
+        <!-- 真实化仪表板：清晰拆分在線時間與實際播放狀態 -->
+        <div class="count-dashboard">
+            <div class="dash-item" style="text-align: left; display: flex; align-items: center; gap: 8px;">
+                <span style="font-size: 22px;">⏱️</span>
+                <div>
+                    <div class="dash-title">本机页面在线时长 (非视频播放时间)</div>
+                    <div class="dash-value" id="dash-total-time">00:00:00</div>
                 </div>
             </div>
-
-            <!-- 安装 4 步骤指南 -->
-            <div style="background: #FFF9FA; border: 1px solid #FFE6EE; border-radius: 12px; padding: 10px; font-size: 11px; color: #555; margin-top: 10px; line-height: 1.6;">
-                <div style="font-weight: bold; color: #333; margin-bottom: 4px;">安装 4 步骤指南：</div>
-                <div>1️⃣ 解压下载的压缩包到桌面文件夹（或将两个下载的文件放进同一个文件夹）</div>
-                <div>2️⃣ 在 Edge 地址栏输入 <code style="background: white; padding: 1px 4px; border-radius: 4px; color: #FF799C; font-family: monospace;">edge://extensions/</code> 回车</div>
-                <div>3️⃣ 开启页面左侧或左下角的【开发者模式】开关</div>
-                <div>4️⃣ 点击上方【加载解压缩的扩展】，选择桌面文件夹即可！</div>
+            <div class="dash-item">
+                <div class="dash-title">🎥 实际视频播放时间</div>
+                <div style="font-size: 13px; color: #888; font-weight: bold;">跨域受限，无法探测</div>
             </div>
+            <div class="dash-item">
+                <div class="dash-title">🎬 已载入视窗数</div>
+                <div class="dash-value" id="dash-video-count" style="font-size: 20px;">0 部</div>
+            </div>
+            <div class="dash-item">
+                <button id="btn-reset" style="background:white;border:1px solid #FFCCD9;color:#FF799C;font-weight:bold;padding:6px 12px;border-radius:10px;cursor:pointer;font-size:11px;">
+                    🔄 清空本地记录
+                </button>
+            </div>
+        </div>
+
+        <!-- Playback Activity Logs -->
+        <div class="card">
+            <div style="font-weight:bold;color:var(--primary-pink);font-size:13px;margin-bottom:8px;">
+                📜 本机会话活动日志：
+            </div>
+            <div id="log-box" style="max-height:120px;overflow-y:auto;font-family:monospace;font-size:11px;color:#555;display:flex;flex-direction:column;gap:4px;">
+                <div style="color:#aaa;">就绪，载入视频后将记录播放器框架载入与本机操作事件...</div>
+            </div>
+        </div>
+
+        <!-- Edge 浏览器原生扩展卡片 -->
+        <div class="card" id="extension-card">
+            <div style="font-size: 13px; font-weight: bold; color: #333; margin-bottom: 6px;">
+                🖥️ 浏览器原生扩展插件（Edge / QQ / Chrome / 360 通用）
+            </div>
+            <p style="font-size: 11px; color: #666; margin-bottom: 8px; line-height: 1.4;">
+                在 B 站官方本站原生运行，突破外部跨域限制，可直接将 HTML5 播放器加速至 2x~16x 极速！
+            </p>
+            <button id="btn-dl-zip" style="width: 100%; padding: 11px; border-radius: 12px; border: none; background: linear-gradient(135deg, #FF799C, #FFA2BD); color: white; font-weight: bold; font-size: 12px; cursor: pointer;">
+                📦 一键下载扩展完整包 (.zip)
+            </button>
         </div>
     </div>
 
     <script>
-        let videos = [];
-        let activeIndex = 0;
-        let autoSwitch = true;
-        let duration = 30;
-        let countdown = 30;
-        let isPaused = false;
-        let speed = 2.0;
-        let isMuted = true;
-        let reportCount = 0;
+        let videos = ["BV1pbbj6bEXB", "BV1xx411c7mD"];
+        let sessionSeconds = parseInt(localStorage.getItem('jiyu_session_seconds') || '0', 10);
 
         const elInput = document.getElementById('bv-input');
         const elLoad = document.getElementById('load-btn');
-        const elFrame = document.getElementById('video-frame');
-        const elTitle = document.getElementById('current-title');
-        const elBiliLink = document.getElementById('bili-link');
-        const elBox = document.getElementById('playlist-box');
-        const elCount = document.getElementById('count');
-        const elToggleAuto = document.getElementById('toggle-auto-btn');
-        const elCountdown = document.getElementById('countdown-text');
-        const elBar = document.getElementById('countdown-bar');
-        const elPauseBtn = document.getElementById('pause-btn');
-        const elSkipBtn = document.getElementById('skip-btn');
-        const elEmptyCard = document.getElementById('empty-card');
-        const elReelCard = document.getElementById('reel-card');
-        const elPlayerCard = document.getElementById('player-card');
-        const elPlaylistCard = document.getElementById('playlist-card');
-        const elMuteBtn = document.getElementById('toggle-mute-btn');
-        const elReportCount = document.getElementById('report-count');
+        const elMultiView = document.getElementById('multi-view');
+        const elTotalTime = document.getElementById('dash-total-time');
+        const elCount = document.getElementById('dash-video-count');
+        const elLog = document.getElementById('log-box');
+        const elReset = document.getElementById('btn-reset');
 
-        if (elMuteBtn) {
-            elMuteBtn.onclick = function() {
-                isMuted = !isMuted;
-                elMuteBtn.innerText = isMuted ? '🔇 靜音模式 (極速連播)' : '🔊 原聲模式';
-                if (videos[activeIndex]) {
-                    switchVideo(activeIndex);
-                }
-            };
+        elInput.value = videos.join('\n');
+        formatTimeDisplay(sessionSeconds);
+        elCount.innerText = videos.length + ' 部';
+
+        function formatTimeDisplay(sec) {
+            const h = String(Math.floor(sec / 3600)).padStart(2, '0');
+            const m = String(Math.floor((sec % 3600) / 60)).padStart(2, '0');
+            const s = String(sec % 60).padStart(2, '0');
+            elTotalTime.innerText = h + ':' + m + ':' + s;
         }
 
-        function reportPlayback(bv, aid, cid) {
-            if (!aid || !cid) return;
-            try {
-                const params = new URLSearchParams({
-                    aid: String(aid),
-                    cid: String(cid),
-                    bvid: bv,
-                    part: '1',
-                    jsonp: 'jsonp',
-                    type: '1',
-                    sub_type: '0'
-                });
-                fetch('https://api.bilibili.com/x/click-interface/click/web/h5', {
-                    method: 'POST',
-                    mode: 'no-cors',
-                    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-                    body: params
-                }).catch(function() {});
-                reportCount++;
-                if (elReportCount) elReportCount.innerText = reportCount;
-            } catch(e) {}
+        function updateStorage() {
+            localStorage.setItem('jiyu_session_seconds', String(sessionSeconds));
         }
 
-        function showAppUI() {
-            if (elEmptyCard) elEmptyCard.style.display = 'none';
-            if (elReelCard) elReelCard.style.display = 'block';
-            if (elPlayerCard) elPlayerCard.style.display = 'block';
-            if (elPlaylistCard) elPlaylistCard.style.display = 'block';
-        }
-
-        function updateCountdownUI() {
-            if (!elCountdown || !elBar) return;
-            const currentTotal = videos.length || 1;
-            if (!autoSwitch) {
-                elCountdown.innerText = '⏸️ 自動輪播已停用';
-                elBar.style.width = '0%';
-                if (elToggleAuto) {
-                    elToggleAuto.innerText = '○ 已關閉輪播';
-                    elToggleAuto.style.background = '#F3F4F6';
-                    elToggleAuto.style.color = '#6B7280';
-                    elToggleAuto.style.borderColor = '#E5E7EB';
-                }
-                return;
+        elReset.onclick = function() {
+            if (confirm('确定要清空本机在线记录吗？')) {
+                sessionSeconds = 0;
+                updateStorage();
+                formatTimeDisplay(0);
+                renderCards();
+                elLog.innerHTML = '<div style="color:#aaa;">已清空本地记录</div>';
             }
+        };
 
-            if (elToggleAuto) {
-                elToggleAuto.innerText = '● 自動輪播中';
-                elToggleAuto.style.background = '#ECFDF5';
-                elToggleAuto.style.color = '#059669';
-                elToggleAuto.style.borderColor = '#A7F3D0';
+        function addLog(msg) {
+            const now = new Date();
+            const time = now.toTimeString().split(' ')[0];
+            const row = document.createElement('div');
+            row.innerText = '[' + time + '] ' + msg;
+            elLog.prepend(row);
+        }
+
+        window.reloadSingleVideo = function(bv) {
+            const frame = document.getElementById('frame-' + bv);
+            if (frame) {
+                frame.src = 'https://player.bilibili.com/player.html?bvid=' + bv + '&page=1&autoplay=1&muted=1&high_quality=1&as_wide=1&r=' + Date.now();
+                addLog('手动重载视窗：' + bv);
             }
+        };
 
-            if (isPaused) {
-                elCountdown.innerText = '⏸️ 已暫停倒數 · 剩餘 ' + countdown + ' 秒 (' + (activeIndex + 1) + '/' + currentTotal + ')';
-                if (elPauseBtn) elPauseBtn.innerText = '▶ 繼續';
-            } else {
-                elCountdown.innerText = '⏳ 剩餘 ' + countdown + ' 秒切換下一個 (' + (activeIndex + 1) + '/' + currentTotal + ')';
-                if (elPauseBtn) elPauseBtn.innerText = '⏸ 暫停';
+        window.onFrameLoaded = function(bv) {
+            const badge = document.getElementById('badge-' + bv);
+            if (badge) {
+                badge.innerText = '播放器已载入，播放状态未知';
+                badge.style.background = '#F472B6';
             }
+        };
 
-            const percent = Math.min(100, Math.max(0, ((duration - countdown) / duration) * 100));
-            elBar.style.width = percent + '%';
-        }
-
-        setInterval(function() {
-            if (!autoSwitch || isPaused || videos.length <= 1) return;
-            countdown--;
-            if (countdown <= 0) {
-                countdown = duration;
-                switchVideo((activeIndex + 1) % videos.length);
+        // 监听跨域消息（遵守浏览器与平台跨域限制）
+        window.addEventListener('message', function(event) {
+            if (event.origin && event.origin.includes('bilibili.com')) {
+                // 若官方播放器未来开放 postMessage 播放状态可于此解析，严禁臆测
             }
-            updateCountdownUI();
-        }, 1000);
-
-        if (elToggleAuto) {
-            elToggleAuto.onclick = function() {
-                autoSwitch = !autoSwitch;
-                if (autoSwitch) {
-                    countdown = duration;
-                    isPaused = false;
-                }
-                updateCountdownUI();
-            };
-        }
-
-        if (elPauseBtn) {
-            elPauseBtn.onclick = function() {
-                isPaused = !isPaused;
-                updateCountdownUI();
-            };
-        }
-
-        if (elSkipBtn) {
-            elSkipBtn.onclick = function() {
-                countdown = duration;
-                switchVideo((activeIndex + 1) % (videos.length || 1));
-            };
-        }
-
-        document.querySelectorAll('.dur-btn').forEach(btn => {
-            btn.onclick = function() {
-                document.querySelectorAll('.dur-btn').forEach(b => b.classList.remove('active'));
-                btn.classList.add('active');
-                duration = parseInt(btn.dataset.sec, 10);
-                countdown = duration;
-                updateCountdownUI();
-            };
         });
 
-        document.querySelectorAll('.spd-btn').forEach(btn => {
-            btn.onclick = function() {
-                document.querySelectorAll('.spd-btn').forEach(b => b.classList.remove('active'));
-                btn.classList.add('active');
-                speed = parseFloat(btn.dataset.spd);
-            };
-        });
-
-        function renderList() {
-            elBox.innerHTML = '';
-            elCount.innerText = videos.length;
+        function renderCards() {
+            elMultiView.innerHTML = '';
             videos.forEach((bv, idx) => {
-                const item = document.createElement('div');
-                item.className = 'playlist-item ' + (idx === activeIndex ? 'active' : '');
-                item.innerHTML = '<span>' + (idx + 1) + '. ' + bv + '</span><span>' + (idx === activeIndex ? '▶ 正在播放' : '點擊觀看') + '</span>';
-                item.onclick = () => switchVideo(idx);
-                elBox.appendChild(item);
+                const card = document.createElement('div');
+                card.className = 'video-card';
+                card.id = 'card-' + bv;
+                card.innerHTML = 
+                    '<div style="display:flex;justify-content:space-between;align-items:center;font-size:12px;font-weight:bold;color:#FF799C;">' +
+                        '<span>#' + (idx + 1) + ' ' + bv + '</span>' +
+                        '<span class="badge-count" id="badge-' + bv + '">等待播放器载入...</span>' +
+                    '</div>' +
+                    '<div class="player-wrapper">' +
+                        '<iframe id="frame-' + bv + '" src="https://player.bilibili.com/player.html?bvid=' + bv + '&page=1&autoplay=1&muted=1&high_quality=1&as_wide=1" allow="autoplay; fullscreen; picture-in-picture; encrypted-media" referrerpolicy="no-referrer" allowfullscreen="true" onload="window.onFrameLoaded && window.onFrameLoaded(\'' + bv + '\')"></iframe>' +
+                    '</div>' +
+                    '<div style="display:flex;justify-content:space-between;align-items:center;font-size:11px;color:#666;">' +
+                        '<span>📺 点击画面播放 · <a href="javascript:void(0)" onclick="reloadSingleVideo(\'' + bv + '\')" style="color:#FF799C;text-decoration:none;font-weight:bold;">🔄 重载视窗</a></span>' +
+                        '<a href="https://www.bilibili.com/video/' + bv + '" target="_blank" style="color:#FF799C;text-decoration:none;font-weight:bold;">B站主站 ↗</a>' +
+                    '</div>';
+                elMultiView.appendChild(card);
             });
         }
 
-        function formatNum(n) {
-            if (n === undefined || n === null) return '--';
-            const num = Number(n);
-            if (isNaN(num)) return String(n);
-            if (num >= 10000) return (num / 10000).toFixed(1) + ' 萬';
-            return num.toLocaleString();
-        }
+        renderCards();
 
-        function showAntiHotlinkNotice() {
-            const elOnline = document.getElementById('stat-online');
-            const elView = document.getElementById('stat-view');
-            const elLike = document.getElementById('stat-like');
-            const elNotice = document.getElementById('stats-notice');
-            if (elOnline && (elOnline.innerText === '載入中' || elOnline.innerText === '--')) {
-                elOnline.innerHTML = '<span style="font-size:10px;color:#D97706;font-weight:bold;">防盜鏈保護</span>';
-            }
-            if (elView && (elView.innerText === '載入中' || elView.innerText === '--')) {
-                elView.innerHTML = '<span style="font-size:10px;color:#D97706;font-weight:bold;">官方保護中</span>';
-            }
-            if (elLike && (elLike.innerText === '載入中' || elLike.innerText === '--')) {
-                elLike.innerHTML = '<span style="font-size:10px;color:#D97706;font-weight:bold;">官方保護中</span>';
-            }
-            if (elNotice) elNotice.style.display = 'block';
-        }
-
-        function fetchLiveStats(bvid) {
-            const elOnline = document.getElementById('stat-online');
-            const elView = document.getElementById('stat-view');
-            const elLike = document.getElementById('stat-like');
-            if (!elOnline || !elView || !elLike) return;
-
-            elOnline.innerText = '載入中';
-            elView.innerText = '載入中';
-            elLike.innerText = '載入中';
-
-            const cbView = 'bili_stat_' + Math.floor(Math.random() * 1000000);
-            const script = document.createElement('script');
-            
-            const timer = setTimeout(function() {
-                delete window[cbView];
-                if (script.parentNode) script.parentNode.removeChild(script);
-                showAntiHotlinkNotice();
-            }, 3500);
-
-            window[cbView] = function(res) {
-                clearTimeout(timer);
-                delete window[cbView];
-                if (script.parentNode) script.parentNode.removeChild(script);
-                if (res && res.code === 0 && res.data) {
-                    const d = res.data;
-                    elView.innerText = formatNum(d.stat && d.stat.view);
-                    elLike.innerText = formatNum(d.stat && d.stat.like);
-                    if (d.title) {
-                        elTitle.innerText = '當前播放：' + bvid + ' · ' + d.title.slice(0, 16);
-                    }
-
-                    if (d.aid && d.cid) {
-                        reportPlayback(bvid, d.aid, d.cid);
-                    }
-
-                    // fetch online count
-                    const cid = d.cid;
-                    const cbOnline = 'bili_onl_' + Math.floor(Math.random() * 1000000);
-                    const sOnline = document.createElement('script');
-                    window[cbOnline] = function(oRes) {
-                        delete window[cbOnline];
-                        if (sOnline.parentNode) sOnline.parentNode.removeChild(sOnline);
-                        if (oRes && oRes.code === 0 && oRes.data) {
-                            elOnline.innerText = (oRes.data.total || oRes.data.count || '1+') + ' 人';
-                        } else {
-                            elOnline.innerText = '1+ 人';
-                        }
-                    };
-                    sOnline.onerror = function() {
-                        delete window[cbOnline];
-                        if (sOnline.parentNode) sOnline.parentNode.removeChild(sOnline);
-                        elOnline.innerText = '--';
-                    };
-                    sOnline.src = 'https://api.bilibili.com/x/player/online/total?bvid=' + bvid + (cid ? '&cid=' + cid : '') + '&jsonp=jsonp&callback=' + cbOnline;
-                    document.body.appendChild(sOnline);
-                } else {
-                    showAntiHotlinkNotice();
+        // 仅记录本机页面在线时长（非视频实际播放时间）
+        setInterval(function() {
+            if (videos.length > 0) {
+                sessionSeconds++;
+                formatTimeDisplay(sessionSeconds);
+                if (sessionSeconds % 10 === 0) {
+                    updateStorage();
                 }
-            };
-            script.onerror = function() {
-                clearTimeout(timer);
-                delete window[cbView];
-                if (script.parentNode) script.parentNode.removeChild(script);
-                showAntiHotlinkNotice();
-            };
-            script.src = 'https://api.bilibili.com/x/web-interface/view?bvid=' + bvid + '&jsonp=jsonp&callback=' + cbView;
-            document.body.appendChild(script);
-        }
+            }
+        }, 1000);
 
-        function switchVideo(idx) {
-            if (!videos[idx]) return;
-            activeIndex = idx;
-            const bv = videos[idx];
-            elFrame.src = 'https://player.bilibili.com/player.html?bvid=' + bv + '&page=1&autoplay=1&muted=' + (isMuted ? '1' : '0') + '&high_quality=1&as_wide=1';
-            elTitle.innerText = '当前播放：' + bv;
-            elBiliLink.href = 'https://www.bilibili.com/video/' + bv;
-            countdown = duration;
-            updateCountdownUI();
-            fetchLiveStats(bv);
-            renderList();
-        }
-
-        elLoad.onclick = () => {
+        elLoad.onclick = function() {
             const raw = elInput.value;
-            const matches = raw.match(/BV[1-9A-HJ-NP-Za-km-z]{10}/g) || [];
-            const unique = [...new Set(matches)];
+            const matches = raw.match(/[bB][vV][1-9A-HJ-NP-Za-km-z]{10}/g) || [];
+            const unique = [...new Set(matches.map(b => 'BV' + b.slice(2)))];
             if (unique.length === 0) {
-                alert('未检测到有效的 BV 号，请贴入正确的 BV 号（如 BV1xx...）');
+                alert('未检测到有效 BV 号');
                 return;
             }
             videos = unique;
-            showAppUI();
-            activeIndex = 0;
-            switchVideo(0);
+            elCount.innerText = videos.length + ' 部';
+            updateStorage();
+            renderCards();
+            addLog('已载入 ' + videos.length + ' 个视频视窗（播放状态需在画面中查看）');
         };
 
-        if (videos.length > 0) {
-            showAppUI();
-            switchVideo(0);
-        }
+        // Edge 浏览器扩展打包下载
+        const MANIFEST_STR = "{\n  \"manifest_version\": 3,\n  \"name\": \"⭐️极禹刷啵 - B站原生播放助手⭐️\",\n  \"version\": \"1.0.0\",\n  \"description\": \"极禹专属B站视频播放与应援助手，支持连续播放与快捷BV跳转\",\n  \"content_scripts\": [\n    {\n      \"matches\": [\n        \"https://www.bilibili.com/*\"\n      ],\n      \"js\": [\n        \"content.js\"\n      ],\n      \"run_at\": \"document_end\"\n    }\n  ]\n}";
+        const CONTENT_JS_STR = "// ⭐️极禹刷啵 - Edge 原生扩展内容脚本⭐️\n(function() {\n  'use strict';\n  if (window.top !== window.self) return;\n\n  const style = document.createElement('style');\n  style.innerHTML = `\n    #jiyu-edge-panel {\n      position: fixed;\n      bottom: 25px;\n      right: 25px;\n      width: 330px;\n      background: rgba(255, 255, 255, 0.96);\n      backdrop-filter: blur(12px);\n      border: 3px solid #FFCCDD;\n      border-radius: 20px;\n      box-shadow: 0 12px 35px rgba(255, 121, 156, 0.35);\n      z-index: 99999999;\n      font-family: -apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, sans-serif;\n      padding: 16px;\n      box-sizing: border-box;\n    }\n    #jiyu-edge-panel h3 {\n      margin: 0 0 8px 0;\n      color: #FF799C;\n      font-size: 14px;\n      font-weight: 900;\n      display: flex;\n      justify-content: space-between;\n      align-items: center;\n    }\n    .jiyu-spd-row {\n      display: flex;\n      gap: 4px;\n      margin-bottom: 10px;\n    }\n    .jiyu-spd-btn {\n      flex: 1;\n      padding: 6px 0;\n      background: #FFF0F4;\n      border: 1px solid #FFCCD9;\n      color: #D6456D;\n      font-size: 11px;\n      font-weight: bold;\n      border-radius: 8px;\n      cursor: pointer;\n    }\n    .jiyu-spd-btn:hover {\n      background: #FF799C;\n      color: white;\n    }\n  `;\n  document.head.appendChild(style);\n\n  const panel = document.createElement('div');\n  panel.id = 'jiyu-edge-panel';\n  panel.innerHTML = `\n    <h3>\n      <span>⭐️ 极禹刷啵本站原生助手</span>\n      <span id=\"jiyu-panel-close\" style=\"cursor:pointer;font-size:16px;color:#aaa;\">×</span>\n    </h3>\n    <p style=\"font-size:11px;color:#666;margin-bottom:8px;\">本站原生 HTML5 倍速调节：</p>\n    <div class=\"jiyu-spd-row\">\n      <button class=\"jiyu-spd-btn\" data-spd=\"1.25\">1.25x</button>\n      <button class=\"jiyu-spd-btn\" data-spd=\"1.5\">1.5x</button>\n      <button class=\"jiyu-spd-btn\" data-spd=\"2.0\">2.0x</button>\n      <button class=\"jiyu-spd-btn\" data-spd=\"3.0\">3.0x</button>\n      <button class=\"jiyu-spd-btn\" data-spd=\"4.0\">4.0x</button>\n      <button class=\"jiyu-spd-btn\" data-spd=\"16.0\">16x</button>\n    </div>\n  `;\n  document.body.appendChild(panel);\n\n  const closeBtn = document.getElementById('jiyu-panel-close');\n  if (closeBtn) closeBtn.onclick = () => { panel.style.display = 'none'; };\n\n  panel.querySelectorAll('.jiyu-spd-btn').forEach(btn => {\n    btn.onclick = () => {\n      const spd = parseFloat(btn.getAttribute('data-spd'));\n      const video = document.querySelector('video');\n      if (video) {\n        video.playbackRate = spd;\n        alert('⚡ 播放倍速已设置为 ' + spd + 'x！');\n      } else {\n        alert('未在当前页面检测到 HTML5 视频，请在视频播放页面点击');\n      }\n    };\n  });\n})();\n";
 
-        // Edge extension download handlers
-        const MANIFEST_STR = JSON.stringify({
-            "manifest_version": 3,
-            "name": "⭐️极禹刷啵 - B站原生播放助手⭐️",
-            "version": "1.0.0",
-            "description": "极禹专属B站视频播放与应援助手，支持连续播放与快捷BV跳转",
-            "content_scripts": [
-                {
-                    "matches": ["*://www.bilibili.com/video/*", "*://www.bilibili.com/list/*"],
-                    "js": ["content.js"],
-                    "run_at": "document_end"
-                }
-            ],
-            "permissions": ["storage"]
-        }, null, 2);
-
-        const CONTENT_JS_STR = `(function() {
-  console.log('⭐️极禹刷啵 - B站原生扩展已激活⭐️');
-  const panel = document.createElement('div');
-  panel.id = 'jiyu-helper-panel';
-  panel.innerHTML = \`
-    <div style="position:fixed;bottom:20px;right:20px;z-index:999999;background:rgba(255,255,255,0.96);border:3px solid #FF799C;border-radius:18px;padding:12px 14px;box-shadow:0 8px 24px rgba(255,121,156,0.3);font-family:sans-serif;width:230px;">
-      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
-        <span style="font-weight:bold;color:#FF799C;font-size:13px;">⭐️极禹刷啵助手⭐️</span>
-        <button id="jiyu-panel-close" style="background:none;border:none;color:#999;font-size:16px;cursor:pointer;">×</button>
-      </div>
-      <div style="font-size:11px;color:#666;margin-bottom:8px;">⚡ 原生快捷倍速：</div>
-      <div style="display:flex;gap:4px;margin-bottom:10px;">
-        <button class="jiyu-spd-btn" data-spd="1.25" style="flex:1;padding:4px 0;border:1px solid #FFCCD9;border-radius:6px;background:#FFF0F4;color:#FF799C;font-size:10px;font-weight:bold;cursor:pointer;">1.25x</button>
-        <button class="jiyu-spd-btn" data-spd="1.5" style="flex:1;padding:4px 0;border:1px solid #FFCCD9;border-radius:6px;background:#FFF0F4;color:#FF799C;font-size:10px;font-weight:bold;cursor:pointer;">1.5x</button>
-        <button class="jiyu-spd-btn" data-spd="2.0" style="flex:1;padding:4px 0;border:1px solid #FFCCD9;border-radius:6px;background:#FF799C;color:white;font-size:10px;font-weight:bold;cursor:pointer;">2.0x</button>
-        <button class="jiyu-spd-btn" data-spd="3.0" style="flex:1;padding:4px 0;border:1px solid #FFCCD9;border-radius:6px;background:#FFF0F4;color:#FF799C;font-size:10px;font-weight:bold;cursor:pointer;">3.0x</button>
-      </div>
-      <div style="font-size:10px;color:#999;text-align:right;">极禹应援 · Edge 扩展</div>
-    </div>
-  \`;
-  document.body.appendChild(panel);
-
-  const closeBtn = document.getElementById('jiyu-panel-close');
-  if (closeBtn) closeBtn.onclick = () => { panel.style.display = 'none'; };
-
-  panel.querySelectorAll('.jiyu-spd-btn').forEach(btn => {
-    btn.onclick = () => {
-      const spd = parseFloat(btn.getAttribute('data-spd'));
-      const video = document.querySelector('video');
-      if (video) {
-        video.playbackRate = spd;
-        alert('⚡ 播放倍速已切换为 ' + spd + 'x！');
-      } else {
-        alert('未在当前页面检测到 HTML5 视频，请在视频播放页面点击');
-      }
-    };
-  });
-
-  // Ensure real video playback continues
-  setInterval(() => {
-    const video = document.querySelector('video');
-    if (video && video.paused && !video.ended) {
-      video.play().catch(() => {});
-    }
-  }, 2000);
-})();`;
-
-        function downloadFile(filename, text, type) {
-            const blob = new Blob([text], { type: type || 'text/plain;charset=utf-8' });
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = filename;
-            document.body.appendChild(a);
-            a.click();
-            document.body.removeChild(a);
-            URL.revokeObjectURL(url);
-        }
-
-        const elBtnManifest = document.getElementById('btn-dl-manifest');
-        if (elBtnManifest) {
-            elBtnManifest.onclick = function() {
-                downloadFile('manifest.json', MANIFEST_STR, 'application/json;charset=utf-8');
-            };
-        }
-
-        const elBtnContent = document.getElementById('btn-dl-content');
-        if (elBtnContent) {
-            elBtnContent.onclick = function() {
-                downloadFile('content.js', CONTENT_JS_STR, 'application/javascript;charset=utf-8');
-            };
-        }
-
-        const elBtnZip = document.getElementById('btn-dl-zip');
-        if (elBtnZip) {
-            elBtnZip.onclick = function() {
-                if (window.JSZip) {
-                    elBtnZip.innerText = '⏳ 正在生成 zip 压缩包...';
-                    const zip = new JSZip();
-                    zip.file('manifest.json', MANIFEST_STR);
-                    zip.file('content.js', CONTENT_JS_STR);
-                    zip.file('README.txt', '⭐️极禹刷啵⭐️ Edge 浏览器原生扩展安装指南\\n\\n1. 将本压缩包解压到一个固定文件夹（例如桌面「极禹B站扩展」）\\n2. 打开 Edge 浏览器，地址栏输入 edge://extensions/ 回车\\n3. 开启页面左侧或左下角【开发者模式】\\n4. 点击【加载解压缩的扩展】，选择刚才解压的文件夹即可！\\n5. 打开 B 站视频网页右下角即可看到极禹专属控制面板！');
-                    zip.generateAsync({ type: 'blob' }).then(function(content) {
-                        const url = URL.createObjectURL(content);
-                        const a = document.createElement('a');
-                        a.href = url;
-                        a.download = 'jiyu-edge-extension.zip';
-                        document.body.appendChild(a);
-                        a.click();
-                        document.body.removeChild(a);
-                        URL.revokeObjectURL(url);
-                        elBtnZip.innerText = '📦 一键下载扩展完整包 (.zip)';
-                    }).catch(function() {
-                        fallbackDownload();
-                    });
-                } else {
-                    fallbackDownload();
-                }
-
-                function fallbackDownload() {
-                    downloadFile('manifest.json', MANIFEST_STR, 'application/json;charset=utf-8');
-                    setTimeout(function() {
-                        downloadFile('content.js', CONTENT_JS_STR, 'application/javascript;charset=utf-8');
-                    }, 400);
-                    if (elBtnZip) elBtnZip.innerText = '📦 一键下载扩展完整包 (.zip)';
-                }
-            };
-        }
-
-        setInterval(function() {
-            if (videos[activeIndex]) {
-                fetchLiveStats(videos[activeIndex]);
+        document.getElementById('btn-dl-zip').onclick = function() {
+            if (window.JSZip) {
+                const zip = new JSZip();
+                zip.file('manifest.json', MANIFEST_STR);
+                zip.file('content.js', CONTENT_JS_STR);
+                zip.file('README.txt', '⭐️极禹刷啵⭐️ Edge 扩展安装指南\n1. 解压文件夹\n2. 打开 edge://extensions/ 开启开发者模式\n3. 点击 加载解压缩的扩展 即可在 B 站本站解锁 2x~16x 倍速！');
+                zip.generateAsync({ type: 'blob' }).then(function(c) {
+                    const url = URL.createObjectURL(c);
+                    const a = document.createElement('a');
+                    a.href = url;
+                    a.download = 'jiyu-edge-extension.zip';
+                    document.body.appendChild(a);
+                    a.click();
+                    document.body.removeChild(a);
+                    URL.revokeObjectURL(url);
+                });
             }
-        }, 30000);
+        };
     </script>
 </body>
 </html>
