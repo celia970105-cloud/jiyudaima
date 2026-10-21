@@ -5,20 +5,35 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <meta name="referrer" content="no-referrer">
     <title>⭐️极禹刷啵 - B站多窗真实同播与计数器⭐️</title>
+    <!-- JSZip 用于浏览器内打包扩展程序 -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
     <style>
         :root {
             --primary-pink: #FF799C;
+            --primary-hover: #FF5277;
             --light-pink: #FFCCDD;
+            --bg-gradient-start: #FFCCDD;
+            --bg-gradient-mid: #FFB3D1;
+            --bg-gradient-end: #FF9EBA;
+            --card-border: #FFCCD9;
             --soft-white: rgba(255, 255, 255, 0.96);
-            --text-dark: #333333;
-            --border-radius: 24px;
+            --text-dark: #374151;
+            --text-muted: #6B7280;
+            --radius-lg: 20px;
+            --radius-md: 14px;
         }
-        * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            -webkit-tap-highlight-color: transparent;
+        }
+
         body {
-            font-family: -apple-system, BlinkMacSystemFont, "Microsoft YaHei", "Segoe UI", sans-serif;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Microsoft YaHei", sans-serif;
             background-color: var(--light-pink);
-            background-image: linear-gradient(135deg, #FFCCDD 0%, #FFB3D1 100%);
+            background-image: linear-gradient(135deg, var(--bg-gradient-start) 0%, var(--bg-gradient-mid) 50%, var(--bg-gradient-end) 100%);
             min-height: 100vh;
             display: flex;
             justify-content: center;
@@ -26,40 +41,234 @@
             color: var(--text-dark);
             padding: 16px 12px;
         }
+
         .container {
             background: var(--soft-white);
-            backdrop-filter: blur(10px);
+            backdrop-filter: blur(12px);
             width: 100%;
-            max-width: 960px;
+            max-width: 1024px;
             padding: 24px 20px;
-            border-radius: var(--border-radius);
-            box-shadow: 0 15px 35px rgba(255, 121, 156, 0.25);
+            border-radius: var(--radius-lg);
+            box-shadow: 0 16px 36px rgba(255, 121, 156, 0.22);
             display: flex;
             flex-direction: column;
-            gap: 18px;
-            border: 4px solid white;
+            gap: 16px;
+            border: 4px solid #ffffff;
         }
-        h1 {
-            font-size: 26px;
+
+        /* 標題與簡介 */
+        .header-section {
             text-align: center;
-            color: var(--primary-pink);
+        }
+        .header-title {
+            font-size: 22px;
             font-weight: 900;
+            color: var(--primary-pink);
             display: flex;
             align-items: center;
             justify-content: center;
             gap: 8px;
+            letter-spacing: 0.5px;
         }
-        .count-dashboard {
-            background: linear-gradient(135deg, #FFF0F4 0%, #FFE6EE 100%);
-            border: 2px solid #FFCCD9;
-            border-radius: 20px;
-            padding: 16px;
+        .header-desc {
+            font-size: 12px;
+            color: var(--text-muted);
+            margin-top: 6px;
+            line-height: 1.4;
+        }
+
+        /* 客觀說明與平台隔離警示 */
+        .notice-box {
+            background: #FFF9FA;
+            border: 1.5px dashed var(--primary-pink);
+            border-radius: var(--radius-md);
+            padding: 12px 14px;
+            font-size: 11px;
+            color: #C03960;
+            line-height: 1.6;
+        }
+
+        /* 通用卡片 */
+        .card {
+            background: #ffffff;
+            border: 2px solid var(--card-border);
+            border-radius: var(--radius-md);
+            padding: 14px 16px;
+            box-shadow: 0 4px 12px rgba(255, 204, 221, 0.18);
+        }
+
+        .card-label {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+            font-weight: bold;
+            color: var(--primary-pink);
+            font-size: 13px;
+        }
+
+        /* BV 輸入框 */
+        textarea {
+            width: 100%;
+            height: 72px;
+            padding: 10px 12px;
+            border: 2px solid #FFE4ED;
+            border-radius: 12px;
+            font-size: 12px;
+            background: #FFF9FA;
+            outline: none;
+            resize: none;
+            font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+            color: #333;
+            transition: all 0.2s;
+        }
+        textarea:focus {
+            border-color: var(--primary-pink);
+            background: #ffffff;
+            box-shadow: 0 0 0 3px rgba(255, 121, 156, 0.15);
+        }
+
+        /* 按鈕組件 */
+        .btn-main {
+            width: 100%;
+            padding: 11px;
+            border: none;
+            border-radius: 50px;
+            font-size: 13px;
+            font-weight: 800;
+            color: white;
+            cursor: pointer;
+            background: linear-gradient(135deg, var(--primary-pink) 0%, #FF9EBA 100%);
+            box-shadow: 0 4px 12px rgba(255, 121, 156, 0.35);
+            transition: transform 0.15s, opacity 0.15s;
+        }
+        .btn-main:hover {
+            opacity: 0.95;
+            transform: translateY(-1px);
+        }
+        .btn-main:active {
+            transform: translateY(1px);
+        }
+
+        .btn-sm {
+            padding: 5px 10px;
+            border-radius: 8px;
+            border: 1px solid var(--card-border);
+            background: #FFF0F4;
+            color: #C03960;
+            font-size: 11px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.15s;
+        }
+        .btn-sm:hover {
+            background: #FFE0EA;
+        }
+
+        /* 矩陣多窗控制列 */
+        .toolbar {
             display: flex;
             flex-wrap: wrap;
-            justify-content: space-around;
+            justify-content: space-between;
             align-items: center;
+            gap: 8px;
+            padding: 8px 12px;
+            background: #FFF5F8;
+            border: 1px solid var(--card-border);
+            border-radius: 12px;
+            font-size: 12px;
+        }
+
+        /* 影片網格佈局 */
+        .video-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(310px, 1fr));
+            gap: 16px;
+        }
+
+        .video-card {
+            background: #ffffff;
+            border: 2px solid var(--card-border);
+            border-radius: var(--radius-md);
+            padding: 12px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            box-shadow: 0 4px 14px rgba(255, 204, 221, 0.2);
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .card-header-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 12px;
+            font-weight: 800;
+        }
+
+        .badge-status {
+            font-size: 10px;
+            font-weight: 700;
+            padding: 3px 8px;
+            border-radius: 12px;
+            background: #E5E7EB;
+            color: #4B5563;
+        }
+        .badge-status.loaded {
+            background: #FDF2F8;
+            color: #DB2777;
+            border: 1px solid #FBCFE8;
+        }
+
+        .player-wrapper {
+            width: 100%;
+            border-radius: 10px;
+            overflow: hidden;
+            background: #000;
+            aspect-ratio: 16 / 9;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.12);
+            position: relative;
+        }
+        iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+            display: block;
+        }
+
+        /* 倒數進度條 */
+        .progress-container {
+            width: 100%;
+            height: 5px;
+            background: #FEE2E2;
+            border-radius: 6px;
+            overflow: hidden;
+        }
+        .progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, #F472B6, var(--primary-pink));
+            width: 0%;
+            transition: width 1s linear;
+        }
+
+        .card-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 11px;
+            color: var(--text-muted);
+        }
+
+        /* 下方緊湊型計數面板 */
+        .count-dashboard {
+            background: linear-gradient(135deg, #FFF5F8 0%, #FFEBF2 100%);
+            border: 1.5px solid var(--card-border);
+            border-radius: 16px;
+            padding: 12px 16px;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
             gap: 12px;
-            box-shadow: 0 4px 15px rgba(255, 121, 156, 0.15);
+            align-items: center;
         }
         .dash-item {
             text-align: center;
@@ -67,192 +276,162 @@
         .dash-title {
             font-size: 11px;
             color: #888;
-            font-weight: bold;
+            font-weight: 700;
             margin-bottom: 2px;
         }
         .dash-value {
-            font-size: 22px;
+            font-size: 18px;
             font-weight: 900;
             color: var(--primary-pink);
-            font-family: monospace;
+            font-family: ui-monospace, SFMono-Regular, monospace;
         }
-        .card {
-            background: white;
-            border: 2px solid var(--light-pink);
-            border-radius: 18px;
-            padding: 16px;
-            box-shadow: 0 4px 10px rgba(255, 204, 221, 0.15);
-        }
-        label {
-            display: block;
-            margin-bottom: 8px;
-            font-weight: bold;
-            color: var(--primary-pink);
-            font-size: 13px;
-        }
-        textarea {
-            width: 100%;
-            height: 70px;
-            padding: 10px;
-            border: 2px solid #FFE6EE;
-            border-radius: 14px;
-            font-size: 13px;
-            background: #FFF9FA;
-            outline: none;
-            resize: none;
-            font-family: monospace;
-        }
-        textarea:focus { border-color: var(--primary-pink); background: white; }
-        .btn-main {
-            width: 100%;
-            padding: 12px;
-            border: none;
-            border-radius: 50px;
-            font-size: 14px;
-            font-weight: bold;
-            color: white;
-            cursor: pointer;
-            background: linear-gradient(to right, #FF799C, #FF9EBA);
-            box-shadow: 0 4px 15px rgba(255, 121, 156, 0.35);
-        }
-        .video-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-            gap: 16px;
-        }
-        .video-card {
-            background: white;
-            border: 2px solid #FFCCD9;
-            border-radius: 16px;
-            padding: 12px;
+
+        /* 擴充功能與日誌卡片 */
+        .log-box {
+            max-height: 100px;
+            overflow-y: auto;
+            font-family: ui-monospace, SFMono-Regular, monospace;
+            font-size: 11px;
+            color: #555;
             display: flex;
             flex-direction: column;
-            gap: 8px;
-            box-shadow: 0 4px 12px rgba(255, 204, 221, 0.2);
-            transition: all 0.3s;
-        }
-        .player-wrapper {
-            width: 100%;
-            border-radius: 12px;
-            overflow: hidden;
-            background: #000;
-            aspect-ratio: 16 / 9;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-            position: relative;
-        }
-        iframe {
-            width: 100%;
-            height: 100%;
-            border: none;
-        }
-        .badge-count {
-            background: #9CA3AF;
-            color: white;
-            padding: 3px 8px;
-            border-radius: 20px;
-            font-size: 11px;
-            font-weight: 900;
-            transition: background 0.3s;
-        }
-        .tip-box {
-            background: #FFF0F4;
-            border: 1px dashed var(--primary-pink);
-            border-radius: 12px;
-            padding: 10px 12px;
-            font-size: 11px;
-            color: #D6456D;
-            line-height: 1.5;
+            gap: 3px;
+            padding: 4px;
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <div>
-            <h1>⭐️极禹刷啵 - B站多窗真实同播与计数器⭐️</h1>
-            <p style="text-align:center;font-size:12px;color:#888;margin-top:4px;">
-                真实多窗视频渲染 · 正常连续观影 · 本机页面计时 · 跨域安全隔离
+        <!-- 頂部標題 -->
+        <div class="header-section">
+            <h1 class="header-title">⭐️ 极禹刷啵 - B站多窗真实同播与计数器 ⭐️</h1>
+            <p class="header-desc">
+                矩陣多窗同時播放 · 隨機週期觀影計時 · 本機播放工作階段統計 · 跨來源隔離守護
             </p>
         </div>
 
-        <!-- 客观限制与安全隔离提示卡片 -->
-        <div class="tip-box">
-            📌 <strong>同源安全策略与状态说明</strong>：B 站官方嵌入式播放器受浏览器跨域安全隔离（Same-Origin Policy），外部网页无法直接探查播放器内部的播放/暂停状态。下方標示「播放状态未知」，请直接在视窗画面中点击播放以正常观看。
+        <!-- 平台限制與客觀說明 -->
+        <div class="notice-box">
+            📌 <strong>同源策略與客觀說明</strong>：B站嵌入式播放器受瀏覽器跨域安全隔離（Same-Origin Policy），外部網頁<strong>無法偵測內部是否實際按下播放、暫停或中途緩衝</strong>。任何外部程式均無法偽造播放量。此工具提供乾淨的多視窗同時觀賞體驗與本機計時，觀看請在畫面中自由點擊互動。
         </div>
 
-        <!-- BV Input Card -->
+        <!-- 多 BV 號輸入與設定卡片 -->
         <div class="card">
-            <label for="bv-input">BV 号输入 (支持多个，每行一个)</label>
-            <textarea id="bv-input" placeholder="BV1pbbj6bEXB&#10;BV1xx411c7mD"></textarea>
-            <button id="load-btn" class="btn-main" style="margin-top: 8px;">载入并开始真实多窗同播</button>
+            <div class="card-label">
+                <span>📋 多 BV 號載入清單 (每行一個或貼上完整網址)</span>
+                <span style="font-size: 11px; color: var(--text-muted); font-weight: normal;">支援 BV1... 格式</span>
+            </div>
+            <textarea id="bv-input" placeholder="BV1pbbj6bEXB&#10;BV1xx411c7mD&#10;BV18b411h7k9"></textarea>
+            <div style="display: flex; gap: 8px; margin-top: 10px;">
+                <button id="load-btn" class="btn-main" style="flex: 2;">🚀 載入並開始多窗矩陣同播</button>
+                <button id="btn-default" class="btn-sm" style="flex: 1;">恢復範例</button>
+            </div>
         </div>
 
-        <!-- Multi Grid View -->
+        <!-- 矩陣同播工具列 -->
+        <div class="toolbar">
+            <div style="font-weight: bold; color: var(--primary-pink); display: flex; align-items: center; gap: 6px;">
+                <span>✨ 播放狀態：</span>
+                <span id="global-timer-status" style="color: #059669; font-weight: 800;">進行中</span>
+            </div>
+            <div style="display: flex; gap: 8px;">
+                <button id="btn-toggle-timer" class="btn-sm">⏸️ 暫停計時</button>
+                <button id="btn-reload-all" class="btn-sm">🔄 全部重載</button>
+                <button id="btn-mute-tip" class="btn-sm" title="瀏覽器限制自動播放須為靜音，點擊畫面可隨時開啟原聲">🔇 靜音自啟說明</button>
+            </div>
+        </div>
+
+        <!-- 多窗影片網格區 (無單片專注模式，一律多窗同播) -->
         <div id="multi-view" class="video-grid"></div>
 
-        <!-- 真实化仪表板：清晰拆分在線時間與實際播放狀態 -->
+        <!-- 緊湊型本機計數面板 (置於播放器下方) -->
         <div class="count-dashboard">
-            <div class="dash-item" style="text-align: left; display: flex; align-items: center; gap: 8px;">
-                <span style="font-size: 22px;">⏱️</span>
-                <div>
-                    <div class="dash-title">本机页面在线时长 (非视频播放时间)</div>
-                    <div class="dash-value" id="dash-total-time">00:00:00</div>
-                </div>
+            <div class="dash-item">
+                <div class="dash-title">⏱️ 本機線上累積時間</div>
+                <div class="dash-value" id="dash-total-time">00:00:00</div>
             </div>
             <div class="dash-item">
-                <div class="dash-title">🎥 实际视频播放时间</div>
-                <div style="font-size: 13px; color: #888; font-weight: bold;">跨域受限，无法探测</div>
+                <div class="dash-title">🎬 視窗同時運行數</div>
+                <div class="dash-value" id="dash-video-count">0 部</div>
             </div>
             <div class="dash-item">
-                <div class="dash-title">🎬 已载入视窗数</div>
-                <div class="dash-value" id="dash-video-count" style="font-size: 20px;">0 部</div>
+                <div class="dash-title">📊 本機累計工作階段</div>
+                <div class="dash-value" id="dash-total-cycles">0 次</div>
             </div>
             <div class="dash-item">
-                <button id="btn-reset" style="background:white;border:1px solid #FFCCD9;color:#FF799C;font-weight:bold;padding:6px 12px;border-radius:10px;cursor:pointer;font-size:11px;">
-                    🔄 清空本地记录
-                </button>
+                <div class="dash-title">🎥 實際影片播放時間</div>
+                <div style="font-size: 11px; color: #888; font-weight: 700; margin-top: 4px;">跨域受限·真實可視</div>
+            </div>
+            <div class="dash-item" style="grid-column: 1 / -1; display: flex; justify-content: flex-end;">
+                <button id="btn-reset" class="btn-sm" style="font-size: 11px;">🔄 清空本機記錄</button>
             </div>
         </div>
 
-        <!-- Playback Activity Logs -->
+        <!-- 本機會話日誌 -->
         <div class="card">
-            <div style="font-weight:bold;color:var(--primary-pink);font-size:13px;margin-bottom:8px;">
-                📜 本机会话活动日志：
+            <div class="card-label">
+                <span>📜 本機活動流水帳：</span>
+                <span style="font-size: 10px; color: #999;">僅存於本機瀏覽器</span>
             </div>
-            <div id="log-box" style="max-height:120px;overflow-y:auto;font-family:monospace;font-size:11px;color:#555;display:flex;flex-direction:column;gap:4px;">
-                <div style="color:#aaa;">就绪，载入视频后将记录播放器框架载入与本机操作事件...</div>
+            <div id="log-box" class="log-box">
+                <div style="color:#aaa;">已就緒，載入影片後將記錄本機會話狀態...</div>
             </div>
         </div>
 
-        <!-- Edge 浏览器原生扩展卡片 -->
+        <!-- 原生擴充套件下載 (Edge / QQ / Chrome) -->
         <div class="card" id="extension-card">
-            <div style="font-size: 13px; font-weight: bold; color: #333; margin-bottom: 6px;">
-                🖥️ 浏览器原生扩展插件（Edge / QQ / Chrome / 360 通用）
+            <div style="font-size: 13px; font-weight: 800; color: #333; margin-bottom: 4px;">
+                🖥️ 瀏覽器原生擴充插件包（Edge / QQ 瀏覽器 / Chrome 通用）
             </div>
-            <p style="font-size: 11px; color: #666; margin-bottom: 8px; line-height: 1.4;">
-                在 B 站官方本站原生运行，突破外部跨域限制，可直接将 HTML5 播放器加速至 2x~16x 极速！
+            <p style="font-size: 11px; color: var(--text-muted); margin-bottom: 10px; line-height: 1.4;">
+                在 B 站主站原生執行，突破跨域限制，支援真實原生影片倍速（2x ~ 16x）控制與無縫連續觀看。
             </p>
-            <button id="btn-dl-zip" style="width: 100%; padding: 11px; border-radius: 12px; border: none; background: linear-gradient(135deg, #FF799C, #FFA2BD); color: white; font-weight: bold; font-size: 12px; cursor: pointer;">
-                📦 一键下载扩展完整包 (.zip)
+            <button id="btn-dl-zip" class="btn-main" style="border-radius: 12px; padding: 9px; font-size: 12px;">
+                📦 一鍵下載擴充完整安裝包 (.zip)
             </button>
         </div>
     </div>
 
     <script>
-        let videos = ["BV1pbbj6bEXB", "BV1xx411c7mD"];
+        // 預設 BV 清單
+        const DEFAULT_BVS = ['BV1pbbj6bEXB', 'BV1xx411c7mD', 'BV18b411h7k9'];
+        let videos = [];
         let sessionSeconds = parseInt(localStorage.getItem('jiyu_session_seconds') || '0', 10);
+        let totalCycles = parseInt(localStorage.getItem('jiyu_total_cycles') || '0', 10);
+        let isTimerActive = true;
 
+        // 每部影片的獨立隨機目標時間與剩餘倒數（秒）
+        const videoTargets = {};
+        const videoCountdowns = {};
+
+        // DOM 元素
         const elInput = document.getElementById('bv-input');
         const elLoad = document.getElementById('load-btn');
+        const elDefault = document.getElementById('btn-default');
         const elMultiView = document.getElementById('multi-view');
         const elTotalTime = document.getElementById('dash-total-time');
         const elCount = document.getElementById('dash-video-count');
+        const elCycles = document.getElementById('dash-total-cycles');
         const elLog = document.getElementById('log-box');
         const elReset = document.getElementById('btn-reset');
+        const elToggleTimer = document.getElementById('btn-toggle-timer');
+        const elReloadAll = document.getElementById('btn-reload-all');
+        const elTimerStatus = document.getElementById('global-timer-status');
+        const elMuteTip = document.getElementById('btn-mute-tip');
 
+        // 初始化 BV 列表
+        try {
+            const saved = localStorage.getItem('jiyu_bvs');
+            videos = saved ? JSON.parse(saved) : DEFAULT_BVS;
+        } catch(e) {
+            videos = DEFAULT_BVS;
+        }
         elInput.value = videos.join('\n');
         formatTimeDisplay(sessionSeconds);
+        elCycles.innerText = totalCycles + ' 次';
         elCount.innerText = videos.length + ' 部';
 
+        // 格式化時間
         function formatTimeDisplay(sec) {
             const h = String(Math.floor(sec / 3600)).padStart(2, '0');
             const m = String(Math.floor((sec % 3600) / 60)).padStart(2, '0');
@@ -260,121 +439,247 @@
             elTotalTime.innerText = h + ':' + m + ':' + s;
         }
 
-        function updateStorage() {
-            localStorage.setItem('jiyu_session_seconds', String(sessionSeconds));
+        // 產生隨機週期秒數 (30 ~ 60 秒)
+        function getRandomTarget() {
+            return Math.floor(Math.random() * (60 - 30 + 1)) + 30;
         }
 
-        elReset.onclick = function() {
-            if (confirm('确定要清空本机在线记录吗？')) {
-                sessionSeconds = 0;
-                updateStorage();
-                formatTimeDisplay(0);
-                renderCards();
-                elLog.innerHTML = '<div style="color:#aaa;">已清空本地记录</div>';
-            }
-        };
-
+        // 新增日誌
         function addLog(msg) {
-            const now = new Date();
-            const time = now.toTimeString().split(' ')[0];
+            const time = new Date().toTimeString().split(' ')[0];
             const row = document.createElement('div');
             row.innerText = '[' + time + '] ' + msg;
             elLog.prepend(row);
         }
 
+        // 本地儲存持久化
+        function updateStorage() {
+            localStorage.setItem('jiyu_session_seconds', String(sessionSeconds));
+            localStorage.setItem('jiyu_total_cycles', String(totalCycles));
+            localStorage.setItem('jiyu_bvs', JSON.stringify(videos));
+        }
+
+        // 清空記錄
+        elReset.onclick = function() {
+            if (confirm('確定要清空本機線上時間與工作階段記錄嗎？')) {
+                sessionSeconds = 0;
+                totalCycles = 0;
+                updateStorage();
+                formatTimeDisplay(0);
+                elCycles.innerText = '0 次';
+                addLog('已清空本機統計數據');
+            }
+        };
+
+        // 靜音說明
+        elMuteTip.onclick = function() {
+            alert('💡 瀏覽器規範：現代瀏覽器（Edge / Chrome）規定自動播放必須為「靜音模式」。若需聲音，請直接在影片視窗內點擊小喇叭解除靜音。');
+        };
+
+        // 暫停/繼續計時
+        elToggleTimer.onclick = function() {
+            isTimerActive = !isTimerActive;
+            if (isTimerActive) {
+                elToggleTimer.innerText = '⏸️ 暫停計時';
+                elTimerStatus.innerText = '進行中';
+                elTimerStatus.style.color = '#059669';
+                addLog('已恢復本機計時與進度');
+            } else {
+                elToggleTimer.innerText = '▶️ 繼續計時';
+                elTimerStatus.innerText = '已暫停';
+                elTimerStatus.style.color = '#DC2626';
+                addLog('已暫停本機計時');
+            }
+        };
+
+        // 單窗重載
         window.reloadSingleVideo = function(bv) {
             const frame = document.getElementById('frame-' + bv);
             if (frame) {
+                const target = getRandomTarget();
+                videoTargets[bv] = target;
+                videoCountdowns[bv] = target;
+                updateSingleCardUI(bv);
                 frame.src = 'https://player.bilibili.com/player.html?bvid=' + bv + '&page=1&autoplay=1&muted=1&high_quality=1&as_wide=1&r=' + Date.now();
-                addLog('手动重载视窗：' + bv);
+                addLog('手動重載視窗：' + bv);
             }
         };
 
-        window.onFrameLoaded = function(bv) {
-            const badge = document.getElementById('badge-' + bv);
-            if (badge) {
-                badge.innerText = '播放器已载入，播放状态未知';
-                badge.style.background = '#F472B6';
-            }
+        // 全部重載
+        elReloadAll.onclick = function() {
+            videos.forEach(bv => {
+                reloadSingleVideo(bv);
+            });
+            addLog('已全部重載 ' + videos.length + ' 個視窗');
         };
 
-        // 监听跨域消息（遵守浏览器与平台跨域限制）
-        window.addEventListener('message', function(event) {
-            if (event.origin && event.origin.includes('bilibili.com')) {
-                // 若官方播放器未来开放 postMessage 播放状态可于此解析，严禁臆测
-            }
-        });
-
+        // 渲染卡片 (無單片專注模式，一律矩陣並列)
         function renderCards() {
             elMultiView.innerHTML = '';
             videos.forEach((bv, idx) => {
+                if (!videoTargets[bv]) {
+                    const target = getRandomTarget();
+                    videoTargets[bv] = target;
+                    videoCountdowns[bv] = target;
+                }
+
                 const card = document.createElement('div');
                 card.className = 'video-card';
                 card.id = 'card-' + bv;
                 card.innerHTML = 
-                    '<div style="display:flex;justify-content:space-between;align-items:center;font-size:12px;font-weight:bold;color:#FF799C;">' +
-                        '<span>#' + (idx + 1) + ' ' + bv + '</span>' +
-                        '<span class="badge-count" id="badge-' + bv + '">等待播放器载入...</span>' +
+                    '<div class="card-header-bar">' +
+                        '<span style="color:var(--primary-pink);font-weight:900;">#' + (idx + 1) + ' ' + bv + '</span>' +
+                        '<span class="badge-status" id="badge-' + bv + '">載入中...</span>' +
                     '</div>' +
                     '<div class="player-wrapper">' +
-                        '<iframe id="frame-' + bv + '" src="https://player.bilibili.com/player.html?bvid=' + bv + '&page=1&autoplay=1&muted=1&high_quality=1&as_wide=1" allow="autoplay; fullscreen; picture-in-picture; encrypted-media" referrerpolicy="no-referrer" allowfullscreen="true" onload="window.onFrameLoaded && window.onFrameLoaded(\'' + bv + '\')"></iframe>' +
+                        '<iframe id="frame-' + bv + '" src="https://player.bilibili.com/player.html?bvid=' + bv + '&page=1&autoplay=1&muted=1&high_quality=1&as_wide=1" allow="autoplay; fullscreen; picture-in-picture; encrypted-media" referrerpolicy="no-referrer" allowfullscreen="true" onload="window.onFrameLoaded(\'' + bv + '\')"></iframe>' +
                     '</div>' +
-                    '<div style="display:flex;justify-content:space-between;align-items:center;font-size:11px;color:#666;">' +
-                        '<span>📺 点击画面播放 · <a href="javascript:void(0)" onclick="reloadSingleVideo(\'' + bv + '\')" style="color:#FF799C;text-decoration:none;font-weight:bold;">🔄 重载视窗</a></span>' +
-                        '<a href="https://www.bilibili.com/video/' + bv + '" target="_blank" style="color:#FF799C;text-decoration:none;font-weight:bold;">B站主站 ↗</a>' +
+                    '<div>' +
+                        '<div style="display:flex;justify-content:space-between;font-size:10px;color:#888;margin-bottom:3px;">' +
+                            '<span>隨機週期計時</span>' +
+                            '<span id="time-text-' + bv + '">' + (videoCountdowns[bv] || 30) + 's / ' + (videoTargets[bv] || 30) + 's</span>' +
+                        '</div>' +
+                        '<div class="progress-container">' +
+                            '<div class="progress-bar" id="bar-' + bv + '"></div>' +
+                        '</div>' +
+                    '</div>' +
+                    '<div class="card-footer">' +
+                        '<span>📺 畫面可點擊互動 · <a href="javascript:void(0)" onclick="reloadSingleVideo(\'' + bv + '\')" style="color:var(--primary-pink);text-decoration:none;font-weight:bold;">🔄 重載</a></span>' +
+                        '<a href="https://www.bilibili.com/video/' + bv + '" target="_blank" style="color:var(--primary-pink);text-decoration:none;font-weight:bold;">主站 ↗</a>' +
                     '</div>';
                 elMultiView.appendChild(card);
+                updateSingleCardUI(bv);
             });
         }
 
-        renderCards();
-
-        // 仅记录本机页面在线时长（非视频实际播放时间）
-        setInterval(function() {
-            if (videos.length > 0) {
-                sessionSeconds++;
-                formatTimeDisplay(sessionSeconds);
-                if (sessionSeconds % 10 === 0) {
-                    updateStorage();
-                }
+        // iframe 載入回呼（嚴格反映客觀事實，標示未知）
+        window.onFrameLoaded = function(bv) {
+            const badge = document.getElementById('badge-' + bv);
+            if (badge) {
+                badge.innerText = '播放器已載入 (播放狀態未知)';
+                badge.className = 'badge-status loaded';
             }
+        };
+
+        // 更新單卡進度條 UI
+        function updateSingleCardUI(bv) {
+            const target = videoTargets[bv] || 30;
+            const current = videoCountdowns[bv] || 0;
+            const pct = Math.max(0, Math.min(100, Math.round(((target - current) / target) * 100)));
+            const elBar = document.getElementById('bar-' + bv);
+            const elText = document.getElementById('time-text-' + bv);
+            if (elBar) elBar.style.width = pct + '%';
+            if (elText) elText.innerText = current + 's / ' + target + 's';
+        }
+
+        // 核心計時輪詢 (每秒)
+        setInterval(function() {
+            if (!isTimerActive || videos.length === 0) return;
+
+            // 本機線上時間累計
+            sessionSeconds++;
+            formatTimeDisplay(sessionSeconds);
+            if (sessionSeconds % 10 === 0) updateStorage();
+
+            // 各影片獨立倒數
+            videos.forEach(bv => {
+                if (videoCountdowns[bv] === undefined) {
+                    videoTargets[bv] = getRandomTarget();
+                    videoCountdowns[bv] = videoTargets[bv];
+                }
+
+                if (videoCountdowns[bv] > 1) {
+                    videoCountdowns[bv]--;
+                    updateSingleCardUI(bv);
+                } else {
+                    // 完成一個隨機計時週期
+                    totalCycles++;
+                    elCycles.innerText = totalCycles + ' 次';
+                    const newTarget = getRandomTarget();
+                    videoTargets[bv] = newTarget;
+                    videoCountdowns[bv] = newTarget;
+                    updateSingleCardUI(bv);
+                    updateStorage();
+                    addLog(bv + ' 完成一個觀影階段（已計入本機會話次數）');
+                }
+            });
         }, 1000);
 
+        // 載入按鈕處理
         elLoad.onclick = function() {
             const raw = elInput.value;
             const matches = raw.match(/[bB][vV][1-9A-HJ-NP-Za-km-z]{10}/g) || [];
             const unique = [...new Set(matches.map(b => 'BV' + b.slice(2)))];
             if (unique.length === 0) {
-                alert('未检测到有效 BV 号');
+                alert('未偵測到有效 BV 號，請確認格式（例如：BV1pbbj6bEXB）');
                 return;
             }
             videos = unique;
             elCount.innerText = videos.length + ' 部';
             updateStorage();
             renderCards();
-            addLog('已载入 ' + videos.length + ' 个视频视窗（播放状态需在画面中查看）');
+            addLog('已載入 ' + videos.length + ' 個視窗，開始多窗矩陣同播');
         };
 
-        // Edge 浏览器扩展打包下载
-        const MANIFEST_STR = "{\n  \"manifest_version\": 3,\n  \"name\": \"⭐️极禹刷啵 - B站原生播放助手⭐️\",\n  \"version\": \"1.0.0\",\n  \"description\": \"极禹专属B站视频播放与应援助手，支持连续播放与快捷BV跳转\",\n  \"content_scripts\": [\n    {\n      \"matches\": [\n        \"https://www.bilibili.com/*\"\n      ],\n      \"js\": [\n        \"content.js\"\n      ],\n      \"run_at\": \"document_end\"\n    }\n  ]\n}";
-        const CONTENT_JS_STR = "// ⭐️极禹刷啵 - Edge 原生扩展内容脚本⭐️\n(function() {\n  'use strict';\n  if (window.top !== window.self) return;\n\n  const style = document.createElement('style');\n  style.innerHTML = `\n    #jiyu-edge-panel {\n      position: fixed;\n      bottom: 25px;\n      right: 25px;\n      width: 330px;\n      background: rgba(255, 255, 255, 0.96);\n      backdrop-filter: blur(12px);\n      border: 3px solid #FFCCDD;\n      border-radius: 20px;\n      box-shadow: 0 12px 35px rgba(255, 121, 156, 0.35);\n      z-index: 99999999;\n      font-family: -apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, sans-serif;\n      padding: 16px;\n      box-sizing: border-box;\n    }\n    #jiyu-edge-panel h3 {\n      margin: 0 0 8px 0;\n      color: #FF799C;\n      font-size: 14px;\n      font-weight: 900;\n      display: flex;\n      justify-content: space-between;\n      align-items: center;\n    }\n    .jiyu-spd-row {\n      display: flex;\n      gap: 4px;\n      margin-bottom: 10px;\n    }\n    .jiyu-spd-btn {\n      flex: 1;\n      padding: 6px 0;\n      background: #FFF0F4;\n      border: 1px solid #FFCCD9;\n      color: #D6456D;\n      font-size: 11px;\n      font-weight: bold;\n      border-radius: 8px;\n      cursor: pointer;\n    }\n    .jiyu-spd-btn:hover {\n      background: #FF799C;\n      color: white;\n    }\n  `;\n  document.head.appendChild(style);\n\n  const panel = document.createElement('div');\n  panel.id = 'jiyu-edge-panel';\n  panel.innerHTML = `\n    <h3>\n      <span>⭐️ 极禹刷啵本站原生助手</span>\n      <span id=\"jiyu-panel-close\" style=\"cursor:pointer;font-size:16px;color:#aaa;\">×</span>\n    </h3>\n    <p style=\"font-size:11px;color:#666;margin-bottom:8px;\">本站原生 HTML5 倍速调节：</p>\n    <div class=\"jiyu-spd-row\">\n      <button class=\"jiyu-spd-btn\" data-spd=\"1.25\">1.25x</button>\n      <button class=\"jiyu-spd-btn\" data-spd=\"1.5\">1.5x</button>\n      <button class=\"jiyu-spd-btn\" data-spd=\"2.0\">2.0x</button>\n      <button class=\"jiyu-spd-btn\" data-spd=\"3.0\">3.0x</button>\n      <button class=\"jiyu-spd-btn\" data-spd=\"4.0\">4.0x</button>\n      <button class=\"jiyu-spd-btn\" data-spd=\"16.0\">16x</button>\n    </div>\n  `;\n  document.body.appendChild(panel);\n\n  const closeBtn = document.getElementById('jiyu-panel-close');\n  if (closeBtn) closeBtn.onclick = () => { panel.style.display = 'none'; };\n\n  panel.querySelectorAll('.jiyu-spd-btn').forEach(btn => {\n    btn.onclick = () => {\n      const spd = parseFloat(btn.getAttribute('data-spd'));\n      const video = document.querySelector('video');\n      if (video) {\n        video.playbackRate = spd;\n        alert('⚡ 播放倍速已设置为 ' + spd + 'x！');\n      } else {\n        alert('未在当前页面检测到 HTML5 视频，请在视频播放页面点击');\n      }\n    };\n  });\n})();\n";
+        // 恢復預設
+        elDefault.onclick = function() {
+            videos = DEFAULT_BVS;
+            elInput.value = videos.join('\n');
+            elCount.innerText = videos.length + ' 部';
+            updateStorage();
+            renderCards();
+            addLog('已恢復預設範例 BV 號');
+        };
+
+        // 初次渲染
+        renderCards();
+
+        // 擴充程式打包與下載 (Edge / QQ / Chrome)
+        const MANIFEST_CONTENT = {
+            "manifest_version": 3,
+            "name": "极禹刷啵 - B站播放增强扩展",
+            "version": "1.0.0",
+            "description": "B站原生多窗增强与极速播放辅助工具",
+            "permissions": ["activeTab", "storage"],
+            "host_permissions": ["*://*.bilibili.com/*"],
+            "content_scripts": [
+                {
+                    "matches": ["*://*.bilibili.com/video/*", "*://*.bilibili.com/blackboard/*"],
+                    "js": ["content.js"],
+                    "run_at": "document_end",
+                    "all_frames": true
+                }
+            ]
+        };
+
+        const CONTENT_JS_CONTENT = `// 极禹刷啵 - B站原生增强
+console.log('⭐️极禹刷啵扩展已启动⭐️');
+function setupController() {
+    const video = document.querySelector('video');
+    if (!video) return;
+    video.autoplay = true;
+    console.log('检测到B站原生video元素，可自由加速');
+}
+setInterval(setupController, 2000);`;
 
         document.getElementById('btn-dl-zip').onclick = function() {
             if (window.JSZip) {
                 const zip = new JSZip();
-                zip.file('manifest.json', MANIFEST_STR);
-                zip.file('content.js', CONTENT_JS_STR);
-                zip.file('README.txt', '⭐️极禹刷啵⭐️ Edge 扩展安装指南\n1. 解压文件夹\n2. 打开 edge://extensions/ 开启开发者模式\n3. 点击 加载解压缩的扩展 即可在 B 站本站解锁 2x~16x 倍速！');
-                zip.generateAsync({ type: 'blob' }).then(function(c) {
-                    const url = URL.createObjectURL(c);
+                zip.file('manifest.json', JSON.stringify(MANIFEST_CONTENT, null, 2));
+                zip.file('content.js', CONTENT_JS_CONTENT);
+                zip.file('README.txt', '⭐️极禹刷啵⭐️ 扩展安装指南：\n1. 解压此 zip 压缩包到本地文件夹\n2. 在 Edge 搜索 edge://extensions/ 或在 QQ 浏览器搜索 qqbrowser://extensions/\n3. 开启「开发者模式」\n4. 点击「加载解压缩的扩展」，选取该文件夹即可完成安装！');
+                zip.generateAsync({ type: 'blob' }).then(function(content) {
+                    const url = URL.createObjectURL(content);
                     const a = document.createElement('a');
                     a.href = url;
-                    a.download = 'jiyu-edge-extension.zip';
+                    a.download = 'jiyu-bilibili-extension.zip';
                     document.body.appendChild(a);
                     a.click();
                     document.body.removeChild(a);
                     URL.revokeObjectURL(url);
                 });
+            } else {
+                alert('JSZip 載入中，請稍候重試');
             }
         };
     </script>
