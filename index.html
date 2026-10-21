@@ -56,7 +56,7 @@
             border: 4px solid #ffffff;
         }
 
-        /* 標題與簡介 */
+        /* 頂部標題 */
         .header-section {
             text-align: center;
         }
@@ -70,14 +70,8 @@
             gap: 8px;
             letter-spacing: 0.5px;
         }
-        .header-desc {
-            font-size: 12px;
-            color: var(--text-muted);
-            margin-top: 6px;
-            line-height: 1.4;
-        }
 
-        /* 客觀說明與平台隔離警示 */
+        /* 合規與同源說明卡 */
         .notice-box {
             background: #FFF9FA;
             border: 1.5px dashed var(--primary-pink);
@@ -305,9 +299,6 @@
         <!-- 頂部標題 -->
         <div class="header-section">
             <h1 class="header-title">⭐️ 极禹刷啵 - B站多窗真实同播与计数器 ⭐️</h1>
-            <p class="header-desc">
-                矩陣多窗同時播放 · 隨機週期觀影計時 · 本機播放工作階段統計 · 跨來源隔離守護
-            </p>
         </div>
 
         <!-- 平台限制與客觀說明 -->
@@ -341,7 +332,7 @@
             </div>
         </div>
 
-        <!-- 多窗影片網格區 (無單片專注模式，一律多窗同播) -->
+        <!-- 多窗影片網格區 (一律多窗矩陣同播) -->
         <div id="multi-view" class="video-grid"></div>
 
         <!-- 緊湊型本機計數面板 (置於播放器下方) -->
@@ -380,12 +371,9 @@
 
         <!-- 原生擴充套件下載 (Edge / QQ / Chrome) -->
         <div class="card" id="extension-card">
-            <div style="font-size: 13px; font-weight: 800; color: #333; margin-bottom: 4px;">
+            <div style="font-size: 13px; font-weight: 800; color: #333; margin-bottom: 8px;">
                 🖥️ 瀏覽器原生擴充插件包（Edge / QQ 瀏覽器 / Chrome 通用）
             </div>
-            <p style="font-size: 11px; color: var(--text-muted); margin-bottom: 10px; line-height: 1.4;">
-                在 B 站主站原生執行，突破跨域限制，支援真實原生影片倍速（2x ~ 16x）控制與無縫連續觀看。
-            </p>
             <button id="btn-dl-zip" class="btn-main" style="border-radius: 12px; padding: 9px; font-size: 12px;">
                 📦 一鍵下載擴充完整安裝包 (.zip)
             </button>
